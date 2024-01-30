@@ -13,3 +13,4 @@ for pos, char in enumerate(input_text):
         floor -= 1
     if floor == -1:
         print(pos + 1)
+        break
