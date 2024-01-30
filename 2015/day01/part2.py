@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 import time
 
-with open(Path(__file__).stem + '.txt') as fp:
+with open(Path(__file__).with_suffix('.txt')) as fp:
     input_text = fp.read()
 
 floor = 0

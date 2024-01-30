@@ -1,6 +1,6 @@
 from pathlib import Path
 
-with open(Path(__file__).stem + '.txt') as fp:
+with open(Path(__file__).with_suffix('.txt')) as fp:
     input_text = fp.read()
 
 up = input_text.count('(')
