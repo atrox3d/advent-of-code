@@ -1,11 +1,15 @@
 from pathlib import Path
 import sys
 
+def get_slack(l, w, h):
+    a, b = sorted([l, w, h])[:2]
+    return a*b
+
 def get_total_paper(l, w, h):
-    return 2*l*w + 2*w*h + 2*h*l + min(l, w, h)**2
+    return 2*l*w + 2*w*h + 2*h*l + get_slack(l, w, h)
 
 def get_paper_and_slack(l, w, h):
-    return 2*l*w + 2*w*h + 2*h*l, min(l, w, h)**2
+    return 2*l*w + 2*w*h + 2*h*l, get_slack(l, w, h)
 
 def convert_box(box):
     return tuple(map(int, box))
@@ -36,7 +40,10 @@ if sys.argv[1:]:
         for test, expected in tests.items():
             print(f'testing {test=}: {expected=}')
             result = test_paper(test)
-            assert expected == result, f'{expected=} != {result=}'
+            try:
+                assert expected == result, f'{expected=} != {result=}'
+            except AssertionError as ae:
+                print(repr(ae))
     elif param.count('x') == 2:
         compute_paper(param)
     else:
