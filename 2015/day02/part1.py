@@ -4,19 +4,27 @@ import sys
 def get_total_paper(l, w, h):
     return 2*l*w + 2*w*h + 2*h*l + min(l, w, h)**2
 
+def get_paper_and_slack(l, w, h):
+    return 2*l*w + 2*w*h + 2*h*l, min(l, w, h)**2
+
 def convert_box(box):
     return tuple(map(int, box))
 
 def parse_box(line):
     return line.rstrip().split('x')
 
-def compute_paper(box_str):
+def test_paper(box_str):
     print(f'{box_str = }')
     box = parse_box(box_str)
     print(f'{box = }')
     int_box = convert_box(box)
     print(f'{int_box = }')
-    total = get_total_paper(*int_box)
+    partials = get_paper_and_slack(*int_box)
+    print(f'{partials = }')
+    return partials + (sum(partials), )
+    
+def compute_paper(partials):    
+    total = sum(partials)
     print(f'{total = }')
     return total
 
@@ -24,10 +32,10 @@ def compute_paper(box_str):
 if sys.argv[1:]:
     param = sys.argv[1]
     if param.lower() == 'test':
-        tests = {'2x3x4':58, '1x1x10':43}
+        tests = {'2x3x4':(52, 6, 58), '1x1x10':(42, 1, 43)}
         for test, expected in tests.items():
             print(f'testing {test=}: {expected=}')
-            result = compute_paper(test)
+            result = test_paper(test)
             assert expected == result, f'{expected=} != {result=}'
     elif param.count('x') == 2:
         compute_paper(param)
