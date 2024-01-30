@@ -18,18 +18,13 @@ def parse_box(line):
     return line.rstrip().split('x')
 
 def test_paper(box_str):
-    print(f'{box_str = }')
     box = parse_box(box_str)
-    print(f'{box = }')
     int_box = convert_box(box)
-    print(f'{int_box = }')
     partials = get_paper_and_slack(*int_box)
-    print(f'{partials = }')
     return partials + (sum(partials), )
     
 def compute_paper(partials):    
     total = sum(partials)
-    print(f'{total = }')
     return total
 
 
@@ -54,8 +49,6 @@ else:
         boxes = [parse_box(line) for line in lines]
         int_boxes = [convert_box(box) for box in boxes]
         papers = [get_total_paper(l, w, h) for l, w, h in int_boxes]
-        for line, box, int_box, paper in zip(lines, boxes, int_boxes, papers):
-            print(f'{line, box, int_box,  paper = }')
         total = sum(papers)
         print(total)
 
