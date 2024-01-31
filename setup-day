@@ -13,11 +13,13 @@ echo "TEMPLATE_DIR: ${TEMPLATE_DIR}"
 
 YEAR=${1}
 DAY=${2}
+ZP_DAY=$(printf %02d $DAY)
 
 echo "YEAR        : ${YEAR}"
 echo "DAY         : ${DAY}"
+echo "DAY         : ${ZP_DAY}"
 
-DEST_DIR="${AOC_DIR}/${YEAR}/day${DAY}"
+DEST_DIR="${AOC_DIR}/${YEAR}/${ZP_DAY}"
 echo "DEST_DIR    : ${DEST_DIR}"
 
 [ -d "${DEST_DIR}" ] && {
