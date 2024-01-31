@@ -29,3 +29,8 @@ echo "DEST_DIR    : ${DEST_DIR}"
 
 echo "copying ${TEMPLATE_DIR} to ${DEST_DIR}"
 cp -r "${TEMPLATE_DIR}" "${DEST_DIR}"
+
+README="${DEST_DIR}/README.md"
+echo "updating ${README}"
+sed -i "s/YEAR/${YEAR}/" "${README}"
+sed -i "s/DAY/${DAY}/" "${README}"
