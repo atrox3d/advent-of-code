@@ -39,10 +39,25 @@ def solution(quiz_input):
     FORBIDDEN = 'ab', 'cd', 'pq', 'xy'
     
     def has_three_vowels(word: str) -> bool:
-        return len([v for v in word if v in VOWELS])
+        return len([v for v in word if v in VOWELS]) >= 3
+    
+    def twice_in_a_row(word: str) -> bool:
+        for pos, char in enumerate(word):
+            try:
+                if char == word[pos+1]:
+                    return True
+            except IndexError:
+                pass
+        return False
 
+    nice = naughty = 0
     for word in quiz_input:
-        print(f'{word} -> {has_three_vowels(word)}')
+        vowels_ok = has_three_vowels(word)
+        print(f'{word} -> {vowels_ok = }')
+
+        twice_ok = twice_in_a_row(word)
+        print(f'{word} -> {twice_ok = }')
+
     # return dict(nice=0, naughty=0)
 
 if sys.argv[1:]:
