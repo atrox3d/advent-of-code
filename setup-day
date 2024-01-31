@@ -1,0 +1,29 @@
+#!/bin/bash
+
+[ ${#} -ge 2 ] || {
+    echo "FATAL | syntax ${0} year day"
+    exit 1
+}
+
+AOC_DIR="$(dirname $(readlink -f $0))"
+echo "AOC_DIR     : ${AOC_DIR}"
+
+TEMPLATE_DIR="${AOC_DIR}/template"
+echo "TEMPLATE_DIR: ${TEMPLATE_DIR}"
+
+YEAR=${1}
+DAY=${2}
+
+echo "YEAR        : ${YEAR}"
+echo "DAY         : ${DAY}"
+
+DEST_DIR="${AOC_DIR}/${YEAR}/day${DAY}"
+echo "DEST_DIR    : ${DEST_DIR}"
+
+[ -d "${DEST_DIR}" ] && {
+    echo "FATAL | DEST_DIR already exist!"
+    exit 2
+}
+
+echo "copying ${TEMPLATE_DIR} to ${DEST_DIR}"
+cp -r "${TEMPLATE_DIR}" "${DEST_DIR}"
