@@ -25,6 +25,8 @@ def solution(quiz_input):
     that is, the MD5 hash of 'pqrstuv1048970' looks like (000006136ef....)
     
     Your puzzle input is ckczppom.
+
+    Now find one that starts with six zeroes.
     """
     import hashlib
 

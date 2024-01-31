@@ -19,3 +19,4 @@ https://adventofcode.com/2015/day/4
 
 https://adventofcode.com/2015/day/4#part2
 
+    Now find one that starts with six zeroes.
