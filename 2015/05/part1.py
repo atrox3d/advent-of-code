@@ -74,6 +74,9 @@ if sys.argv[1:]:
                 print(repr(ae))
             finally:
                 print()
+    else:
+        solution(sys.argv[1:])
+
 else:
     with open(Path(__file__).with_suffix('.txt')) as fp:
         quiz_input = [line.rstrip() for line in fp.readlines()]
