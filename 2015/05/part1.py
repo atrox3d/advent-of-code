@@ -49,16 +49,33 @@ def solution(quiz_input):
             except IndexError:
                 pass
         return False
+    
+    def allowed(word: str) -> bool:
+        for forbidden in FORBIDDEN:
+            if forbidden in word:
+                return False
+        return True
 
-    nice = naughty = 0
-    for word in quiz_input:
+    def is_nice(word: str) -> bool:
         vowels_ok = has_three_vowels(word)
         print(f'{word} -> {vowels_ok = }')
 
         twice_ok = twice_in_a_row(word)
         print(f'{word} -> {twice_ok = }')
 
-    # return dict(nice=0, naughty=0)
+        allowed_ok = allowed(word)
+        print(f'{word} -> {allowed_ok = }')
+
+        return all([vowels_ok, twice_ok, allowed_ok])
+
+    nice = naughty = 0
+    for word in quiz_input:
+        if is_nice(word):
+            nice += 1
+        else:
+            naughty += 1
+
+    return dict(nice=nice, naughty=naughty)
 
 if sys.argv[1:]:
     param = sys.argv[1]
@@ -90,7 +107,7 @@ if sys.argv[1:]:
             finally:
                 print()
     else:
-        solution(sys.argv[1:])
+        print(solution(sys.argv[1:]))
 
 else:
     with open(Path(__file__).with_suffix('.txt')) as fp:
