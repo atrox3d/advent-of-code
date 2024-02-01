@@ -110,6 +110,6 @@ if sys.argv[1:]:
         print(solution(sys.argv[1:]))
 
 else:
-    with open(Path(__file__).with_suffix('.txt')) as fp:
+    with open(Path(__file__).parent / 'input.txt') as fp:
         quiz_input = [line.rstrip() for line in fp.readlines()]
         print(solution(quiz_input))

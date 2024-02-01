@@ -28,6 +28,6 @@ if sys.argv[1:]:
             finally:
                 print()
 else:
-    with open(Path(__file__).with_suffix('.txt')) as fp:
+    with open(Path(__file__).parent / 'input.txt') as fp:
         quiz_input = fp.read().rstrip()
         print(solution(quiz_input))
