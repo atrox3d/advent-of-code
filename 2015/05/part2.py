@@ -33,27 +33,6 @@ def solution(quiz_input):
     
     How many strings are nice under these new rules?
     """
-    VOWELS = 'aeiou'
-    FORBIDDEN = 'ab', 'cd', 'pq', 'xy'
-    
-    def at_least_twice(word: str) -> bool:
-        return len([v for v in word if v in VOWELS]) >= 3
-    
-    def in_between(word: str) -> bool:
-        for pos, char in enumerate(word):
-            try:
-                if char == word[pos+1]:
-                    return True
-            except IndexError:
-                pass
-        return False
-    
-    def allowed(word: str) -> bool:
-        for forbidden in FORBIDDEN:
-            if forbidden in word:
-                return False
-        return True
-    
     def get_groups(word: str, length) -> bool:
         pairs = [pair for pair in [word[pos:pos+length] for pos in range(len(word))] 
                  if len(pair) == length]
@@ -65,11 +44,20 @@ def solution(quiz_input):
 
     def at_least_twice(word: str) -> bool:
         pairs = get_groups(word, 2)
-        repeats = find_repeated_pairs(pairs, at_least=2)
-        if len(repeats) > 0:
-            print(f'{repeats = }')
-            return True
-        return False
+        return find_repeated_pairs(pairs, at_least=2)
+        
+    def non_overlapping(word: str, pairs: list[str]) -> list[str]:
+        for pair in pairs:
+            for pos in range(len(word)):
+                if word[pos:].startswith(pair):
+                    large = word[pos-1:pos+len(pair)+1]
+                    # print(f'checking {pair}: {large=}')
+                    try:
+                        if large[0]==large[1] or large[-2]==large[-1]:
+                            return False
+                    except IndexError:
+                        pass
+        return True
     
     def in_between(word: str) -> bool:
         triplets = get_groups(word, 3)
@@ -80,13 +68,16 @@ def solution(quiz_input):
         return False
 
     def is_nice(word: str) -> bool:
-        repeat_ok = at_least_twice(word)
-        # print(f'{word} -> {repeat_ok = }')
+        twice = at_least_twice(word)
+        no_overlap = non_overlapping(word, twice)
+
+        print(f'{word} -> {twice = }')
+        print(f'{word} -> {no_overlap = }')
 
         between_ok = in_between(word)
-        # print(f'{word} -> {between_ok = }')
+        print(f'{word} -> {between_ok = }')
 
-        return all([repeat_ok, between_ok])
+        return all([no_overlap, between_ok])
 
     nice = naughty = 0
     for word in quiz_input:
@@ -94,7 +85,7 @@ def solution(quiz_input):
             nice += 1
         else:
             naughty += 1
-        # print()
+        print()
 
     return dict(nice=nice, naughty=naughty)
 
