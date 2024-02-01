@@ -35,39 +35,28 @@ def solution(quiz_input):
 
     How many strings are nice?
     """
-    VOWELS = 'aeiou'
-    FORBIDDEN = 'ab', 'cd', 'pq', 'xy'
-    
-    def has_three_vowels(word: str) -> bool:
-        return len([v for v in word if v in VOWELS]) >= 3
-    
-    def twice_in_a_row(word: str) -> bool:
-        for pos, char in enumerate(word):
-            try:
-                if char == word[pos+1]:
-                    return True
-            except IndexError:
-                pass
-        return False
-    
-    def allowed(word: str) -> bool:
-        for forbidden in FORBIDDEN:
-            if forbidden in word:
-                return False
-        return True
+    import re
+
+    # vowels = re.compile(r'[aeiou]{3,}')
+    # repeat = re.compile(r'(.)\1')
+    # exclude = re.compile(r'^((?!ab|cd|pq|xy).)*$')
 
     def is_nice(word: str) -> bool:
-        vowels_ok = has_three_vowels(word)
-        print(f'{word} -> {vowels_ok = }')
+        three_vowels = re.match(r'[aeiou]{3,}', word)
+        print(f'{word = }, {three_vowels = }')
 
-        twice_ok = twice_in_a_row(word)
-        print(f'{word} -> {twice_ok = }')
+        double = re.match(r'(.)\1', word)
+        print(f'{word = }, {double = }')
 
-        allowed_ok = allowed(word)
-        print(f'{word} -> {allowed_ok = }')
+        exclude = re.match(r'^((?!ab|cd|pq|xy).)*$', word)
+        print(f'{word = }, {exclude = }')
 
-        return all([vowels_ok, twice_ok, allowed_ok])
-
+        result = three_vowels is not None \
+                and double is not None \
+                and exclude is not None
+        print(f'{result = }')
+        return result
+    
     nice = naughty = 0
     for word in quiz_input:
         if is_nice(word):
@@ -101,9 +90,10 @@ if sys.argv[1:]:
             result = solution(test['input'])
             try:
                 assert expected == result, f'{expected=} != {result=}'
-                print('PASS')
+                print(f'PASS: {expected=} != {result=}')
             except AssertionError as ae:
-                print(repr(ae))
+                print(f'FAIL: {expected=} != {result=}')
+                # print(repr(ae))
             finally:
                 print()
     else:
