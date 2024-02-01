@@ -54,8 +54,9 @@ def solution(quiz_input):
                 return False
         return True
     
-    def get_pairs(word: str) -> bool:
-        pairs = [pair for pair in [word[pos:pos+2] for pos in range(len(word))] if len(pair) == 2]
+    def get_groups(word: str, length) -> bool:
+        pairs = [pair for pair in [word[pos:pos+length] for pos in range(len(word))] 
+                 if len(pair) == length]
         return pairs
 
     def find_repeated_pairs(pairs: list[str], at_least):
@@ -63,12 +64,16 @@ def solution(quiz_input):
         return min_repeats.keys()
 
     def at_least_twice(word: str) -> bool:
-        pairs = get_pairs(word)
+        pairs = get_groups(word, 2)
         repeats = find_repeated_pairs(pairs, at_least=2)
+        print(f'{repeats = }')
         return len(repeats) > 0
     
     def in_between(word: str) -> bool:
-        return False
+        triplets = get_groups(word, 3)
+        betweens = [triplet for triplet in triplets if triplet[0]==triplet[-1]]
+        print(f'{betweens = }')
+        return len(betweens) > 0
 
     def is_nice(word: str) -> bool:
         repeat_ok = at_least_twice(word)
@@ -85,6 +90,7 @@ def solution(quiz_input):
             nice += 1
         else:
             naughty += 1
+        print()
 
     return dict(nice=nice, naughty=naughty)
 
@@ -116,7 +122,7 @@ if sys.argv[1:]:
             result = solution(test['input'])
             try:
                 assert expected == result, f'{expected=} != {result=}'
-                print('PASS')
+                print(f'PASS {result =}')
             except AssertionError as ae:
                 print(repr(ae))
             finally:
