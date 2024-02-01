@@ -9,12 +9,13 @@ def solution(quiz_input):
 
     Now, a nice string is one with all of the following properties:
 
-    It contains a pair of any two letters that appears at least twice 
+    - It contains a pair of any two letters that appears at least twice 
     in the string without overlapping, 
     like xyxy (xy) or aabcdefgaa (aa), but not like aaa (aa, but it overlaps).
     
-    It contains at least one letter which repeats with exactly one letter between them, 
+    - It contains at least one letter which repeats with exactly one letter between them, 
     like xyx, abcdefeghi (efe), or even aaa.
+    
     For example:
 
     qjhvhtzxzqqjkmpb is nice because is has a pair that appears twice (qj) 
@@ -35,10 +36,10 @@ def solution(quiz_input):
     VOWELS = 'aeiou'
     FORBIDDEN = 'ab', 'cd', 'pq', 'xy'
     
-    def has_three_vowels(word: str) -> bool:
+    def at_least_twice(word: str) -> bool:
         return len([v for v in word if v in VOWELS]) >= 3
     
-    def twice_in_a_row(word: str) -> bool:
+    def in_between(word: str) -> bool:
         for pos, char in enumerate(word):
             try:
                 if char == word[pos+1]:
@@ -52,18 +53,31 @@ def solution(quiz_input):
             if forbidden in word:
                 return False
         return True
+    
+    def get_pairs(word: str) -> bool:
+        pairs = [pair for pair in [word[pos:pos+2] for pos in range(len(word))] if len(pair) == 2]
+        return pairs
+
+    def find_repeated_pairs(pairs: list[str], at_least):
+        min_repeats = {pair:pairs.count(pair) for pair in pairs if pairs.count(pair) >= at_least}
+        return min_repeats.keys()
+
+    def at_least_twice(word: str) -> bool:
+        pairs = get_pairs(word)
+        repeats = find_repeated_pairs(pairs, at_least=2)
+        return len(repeats) > 0
+    
+    def in_between(word: str) -> bool:
+        return False
 
     def is_nice(word: str) -> bool:
-        vowels_ok = has_three_vowels(word)
-        print(f'{word} -> {vowels_ok = }')
+        repeat_ok = at_least_twice(word)
+        print(f'{word} -> {repeat_ok = }')
 
-        twice_ok = twice_in_a_row(word)
-        print(f'{word} -> {twice_ok = }')
+        between_ok = in_between(word)
+        print(f'{word} -> {between_ok = }')
 
-        allowed_ok = allowed(word)
-        print(f'{word} -> {allowed_ok = }')
-
-        return all([vowels_ok, twice_ok, allowed_ok])
+        return all([repeat_ok, between_ok])
 
     nice = naughty = 0
     for word in quiz_input:
