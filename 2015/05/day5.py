@@ -41,7 +41,7 @@ def solution(quiz_input):
     # repeat = re.compile(r'(.)\1')
     # exclude = re.compile(r'^((?!ab|cd|pq|xy).)*$')
 
-    def is_nice(word: str) -> bool:
+    def is_nice1(word: str) -> bool:
         three_vowels = re.findall(r'[aeiou]', word)
         three_vowels_ok = len(three_vowels) >= 3
         print(f'{word = }, {three_vowels = }, {three_vowels_ok = }')
@@ -57,10 +57,22 @@ def solution(quiz_input):
         result = three_vowels_ok and double_ok and exclude_ok 
         print(f'{result = }')
         return result
+
+    def is_nice2(word: str) -> bool:
+        twice = re.search(r'(..).*\1', word)
+        twice = twice is not None
+        print(f'{word = }, {twice = }')
+
+        between = re.search(r'(.).\1', word)
+        between = between is not None
+        print(f'{word = }, {between = }')
+
+        
+        return twice and between
     
     nice = naughty = 0
     for word in quiz_input:
-        if is_nice(word):
+        if is_nice2(word):
             nice += 1
         else:
             naughty += 1
