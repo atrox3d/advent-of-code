@@ -66,14 +66,18 @@ def solution(quiz_input):
     def at_least_twice(word: str) -> bool:
         pairs = get_groups(word, 2)
         repeats = find_repeated_pairs(pairs, at_least=2)
-        print(f'{repeats = }')
-        return len(repeats) > 0
+        if len(repeats) > 0:
+            print(f'{repeats = }')
+            return True
+        return False
     
     def in_between(word: str) -> bool:
         triplets = get_groups(word, 3)
         betweens = [triplet for triplet in triplets if triplet[0]==triplet[-1]]
-        print(f'{betweens = }')
-        return len(betweens) > 0
+        if len(betweens) > 0:
+            print(f'{betweens = }')
+            return True
+        return False
 
     def is_nice(word: str) -> bool:
         repeat_ok = at_least_twice(word)
