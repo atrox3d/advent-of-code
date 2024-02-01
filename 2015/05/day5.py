@@ -42,18 +42,19 @@ def solution(quiz_input):
     # exclude = re.compile(r'^((?!ab|cd|pq|xy).)*$')
 
     def is_nice(word: str) -> bool:
-        three_vowels = re.match(r'[aeiou]{3,}', word)
-        print(f'{word = }, {three_vowels = }')
+        three_vowels = re.findall(r'[aeiou]', word)
+        three_vowels_ok = len(three_vowels) >= 3
+        print(f'{word = }, {three_vowels = }, {three_vowels_ok = }')
 
-        double = re.match(r'(.)\1', word)
-        print(f'{word = }, {double = }')
+        double = re.findall(r'(.)\1', word)
+        double_ok = double != []
+        print(f'{word = }, {double = }, {double_ok = }')
 
         exclude = re.match(r'^((?!ab|cd|pq|xy).)*$', word)
-        print(f'{word = }, {exclude = }')
+        exclude_ok = exclude is not None
+        print(f'{word = }, {exclude = }, {exclude_ok = }')
 
-        result = three_vowels is not None \
-                and double is not None \
-                and exclude is not None
+        result = three_vowels_ok and double_ok and exclude_ok 
         print(f'{result = }')
         return result
     
