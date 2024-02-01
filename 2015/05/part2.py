@@ -79,15 +79,19 @@ if sys.argv[1:]:
     if param.lower() == 'test':
         tests = [
             {
-                'input': ['aaa'], 
+                'input': ['qjhvhtzxzqqjkmpb'], 
                 'expected': {'nice': 1, 'naughty': 0},
             },
             {
-                'input': ['jchzalrnumimnmhp'], 
+                'input': ['xxyxx'], 
+                'expected': {'nice': 1, 'naughty': 0},
+            },
+            {
+                'input': ['uurcxstgmygtbstg'], 
                 'expected': {'nice': 0, 'naughty': 1},
             },
             {
-                'input': ['dvszwmarrgswjxmb'], 
+                'input': ['ieodomkazucvgmuy'], 
                 'expected': {'nice': 0, 'naughty': 1},
             },
         ]
