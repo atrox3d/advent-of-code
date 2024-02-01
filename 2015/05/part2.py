@@ -75,16 +75,16 @@ def solution(quiz_input):
         triplets = get_groups(word, 3)
         betweens = [triplet for triplet in triplets if triplet[0]==triplet[-1]]
         if len(betweens) > 0:
-            print(f'{betweens = }')
+            # print(f'{betweens = }')
             return True
         return False
 
     def is_nice(word: str) -> bool:
         repeat_ok = at_least_twice(word)
-        print(f'{word} -> {repeat_ok = }')
+        # print(f'{word} -> {repeat_ok = }')
 
         between_ok = in_between(word)
-        print(f'{word} -> {between_ok = }')
+        # print(f'{word} -> {between_ok = }')
 
         return all([repeat_ok, between_ok])
 
@@ -94,7 +94,7 @@ def solution(quiz_input):
             nice += 1
         else:
             naughty += 1
-        print()
+        # print()
 
     return dict(nice=nice, naughty=naughty)
 
