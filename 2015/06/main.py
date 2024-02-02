@@ -18,7 +18,8 @@ def solution(quiz_input):
 
 if __name__ == '__main__':
     options = parse.get_parser().parse_args()
-    logger.debug(f'{options = }')
+    # logger.debug(f'{options = }')
+    parse.log_options(options)
 
     if options.test_param:
         logger.info(f'testing solution against {options.test_param}')

@@ -2,7 +2,7 @@ from pathlib import Path
 import logging
 
 INPUT_FILE = 'input.txt'
-INPUT_PATH = Path(__file__).parent / INPUT_FILE 
+INPUT_PATH = Path(__file__).parent / INPUT_FILE
 
 logger = logging.getLogger(__name__)
 
