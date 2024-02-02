@@ -25,9 +25,22 @@ def get_loader(input_path):
     
     def csv_loader(input_path):
         with open(input_path) as fp:
-            reader = csv.reader(fp)
-            lines = [line for line in reader]
-            return lines
+            reader = csv.reader(fp,)
+            lines = [list(map(str.strip, line)) for line in reader]
+            logger.debug(f'{lines = }')
+            convert = []
+            for values in lines:
+                cvalues = []
+                for value in values:
+                    if value.isnumeric():
+                        value = int(value)
+                    elif value.lower() in ('true', 'false'):
+                        value = bool(value)
+                    elif value.lower() == 'none':
+                        value = None
+                    cvalues.append(value)
+                convert.append(cvalues)
+            return convert
         
     def txt_loader(input_path):
         with open(input_path) as fp:
