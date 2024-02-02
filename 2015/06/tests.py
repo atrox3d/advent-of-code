@@ -55,8 +55,17 @@ def load_tests(input_path=TESTS_PATH):
 def test(solution, tests=None, input_path=None, multiline=None):
     tests = load_tests(input_path)
 
-    for _input, expected in tests:
-        logger.info(f'testing {_input}: {expected=}')
+    for test in tests:
+        logger.debug(f'{test = }')
+        if isinstance(test, dict):
+            logger.debug(f'{test.items() = }')
+            _input = test['input']
+            expected = test['expected']
+        elif isinstance(test, tuple|list):
+            _input, expected = test
+
+        logger.info(f'testing {_input=}: {expected=}')
+        exit()
         result = test_param(solution, _input, multiline)
         try:
             assert expected == result, f'{expected=} != {result=}'
