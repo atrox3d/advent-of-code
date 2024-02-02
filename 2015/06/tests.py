@@ -37,12 +37,7 @@ def get_loader(input_path):
             reader = csv.reader(fp,)
             lines = [list(map(str.strip, line)) for line in reader]
             logger.debug(f'{lines = }')
-            convert = []
-            for values in lines:
-                cvalues = []
-                for value in values:
-                    cvalues.append(str_to_val(value))
-                convert.append(cvalues)
+            convert = [[str_to_val(value) for value in values] for values in lines]
             return convert
         
     def txt_loader(input_path):
