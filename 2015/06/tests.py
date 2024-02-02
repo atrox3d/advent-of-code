@@ -23,6 +23,15 @@ def get_loader(input_path):
             data = [tuple(data.values()) for data in data]
         return data
     
+    def str_to_val(value):
+        if value.isnumeric():
+            value = int(value)
+        elif value.lower() in ('true', 'false'):
+            value = bool(value)
+        elif value.lower() == 'none':
+            value = None
+        return value
+    
     def csv_loader(input_path):
         with open(input_path) as fp:
             reader = csv.reader(fp,)
@@ -32,13 +41,7 @@ def get_loader(input_path):
             for values in lines:
                 cvalues = []
                 for value in values:
-                    if value.isnumeric():
-                        value = int(value)
-                    elif value.lower() in ('true', 'false'):
-                        value = bool(value)
-                    elif value.lower() == 'none':
-                        value = None
-                    cvalues.append(value)
+                    cvalues.append(str_to_val(value))
                 convert.append(cvalues)
             return convert
         
