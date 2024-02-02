@@ -39,11 +39,6 @@ def get_loader(input_path):
             logger.debug(f'{lines = }')
             convert = [[str_to_val(value) for value in values] for values in lines]
             return convert
-        
-    def txt_loader(input_path):
-        with open(input_path) as fp:
-            lines = [line.strip() for line in fp.readlines()]
-            return lines
             
     suffix = Path(input_path).suffix
     if suffix == '.json':
@@ -52,9 +47,6 @@ def get_loader(input_path):
     elif suffix == '.csv':
         logger.info(f'csv loader')
         return csv_loader
-    elif suffix == '.txt':
-        logger.info(f'txt loader')
-        return txt_loader
     else:
         raise NotImplementedError(f'file type {suffix} not implemented')
 
@@ -81,6 +73,5 @@ def test(solution, tests=None, input_path=None, multiline=None):
             logger.info(f'PASS: {expected=} != {result=}')
         except AssertionError as ae:
             logger.error(f'FAIL: {expected=} != {result=}')
-            # print(repr(ae))
         finally:
             print()
