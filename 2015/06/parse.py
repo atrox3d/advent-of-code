@@ -11,6 +11,7 @@ def get_parser() -> argparse.ArgumentParser:
     
     mutex = parser.add_mutually_exclusive_group()
     mutex.add_argument('-p', '--print', action='store_true')
+    # TODO: https://stackoverflow.com/questions/30896982/argparse-optional-value-for-argument
     mutex.add_argument('-t', '--test',  action='store_true')
     
     parser.add_argument('-i', '--input_path', default=helpers.INPUT_PATH)
