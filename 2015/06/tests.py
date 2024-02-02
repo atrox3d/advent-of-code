@@ -1,4 +1,5 @@
 import helpers
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -7,21 +8,16 @@ def test_param(solution, param, multiline):
         if multiline:
             logger.debug(f'converting {param} to list')
             param = [param]
-        print(solution(param))
+        return solution(param)
 
-def test(solution):
+def test(solution, multiline):
     tests = [
-        {
-            'input': None, 
-            'expected': None,
-        },
+        (None, None),
     ]
-    for test in tests:
-        _input = test['input']
-        expected = test['expected']
+
+    for _input, expected in tests:
         logger.info(f'testing {_input}: {expected=}')
-        
-        result = solution(test['input'])
+        result = test_param(solution, _input, multiline)
         try:
             assert expected == result, f'{expected=} != {result=}'
             logger.info(f'PASS: {expected=} != {result=}')

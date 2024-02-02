@@ -24,7 +24,7 @@ if __name__ == '__main__':
     
     elif options.test:
         logger.info(f'testing solution against tests')
-        tests.test(solution)
+        tests.test(solution, helpers.is_multiline(input_path=options.input_path))
 
     elif options.print:
         quiz_input = helpers.get_input(options.input_path)
