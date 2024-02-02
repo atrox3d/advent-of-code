@@ -3,8 +3,6 @@ import json
 import csv
 from pathlib import Path
 
-import helpers
-
 logger = logging.getLogger(__name__)
 
 TESTS_FILE = 'tests.json'
