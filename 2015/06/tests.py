@@ -20,6 +20,7 @@ def test(solution):
         _input = test['input']
         expected = test['expected']
         logger.info(f'testing {_input}: {expected=}')
+        
         result = solution(test['input'])
         try:
             assert expected == result, f'{expected=} != {result=}'
