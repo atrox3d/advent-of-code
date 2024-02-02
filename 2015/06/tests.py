@@ -10,7 +10,7 @@ def test_param(solution, param, multiline):
             param = [param]
         return solution(param)
 
-def test(solution, multiline):
+def test(solution, input_path, multiline):
     tests = [
         (None, None),
     ]
