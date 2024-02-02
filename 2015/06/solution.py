@@ -37,25 +37,20 @@ def solution(quiz_input):
     def parse_instruction(line: str):
         import re
         logger.debug(line)
-        instructions = re.compile(r'(\D+) (\d+),(\d+) (\D+) (\d+),(\d+)')
+        # instructions = re.compile(r'(\D+) (\d+),(\d+) (\D+) (\d+),(\d+)')
+        instructions = re.compile(r'^(\w+) (\D*)(\d+),(\d+) (\w+) (\d+),(\d+)$')
         tokens = instructions.match(line)
         if tokens:
             logger.debug(f'{tokens.groups()}')
-            action, startr, startc, through, endr, endc = tokens.groups()
-            logger.debug((action, startr, startc, through, endr, endc))
-        
+            action, onoff, startr, startc, through, endr, endc = tokens.groups()
+            logger.debug((action, onoff, startr, startc, through, endr, endc))
             match tokens.groups():
-                case 'turn on', startr, startc, 'through', endr, endc:
+                case 'turn', onoff, startr, startc, 'through', endr, endc:
                     start = startr, startc
                     end = endr, endc
-                    logger.info(f'TURNON {start} -> {end}')
-                    
-                case 'turn off', startr, startc, 'through', endr, endc:
-                    start = startr, startc
-                    end = endr, endc
-                    logger.info(f'TURNOFF {start} -> {end}')
-                    
-                case 'toggle', startr, startc, 'through', endr, endc:
+                    logger.info(f'TURN {onoff} {start} -> {end}')
+
+                case 'toggle', _, startr, startc, 'through', endr, endc:
                     start = startr, startc
                     end = endr, endc
                     logger.info(f'TOGGLE {start} -> {end}')
@@ -75,4 +70,4 @@ def solution(quiz_input):
     return False
 
 if __name__ == '__main__':
-    main.main(solution, level='INFO')
+    main.main(solution, level='DEBUG')
