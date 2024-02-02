@@ -20,6 +20,7 @@ def get_loader(input_path):
     def json_loader(input_path):
         with open(input_path) as fp:
             data = json.load(fp)
+            data = [tuple(data.values()) for data in data]
         return data
     
     def csv_loader(input_path):
@@ -57,15 +58,12 @@ def test(solution, tests=None, input_path=None, multiline=None):
 
     for test in tests:
         logger.debug(f'{test = }')
-        if isinstance(test, dict):
-            logger.debug(f'{test.items() = }')
-            _input = test['input']
-            expected = test['expected']
-        elif isinstance(test, tuple|list):
+        if isinstance(test, tuple|list):
             _input, expected = test
-
+        else:
+            raise ValueError(f'tes must be a tuple or list {test = }')
         logger.info(f'testing {_input=}: {expected=}')
-        exit()
+        
         result = test_param(solution, _input, multiline)
         try:
             assert expected == result, f'{expected=} != {result=}'
