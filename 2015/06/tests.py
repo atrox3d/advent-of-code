@@ -3,10 +3,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def test_param(solution, param):
-        if helpers.is_multiline(helpers.INPUT_PATH):
+def test_param(solution, param, multiline):
+        if multiline:
             logger.debug(f'converting {param} to list')
-            param = [param]    
+            param = [param]
         print(solution(param))
 
 def test(solution):

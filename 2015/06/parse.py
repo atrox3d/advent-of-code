@@ -1,10 +1,6 @@
 import argparse
-from pathlib import Path
 
 import helpers
-
-INPUT_FILE = 'input.txt'
-INPUT_PATH = Path(__file__).parent / INPUT_FILE 
 
 def get_parser() -> argparse.ArgumentParser:
     # create parser
@@ -34,5 +30,5 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('test_val', nargs='?')
     parser.add_argument('-p', '--print', action='store_true')
     parser.add_argument('-t', '--test',  action='store_true')
-    parser.add_argument('-i', '--input_path', default=INPUT_PATH)
+    parser.add_argument('-i', '--input_path', default=helpers.INPUT_PATH)
     return parser
