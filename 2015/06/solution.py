@@ -38,11 +38,31 @@ def solution(quiz_input):
         import re
         logger.debug(line)
         instructions = re.compile(r'(\D+) (\d+),(\d+) (\D+) (\d+),(\d+)')
-        match = instructions.match(line)
-        if match:
-            logger.debug(f'{match.groups()}')
-            action, startr, startc, through, endr, endc = match.groups()
-            logger.debug(action, startr, startc, through, endr, endc)
+        tokens = instructions.match(line)
+        if tokens:
+            logger.debug(f'{tokens.groups()}')
+            action, startr, startc, through, endr, endc = tokens.groups()
+            logger.debug((action, startr, startc, through, endr, endc))
+        
+            match tokens.groups():
+                case 'turn on', startr, startc, 'through', endr, endc:
+                    start = startr, startc
+                    end = endr, endc
+                    logger.info(f'TURNON {start} -> {end}')
+                    
+                case 'turn off', startr, startc, 'through', endr, endc:
+                    start = startr, startc
+                    end = endr, endc
+                    logger.info(f'TURNOFF {start} -> {end}')
+                    
+                case 'toggle', startr, startc, 'through', endr, endc:
+                    start = startr, startc
+                    end = endr, endc
+                    logger.info(f'TOGGLE {start} -> {end}')
+
+                case _:
+                    raise ValueError(f'unrecognized pattern {tokens.groups()}')
+
         else:
             print(f'ERROR {line}')
             exit()
