@@ -3,29 +3,32 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-INPUT_FILE = 'input.txt'
-INPUT_PATH = Path(__file__).parent / INPUT_FILE 
-
-def is_multiline(input_path=INPUT_PATH):
-    with open(input_path) as fp:
-        multiline = '\n' in fp.read()
-    logger.debug(f'inputs is {"multiline" if multiline else "just data"}')
+def is_multiline(data=None, input_path=None):
+    
+    if input_path:
+        with open(input_path) as fp:
+            data = fp.read()
+    if data:
+        multiline = '\n' in data
+        logger.debug(f'inputs is {"multiline" if multiline else "just data"}')
+    else:
+        raise ValueError(f'data or input_path needed')
+        
     return multiline
 
-def get_input(input_path=INPUT_PATH):
+def get_input(input_path):
     with open(input_path) as fp:
         data = fp.read()
-        if '\n' in data:
+        if is_multiline(data=data):
             logger.debug(f'parsing input lines')
-            data = [line.rstrip() for line in data]
+            data = [line.rstrip() for line in data.split('\n')]
         else:
             logger.debug(f'reading input data')
     return data
 
-def print_input(data=None, input_path=INPUT_PATH):
-    logger.debug(f'printing data')
-    data = data or get_input(input_path)
-    if is_multiline(input_path):
+def print_input(data):
+    logger.debug(f'printing {data = }')
+    if isinstance(data, list):
         for line in data:
             print(line)
     else:
