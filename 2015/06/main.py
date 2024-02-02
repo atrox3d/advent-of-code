@@ -4,14 +4,13 @@ import helpers
 import tests
 import parse
 
-logging.basicConfig(
-            level='DEBUG', 
-            format='%(levelname)5.5s|%(module)12.12s|%(funcName)15.15s| %(message)s'
-            )
-
 logger = logging.getLogger(__name__)
 
-def main(solution):
+def main(solution, level='DEBUG'):
+    logging.basicConfig(
+                level=level, 
+                format='%(levelname)5.5s|%(module)12.12s|%(funcName)15.15s| %(message)s'
+                )
     options = parse.get_parser().parse_args()
     # logger.debug(f'{options = }')
     parse.log_options(options)

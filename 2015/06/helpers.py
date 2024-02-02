@@ -22,7 +22,7 @@ def get_input(input_path):
         data = fp.read()
         if is_multiline(data=data):
             logger.debug(f'parsing input lines')
-            data = [line.rstrip() for line in data.split('\n')]
+            data = [line.rstrip() for line in data.split('\n') if line]
         else:
             logger.debug(f'reading input data')
     return data
