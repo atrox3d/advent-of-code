@@ -1,33 +1,30 @@
-from pathlib import Path
 import sys
-            
+import logging
+
+import helpers
+import tests
+
+logging.basicConfig(level='DEBUG')
+logger = logging.getLogger(__name__)
+
 def solution(quiz_input):
     """
     """
-    return quiz_input
+    helpers.print_input(quiz_input)
+    return False
 
-if sys.argv[1:]:
-    param = sys.argv[1]
-    if param.lower() == 'test':
-        tests = [
-            {
-                'input': '', 
-                'expected': 0,
-            },
-        ]
-        for test in tests:
-            _input = test['input']
-            expected = test['expected']
-            print(f'testing {_input}: {expected=}')
-            result = solution(test['input'])
-            try:
-                assert expected == result, f'{expected=} != {result=}'
-                print('PASS')
-            except AssertionError as ae:
-                print(repr(ae))
-            finally:
-                print()
-else:
-    with open(Path(__file__).parent / 'input.txt') as fp:
-        quiz_input = fp.read().rstrip()
-        print(solution(quiz_input))
+if __name__ == '__main__':
+    if sys.argv[1:]:
+        param = sys.argv[1]
+        logger.info(f'param detected:')
+        if param.lower() == 'test':
+            logger.info(f'testing solution against tests')
+            tests.test(solution)
+        else:
+            logger.info(f'testing solution against {param}')
+            tests.test_param(solution, param)
+    else:
+        quiz_input = helpers.get_input()
+        logger.info('running solution')
+        result = solution(quiz_input)
+        logger.info(f'{result = }')
