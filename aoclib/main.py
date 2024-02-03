@@ -22,7 +22,7 @@ def main(solution, level='DEBUG'):
     
     elif options.test:
         logger.info(f'testing solution against tests')
-        tests.test(solution, input_path=options.test, 
+        tests.test_solution(solution, input_path=options.test, 
                    multiline=helpers.is_multiline(input_path=options.input_path))
 
     elif options.print:

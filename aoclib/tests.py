@@ -9,17 +9,18 @@ logger = logging.getLogger(__name__)
 TESTS_FILE = 'tests.json'
 TESTS_PATH = Path(sys.argv[0]).parent / TESTS_FILE
 
-def test_param(solution, param, multiline):
-        if multiline:
-            logger.debug(f'converting {param} to list')
-            param = [param]
-        return solution(param)
-
 def get_loader(input_path):
     def json_loader(input_path):
         with open(input_path) as fp:
             data = json.load(fp)
+            logger.debug(f'{data = }')
+            for d in data:
+                for k, v in d.items():
+                    if '\n' in v:
+                        d[k] = v.split('\n')
+            logger.debug(f'{data = }')
             data = [tuple(data.values()) for data in data]
+            logger.debug(f'{data = }')
         return data
     
     def str_to_val(value):
@@ -54,8 +55,14 @@ def load_tests(input_path=TESTS_PATH):
     loader = get_loader(input_path)
     return loader(input_path)
 
+def test_param(solution, param, multiline):
+        if multiline:
+            logger.debug(f'converting {param} to list')
+            param = [param]
+        return solution(param)
 
-def test(solution, tests=None, input_path=None, multiline=None):
+
+def test_solution(solution, tests=None, input_path=None, multiline=None):
     tests = load_tests(input_path)
 
     for test in tests:
@@ -64,7 +71,9 @@ def test(solution, tests=None, input_path=None, multiline=None):
             _input, expected = test
         else:
             raise ValueError(f'tes must be a tuple or list {test = }')
-        logger.info(f'testing {_input=}: {expected=}')
+        logger.info(f'{_input = }')
+        logger.info(f'{expected = }')
+        logger.info(f'{multiline = }')
         
         result = test_param(solution, _input, multiline)
         try:

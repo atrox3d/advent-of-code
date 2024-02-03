@@ -71,11 +71,30 @@ def solution(quiz_input):
     zero = {k:0 for k in pass_test}
     logger.debug(f'{quiz_input = }')
 
-    tokens = re.compile(r'^(?:(\w+)|(\d+)|(\w+) (\w+) (\w+)|(\w+) (\w+)) -> (\w+)$')
+    tokens = re.compile(
+        r'^(?P<left>'           # 0
+        r'(\w+)|'               # 1 2
+        r'(\d+)|'               # 3 4
+        r'(\w+) (\w+) (\w+)|'   # 5 6
+        r'(\w+) (\w+)'          # 6 7
+        r')'
+        r' (->) '               # 8
+        r'(?P<right>\w+)$')     # 9
+    
     for line in quiz_input:
-        found = tokens.match(line)
         print(f'{line = }')
+        found = tokens.match(line)
         print(f'{found = }')
+        groups = found.groups()
+        print(f'{groups = }')
+        groupd = found.groupdict()
+        print(f'{groupd = }')
+
+        trim = [val for val in groups if val]
+        print(f'{trim = }')
+
+        print(list(enumerate(groups)))
+
         print()
         if not found:
             print(f'not found: {line}')
