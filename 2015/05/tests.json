@@ -1,0 +1,23 @@
+[
+  {
+    "input": "aaa",
+    "expected": {
+      "nice": 1,
+      "naughty": 0
+    }
+  },
+  {
+    "input": "jchzalrnumimnmhp",
+    "expected": {
+      "nice": 0,
+      "naughty": 1
+    }
+  },
+  {
+    "input": "dvszwmarrgswjxmb",
+    "expected": {
+      "nice": 0,
+      "naughty": 1
+    }
+  }
+]

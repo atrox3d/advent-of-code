@@ -1,5 +1,10 @@
-from pathlib import Path
-import sys
+import logging
+import sys, os
+
+sys.path.append(os.getcwd())
+from aoclib import main
+
+logger = logging.getLogger(__name__)
             
 def solution(quiz_input):
     """
@@ -59,6 +64,7 @@ def solution(quiz_input):
         return result
 
     def is_nice2(word: str) -> bool:
+        logger.debug(f'{word=}')
         twice = re.search(r'(..).*\1', word)
         twice = twice is not None
         print(f'{word = }, {twice = }')
@@ -78,6 +84,31 @@ def solution(quiz_input):
             naughty += 1
 
     return dict(nice=nice, naughty=naughty)
+
+
+if __name__ == '__main__':
+    main.main(solution, level='DEBUG')
+    exit()
+    tests = [
+        {
+            'input': ['aaa'], 
+            'expected': {'nice': 1, 'naughty': 0},
+        },
+        {
+            'input': ['jchzalrnumimnmhp'], 
+            'expected': {'nice': 0, 'naughty': 1},
+        },
+        {
+            'input': ['dvszwmarrgswjxmb'], 
+            'expected': {'nice': 0, 'naughty': 1},
+        },
+    ]
+    from aoclib.jsonutil import create_json_tests
+    from aoclib.tests import TESTS_PATH
+    create_json_tests(data=tests,
+                      path=TESTS_PATH
+                      )
+    exit()
 
 if sys.argv[1:]:
     param = sys.argv[1]
