@@ -1,6 +1,8 @@
 import logging
+import sys, os
 
-import main
+sys.path.append(os.getcwd())
+from aoclib import main
 
 logger = logging.getLogger(__name__)
 
