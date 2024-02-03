@@ -47,13 +47,14 @@ def solution(quiz_input):
                     start = int(startr), int(startc)
                     end = int(endr), int(endc)
                     onoff = onoff.strip()
-                    logger.info(f'TURN {onoff!r} {start} -> {end}')
+                    onoff = 1 if onoff == 'on' else 0
+                    logger.debug(f'TURN {onoff!r} {start} -> {end}')
                     return 'turn', onoff, start, end
                 
                 case 'toggle', _, startr, startc, 'through', endr, endc:
                     start = int(startr), int(startc)
                     end = int(endr), int(endc)
-                    logger.info(f'TOGGLE {start} -> {end}')
+                    logger.debug(f'TOGGLE {start} -> {end}')
                     return 'toggle', None, start, end
 
                 case _:
@@ -64,13 +65,23 @@ def solution(quiz_input):
             exit()
 
     def act(grid, action: str, param: str, start: tuple[int], end: tuple[int]):
-        logger.info(f'{action, param, start, end = }')
+        # logger.info(f'{action, param, start, end = }')
+        for r in range(start[0], end[0]+1):
+            for c in range(start[1], end[1]+1):
+                if action == 'turn':
+                    grid[r][c] = param
+                elif action == 'toggle':
+                    grid[r][c] ^= 1
+
 
     grid = [[0 for c in range(1000)] for r in range(1000)]
     for line in quiz_input:
         instruction = parse_instruction(line)
         act(grid, *instruction)
-    return False
+    # print(grid)
+    result = sum([sum(r) for r in grid])
+    print(result)
+    return result
 
 if __name__ == '__main__':
     main.main(solution, level='INFO')
