@@ -33,6 +33,31 @@ def solution(quiz_input):
     turn off 499,499 through 500,500 would turn off (or leave off) 
     the middle four lights.
     After following the instructions, how many lights are lit?
+
+--- Part Two ---
+    You just finish implementing your winning light pattern when you realize you 
+    mistranslated Santa's message from Ancient Nordic Elvish.
+
+    The light grid you bought actually has individual brightness controls;
+    each light can have a brightness of zero or more. The lights all start at zero.
+
+    The phrase turn on actually means that you should increase the brightness
+    of those lights by 1.
+
+    The phrase turn off actually means that you should decrease the brightness 
+    of those lights by 1, to a minimum of zero.
+
+    The phrase toggle actually means that you should increase the brightness 
+    of those lights by 2.
+
+    What is the total brightness of all lights combined after following Santa's 
+    instructions?
+
+    For example:
+
+    turn on 0,0 through 0,0 would increase the total brightness by 1.
+    toggle 0,0 through 999,999 would increase the total brightness by 2000000.    
+
     """
     def parse_instruction(line: str):
         import re
@@ -66,6 +91,14 @@ def solution(quiz_input):
             return newvalue
         elif action == 'toggle':
             return value ^ 1
+    
+    def strategy_part2(action: str, param: str, value: int) -> int:
+        if action == 'turn':
+            offset = 1 if param == 'on' else -1
+            value += offset
+            return value if value >= 0 else 0
+        elif action == 'toggle':
+            return value + 2
 
 
     def act(grid, action: str, param: str, start: tuple[int], end: tuple[int],
@@ -77,7 +110,7 @@ def solution(quiz_input):
     grid = [[0 for c in range(1000)] for r in range(1000)]
     for line in quiz_input:
         instruction = parse_instruction(line)
-        act(grid, *instruction, strategy_part1)
+        act(grid, *instruction, strategy_part2)
     result = sum([sum(r) for r in grid])
     print(result)
     return result
