@@ -45,7 +45,7 @@ def solution(quiz_input):
                     start = int(startr), int(startc)
                     end = int(endr), int(endc)
                     onoff = onoff.strip()
-                    onoff = 1 if onoff == 'on' else 0
+                    # onoff = 1 if onoff == 'on' else 0
                     return 'turn', onoff, start, end
                 
                 case 'toggle', _, startr, startc, 'through', endr, endc:
@@ -59,19 +59,25 @@ def solution(quiz_input):
         else:
             print(f'ERROR: no match: {line}')
             exit()
+    
+    def strategy_part1(action: str, param: str, value: int) -> int:
+        if action == 'turn':
+            newvalue = 1 if param == 'on' else 0
+            return newvalue
+        elif action == 'toggle':
+            return value ^ 1
 
-    def act(grid, action: str, param: str, start: tuple[int], end: tuple[int]):
+
+    def act(grid, action: str, param: str, start: tuple[int], end: tuple[int],
+            strategy):
         for r in range(start[0], end[0]+1):
             for c in range(start[1], end[1]+1):
-                if action == 'turn':
-                    grid[r][c] = param
-                elif action == 'toggle':
-                    grid[r][c] ^= 1
+                grid[r][c] = strategy(action, param, grid[r][c])
 
     grid = [[0 for c in range(1000)] for r in range(1000)]
     for line in quiz_input:
         instruction = parse_instruction(line)
-        act(grid, *instruction)
+        act(grid, *instruction, strategy_part1)
     result = sum([sum(r) for r in grid])
     print(result)
     return result
