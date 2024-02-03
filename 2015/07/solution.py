@@ -80,24 +80,27 @@ def solution(quiz_input):
         r')'
         r' (->) '               # 8
         r'(?P<right>\w+)$')     # 9
-    
+    tokens = re.compile(
+            r'^(\d+|\w+)*\s*(AND|OR|NOT|LSHIFT|RSHIFT)*\s*(\d+|\w+)* (->) (\w+)$'
+        )
     for line in quiz_input:
         print(f'{line = }')
         found = tokens.match(line)
         print(f'{found = }')
-        groups = found.groups()
-        print(f'{groups = }')
-        groupd = found.groupdict()
-        print(f'{groupd = }')
+        if found:
+            groups = found.groups()
+            print(f'{groups = }')
+            groupd = found.groupdict()
+            print(f'{groupd = }')
 
-        trim = [val for val in groups if val]
-        print(f'{trim = }')
+            trim = [val for val in groups if val]
+            print(f'{trim = }')
 
-        print(list(enumerate(groups)))
+            print(list(enumerate(groups)))
 
-        print()
-        if not found:
-            print(f'not found: {line}')
+            print()
+        else:
+            logger.error(f'not found: {line}')
             exit()
 
     return zero
