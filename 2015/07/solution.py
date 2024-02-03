@@ -103,4 +103,4 @@ def solution(quiz_input):
     return zero
 
 if __name__ == '__main__':
-    main.main(solution, level='DEBUG')
+    main.main(solution, level='INFO')

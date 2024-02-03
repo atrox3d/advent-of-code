@@ -4,6 +4,8 @@ import csv
 import sys
 from pathlib import Path
 
+from . import helpers
+
 logger = logging.getLogger(__name__)
 
 TESTS_FILE = 'tests.json'
@@ -55,10 +57,11 @@ def load_tests(input_path=TESTS_PATH):
     loader = get_loader(input_path)
     return loader(input_path)
 
-def test_param(solution, param, multiline):
-        if multiline:
-            logger.debug(f'converting {param} to list')
-            param = [param]
+def test_param(solution, param: str, input_path: str):
+        if not input_path.endswith('.json'):
+            if helpers.is_multiline(input_path=input_path):
+                logger.debug(f'converting {param} to list')
+                param = [param]
         return solution(param)
 
 

@@ -17,7 +17,8 @@ def main(solution, level='DEBUG'):
 
     if options.test_param:
         logger.info(f'testing solution against {options.test_param}')
-        tests.test_param(solution, options.test_param)
+        tests.test_param(solution, options.test_param,
+                         options.input_path)
     
     elif options.test:
         logger.info(f'testing solution against tests')
