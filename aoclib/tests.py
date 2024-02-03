@@ -17,9 +17,9 @@ def get_loader(input_path):
             for d in data:
                 for k, v in d.items():
                     if '\n' in v:
-                        d[k] = v.split('\n')
+                        d[k] = [line for line in v.split('\n') if line]
             logger.debug(f'{data = }')
-            data = [tuple(data.values()) for data in data]
+            data = [tuple(item.values()) for item in data]
             logger.debug(f'{data = }')
         return data
     
@@ -62,7 +62,7 @@ def test_param(solution, param, multiline):
         return solution(param)
 
 
-def test_solution(solution, tests=None, input_path=None, multiline=None):
+def test_solution(solution, tests=None, input_path=None):
     tests = load_tests(input_path)
 
     for test in tests:
@@ -73,9 +73,9 @@ def test_solution(solution, tests=None, input_path=None, multiline=None):
             raise ValueError(f'tes must be a tuple or list {test = }')
         logger.info(f'{_input = }')
         logger.info(f'{expected = }')
-        logger.info(f'{multiline = }')
         
-        result = test_param(solution, _input, multiline)
+        # result = test_param(solution, _input)
+        result = solution(_input)
         try:
             assert expected == result, f'{expected=} != {result=}'
             logger.info(f'PASS: {expected=} != {result=}')

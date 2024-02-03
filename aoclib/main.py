@@ -17,13 +17,11 @@ def main(solution, level='DEBUG'):
 
     if options.test_param:
         logger.info(f'testing solution against {options.test_param}')
-        tests.test_param(solution, options.test_param, 
-                         helpers.is_multiline(input_path=options.input_path))
+        tests.test_param(solution, options.test_param)
     
     elif options.test:
         logger.info(f'testing solution against tests')
-        tests.test_solution(solution, input_path=options.test, 
-                   multiline=helpers.is_multiline(input_path=options.input_path))
+        tests.test_solution(solution, input_path=options.test) 
 
     elif options.print:
         quiz_input = helpers.get_input(options.input_path)
