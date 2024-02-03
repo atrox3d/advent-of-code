@@ -1,3 +1,3 @@
-https://adventofcode.com/2015/day/6   
+https://adventofcode.com/YEAR/day/DAY
 
-https://adventofcode.com/2015/day/6#part2
+https://adventofcode.com/YEAR/day/DAY#part2
