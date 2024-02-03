@@ -1,12 +1,13 @@
 import logging
 import json
 import csv
+import sys
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 TESTS_FILE = 'tests.json'
-TESTS_PATH = Path(__file__).parent / TESTS_FILE
+TESTS_PATH = Path(sys.argv[0]).parent / TESTS_FILE
 
 def test_param(solution, param, multiline):
         if multiline:

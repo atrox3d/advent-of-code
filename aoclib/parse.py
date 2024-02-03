@@ -1,7 +1,8 @@
 import argparse
 import logging
 
-import helpers, tests
+from . import helpers
+from . import tests
 
 logger = logging.getLogger(__name__)
 
