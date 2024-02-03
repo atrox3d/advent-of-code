@@ -42,32 +42,35 @@ def solution(quiz_input):
         tokens = instructions.match(line)
         if tokens:
             logger.debug(f'{tokens.groups()}')
-            action, onoff, startr, startc, through, endr, endc = tokens.groups()
-            logger.debug((action, onoff, startr, startc, through, endr, endc))
             match tokens.groups():
                 case 'turn', onoff, startr, startc, 'through', endr, endc:
-                    start = startr, startc
-                    end = endr, endc
-                    logger.info(f'TURN {onoff} {start} -> {end}')
-
+                    start = int(startr), int(startc)
+                    end = int(endr), int(endc)
+                    onoff = onoff.strip()
+                    logger.info(f'TURN {onoff!r} {start} -> {end}')
+                    return 'turn', onoff, start, end
+                
                 case 'toggle', _, startr, startc, 'through', endr, endc:
-                    start = startr, startc
-                    end = endr, endc
+                    start = int(startr), int(startc)
+                    end = int(endr), int(endc)
                     logger.info(f'TOGGLE {start} -> {end}')
+                    return 'toggle', None, start, end
 
                 case _:
                     raise ValueError(f'unrecognized pattern {tokens.groups()}')
 
         else:
-            print(f'ERROR {line}')
+            print(f'ERROR: no match: {line}')
             exit()
 
-
+    def act(grid, action: str, param: str, start: tuple[int], end: tuple[int]):
+        logger.info(f'{action, param, start, end = }')
 
     grid = [[0 for c in range(1000)] for r in range(1000)]
     for line in quiz_input:
-        parse_instruction(line)
+        instruction = parse_instruction(line)
+        act(grid, *instruction)
     return False
 
 if __name__ == '__main__':
-    main.main(solution, level='DEBUG')
+    main.main(solution, level='INFO')
