@@ -66,16 +66,22 @@ def solution(quiz_input):
     (provided as your puzzle input), what signal is ultimately 
     provided to wire a?
     """
-    return {
-        'd': 72,
-        'e': 507,
-        'f': 492,
-        'g': 114,
-        'h': 65412,
-        'i': 65079,
-        'x': 123,
-        'y': 456,
-    }
+    import re
+    pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
+    zero = {k:0 for k in pass_test}
+    logger.debug(f'{quiz_input = }')
+
+    tokens = re.compile(r'^(?:(\w+)|(\d+)|(\w+) (\w+) (\w+)|(\w+) (\w+)) -> (\w+)$')
+    for line in quiz_input:
+        found = tokens.match(line)
+        print(f'{line = }')
+        print(f'{found = }')
+        print()
+        if not found:
+            print(f'not found: {line}')
+            exit()
+
+    return zero
 
 if __name__ == '__main__':
-    main.main(solution, level='INFO')
+    main.main(solution, level='DEBUG')
