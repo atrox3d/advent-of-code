@@ -36,25 +36,21 @@ def solution(quiz_input):
     """
     def parse_instruction(line: str):
         import re
-        logger.debug(line)
         # instructions = re.compile(r'(\D+) (\d+),(\d+) (\D+) (\d+),(\d+)')
         instructions = re.compile(r'^(\w+) (\D*)(\d+),(\d+) (\w+) (\d+),(\d+)$')
         tokens = instructions.match(line)
         if tokens:
-            logger.debug(f'{tokens.groups()}')
             match tokens.groups():
                 case 'turn', onoff, startr, startc, 'through', endr, endc:
                     start = int(startr), int(startc)
                     end = int(endr), int(endc)
                     onoff = onoff.strip()
                     onoff = 1 if onoff == 'on' else 0
-                    logger.debug(f'TURN {onoff!r} {start} -> {end}')
                     return 'turn', onoff, start, end
                 
                 case 'toggle', _, startr, startc, 'through', endr, endc:
                     start = int(startr), int(startc)
                     end = int(endr), int(endc)
-                    logger.debug(f'TOGGLE {start} -> {end}')
                     return 'toggle', None, start, end
 
                 case _:
@@ -65,7 +61,6 @@ def solution(quiz_input):
             exit()
 
     def act(grid, action: str, param: str, start: tuple[int], end: tuple[int]):
-        # logger.info(f'{action, param, start, end = }')
         for r in range(start[0], end[0]+1):
             for c in range(start[1], end[1]+1):
                 if action == 'turn':
@@ -73,12 +68,10 @@ def solution(quiz_input):
                 elif action == 'toggle':
                     grid[r][c] ^= 1
 
-
     grid = [[0 for c in range(1000)] for r in range(1000)]
     for line in quiz_input:
         instruction = parse_instruction(line)
         act(grid, *instruction)
-    # print(grid)
     result = sum([sum(r) for r in grid])
     print(result)
     return result
