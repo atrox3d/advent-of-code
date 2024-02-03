@@ -66,7 +66,16 @@ def solution(quiz_input):
     (provided as your puzzle input), what signal is ultimately 
     provided to wire a?
     """
-    return None
+    return {
+        'd': 72,
+        'e': 507,
+        'f': 492,
+        'g': 114,
+        'h': 65412,
+        'i': 65079,
+        'x': 123,
+        'y': 456,
+    }
 
 if __name__ == '__main__':
     main.main(solution, level='INFO')
