@@ -94,19 +94,19 @@ def solution(quiz_input):
     port_inits = get_initial_ports(quiz_input)
     ports = get_instructions_by_port(quiz_input)
     # print_first_level_creation(quiz_input, port_inits, ports)
-    for port in port_inits:
+    for port, value in port_inits.items():
         for dest, lines in ports.items():
             if port == dest:
                 logger.info(f'{dest = }')
                 logger.info(f'{port = }')
                 for line in lines:
                     logger.info(f'CALL get_call_stack | {port =}, {line =}')
-                    get_call_stack(port, ports, [line])
+                    get_call_stack(port, ports, [line], {port:value})
         print()
 
     return zero
 
-def get_call_stack(port, ports, stack=[]):
+def get_call_stack(port, ports, stack=[], values={}):
     tabs = ' ' * (len(stack)+1)
     tabs = ''
     logger.debug(f'{tabs}ENTER')
@@ -124,16 +124,18 @@ def get_call_stack(port, ports, stack=[]):
                 match trimmed:
                     case left, op, right:
                         logger.info(f'{tabs}{dest} = {left} {op} {right}')
-                        if any(map(str.isnumeric, [left, right])):
-                            print('woooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
+                        if any(isinstance(x, int) for x in (left, right)):
+                            if any(x in values for x in (left, right)):
+                                print('woooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
+                                
                         if isinstance(left, str):
-                            get_call_stack(left, ports, stack)
+                            get_call_stack(left, ports, stack, values)
                         if isinstance(right, str):
-                            get_call_stack(right, ports, stack)
+                            get_call_stack(right, ports, stack, values)
                     case op, right:
                         logger.info(f'{tabs}{dest} = {op} {right}')
                         if isinstance(right, str):
-                            get_call_stack(right, ports, stack)
+                            get_call_stack(right, ports, stack, values)
                         pass
                     case _:
                         raise ValueError(f'{statement = }')
