@@ -91,24 +91,23 @@ def solution(quiz_input):
     zero = {k:0 for k in pass_test}
     # logger.debug(f'{quiz_input = }')
 
-    # for port, lines in ports.items():
-        # print(f'{port = }, {lines = }')
-    # print(f'{port_inits = }')
-
     port_inits = get_initial_ports(quiz_input)
     ports = get_instructions_by_port(quiz_input)
-    for initport in port_inits:
-        for port, lines in ports.items():
-            for line in lines:
-                if initport in line:
-                    print(port, line)
+    print_first_level_creation(quiz_input, port_inits, ports)
 
     return zero
 
+def print_first_level_creation(quiz_input, port_inits, ports):
+    for initport in port_inits:
+        for port, lines in ports.items():
+            for line in lines:
+                if initport in line[:-2:]:
+                    print(port, line)
+    
 def get_initial_ports(quiz_input):
     port_inits = {}
+    assign = re.compile(r'^(\d+) (->) (\w+)$')
     for line in quiz_input:
-        assign = re.compile(r'^(\d+) (->) (\w+)$')
         found = assign.match(line)
         if found is not None:
             port = found.groups()[-1]
