@@ -93,9 +93,50 @@ def solution(quiz_input):
 
     port_inits = get_initial_ports(quiz_input)
     ports = get_instructions_by_port(quiz_input)
-    print_first_level_creation(quiz_input, port_inits, ports)
+    # print_first_level_creation(quiz_input, port_inits, ports)
+    for port in port_inits:
+        for dest, lines in ports.items():
+            if port == dest:
+                logger.info(f'{dest = }')
+                logger.info(f'{port = }')
+                for line in lines:
+                    logger.info(f'CALL get_call_stack | {port =}, {line =}')
+                    get_call_stack(port, ports, [line])
+        print()
 
     return zero
+
+def get_call_stack(port, ports, stack=[]):
+    tabs = ' ' * (len(stack)+1)
+    tabs = ''
+    logger.debug(f'{tabs}ENTER')
+    for dest, lines in ports.items():
+        for line in lines:
+            if port in line and port != dest and line not in stack:
+                for pos, needle in enumerate(stack[:10]):
+                    logger.debug(f'{tabs}stack[{pos}] = {needle}')
+                if len(stack) > 10:
+                    logger.debug(f'{tabs}stack[x] = ...')
+                stack.append(line)
+                logger.debug(f'{tabs}{port =}, {dest = }, {line =}')
+                statement = line[:-2]
+                match [item for item in statement if item is not None]:
+                    case left, op, right:
+                        logger.info(f'{tabs}{left = }, {op = }, {right =}')
+                        if isinstance(left, str):
+                            get_call_stack(left, ports, stack)
+                        if isinstance(right, str):
+                            get_call_stack(right, ports, stack)
+                    case op, right:
+                        logger.info(f'{tabs}{op = }, {right =}')
+                        if isinstance(right, str):
+                            get_call_stack(right, ports, stack)
+                        pass
+                    case _:
+                        raise ValueError(f'{statement = }')
+                get_call_stack(dest, ports, stack)
+    logger.debug(f'{tabs}RETURN')
+
 
 def print_first_level_creation(quiz_input, port_inits, ports):
     for initport in port_inits:
@@ -111,7 +152,7 @@ def get_initial_ports(quiz_input):
         found = assign.match(line)
         if found is not None:
             port = found.groups()[-1]
-            port_inits[port] = line
+            port_inits[port] = found[1]
     return port_inits
 
 def get_instructions_by_port(quiz_input):
