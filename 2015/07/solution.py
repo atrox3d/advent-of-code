@@ -1,13 +1,3 @@
-import logging
-import sys, os
-import re
-
-
-sys.path.append(os.getcwd())
-from aoclib import main
-
-logger = logging.getLogger(__name__)
-
 """
 --- Day 7: Some Assembly Required ---
 This year, Santa brought little Bobby Tables a set of wires 
@@ -67,6 +57,16 @@ In little Bobby's kit's instructions booklet
 (provided as your puzzle input), what signal is ultimately 
 provided to wire a?
 """
+import logging
+import sys, os
+import re, json
+
+
+sys.path.append(os.getcwd())
+from aoclib import main
+
+logger = logging.getLogger(__name__)
+
 REGEX1 = (
         r'^(?P<left>'           # 0
         r'(\w+)|'               # 1 2
@@ -85,12 +85,45 @@ REGEX2 = (
         r'(\w+)$'
 )
 
+REGEX_LR = r'^(.+)\s->\s(.+$)'
+REGEX_EXPR = r'^(\d+|\w+)*\s*(AND|OR|NOT|LSHIFT|RSHIFT)*\s*(\d+|\w+)*'
+
+def split_lr(line: str) -> tuple[tuple]:
+    logger.debug(f'{line = }')
+    found = re.match(REGEX_LR, line)
+    return found.groups()
+
+def build_ports(quiz_input: list[str]) -> dict:
+    ports = {}
+    for line in quiz_input:
+        logger.debug(f'{line = }')
+        expr, port = split_lr(line)
+        logger.debug(f'{expr, port = }')
+        if ports.get(port, False):
+            raise ValueError(f'multiple values for port {port}')
+        ports[port] = parse_expr(expr)
+        logger.debug(f'ports[{port}] = {ports[port]}')
+
+    return ports
+
+def build_dependencies(ports: dict[str, tuple[str]]) -> dict:
+    dependecies = {}
+    for port, expr in ports.items():
+        
+
+
+def parse_expr(expr: str) -> tuple:
+    logger.debug(f'{expr = }')
+    found = re.match(REGEX_EXPR, expr)
+    # filtered
+    return found.groups()
 
 def solution(quiz_input):
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
     zero = {k:0 for k in pass_test}
 
+    ports = build_ports(quiz_input)
     return zero
 
 if __name__ == '__main__':
-    main.main(solution, level='INFO')
+    main.main(solution, level='DEBUG')
