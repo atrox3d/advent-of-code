@@ -122,13 +122,13 @@ def get_call_stack(port, ports, stack=[]):
                 statement = line[:-2]
                 match [item for item in statement if item is not None]:
                     case left, op, right:
-                        logger.info(f'{tabs}{left = }, {op = }, {right =}')
+                        logger.info(f'{tabs}{dest} = {left} {op} {right}')
                         if isinstance(left, str):
                             get_call_stack(left, ports, stack)
                         if isinstance(right, str):
                             get_call_stack(right, ports, stack)
                     case op, right:
-                        logger.info(f'{tabs}{op = }, {right =}')
+                        logger.info(f'{tabs}{dest} = {op} {right}')
                         if isinstance(right, str):
                             get_call_stack(right, ports, stack)
                         pass
