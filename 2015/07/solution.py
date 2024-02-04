@@ -120,9 +120,12 @@ def get_call_stack(port, ports, stack=[]):
                 stack.append(line)
                 logger.debug(f'{tabs}{port =}, {dest = }, {line =}')
                 statement = line[:-2]
-                match [item for item in statement if item is not None]:
+                trimmed = [item for item in statement if item is not None] 
+                match trimmed:
                     case left, op, right:
                         logger.info(f'{tabs}{dest} = {left} {op} {right}')
+                        if any(map(str.isnumeric, [left, right])):
+                            print('woooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
                         if isinstance(left, str):
                             get_call_stack(left, ports, stack)
                         if isinstance(right, str):
