@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 def main(solution, level='DEBUG'):
     logging.basicConfig(
                 level=level, 
-                format='%(levelname)5.5s|%(module)12.12s|%(funcName)15.15s| %(message)s'
+                format='%(levelname)5.5s|%(module)10.10s|%(funcName)15.15s| %(message)s'
                 )
     options = parse.get_parser().parse_args()
     logger.debug(f'{options = }')
