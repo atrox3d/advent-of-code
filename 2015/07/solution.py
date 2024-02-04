@@ -94,7 +94,10 @@ def split_lr(line: str) -> tuple[tuple]:
 
 def parse_expr(expr: str) -> tuple:
     found = re.match(REGEX_EXPR, expr)
-    return found.groups()
+    groups = [int(item) if item is not None and item.isnumeric()
+              else item
+              for item in found.groups()]
+    return groups
 
 def build_ports(quiz_input: list[str]) -> dict:
     ports = {}
@@ -111,19 +114,19 @@ def find_root(port, ports, stack=[]):
     except KeyError:
         return stack
     
-    stack.append(expr)
+    stack.append({port:expr})
 
     match expr:
         case lvalue, None, None:
-            print(f'{port} = {lvalue}')
+            logger.debug(f'{port} = {lvalue}')
             if isinstance(lvalue, str):
                 return find_root(lvalue, ports, stack)
         case op, None, rvalue:
-            print(f'{port} = {op} {rvalue}')
+            logger.debug(f'{port} = {op} {rvalue}')
             if isinstance(rvalue, str):
                 return find_root(rvalue, ports, stack)
         case lvalue, op, rvalue:
-            print(f'{port} = {lvalue} {op} {rvalue}')
+            logger.debug(f'{port} = {lvalue} {op} {rvalue}')
             if isinstance(lvalue, str):
                 return find_root(lvalue, ports, stack)
             if isinstance(rvalue, str):
@@ -132,13 +135,89 @@ def find_root(port, ports, stack=[]):
             raise ValueError(expr)
     return stack
 
+def compute(lvalue, op, rvalue):
+    """
+    x << y
+    Returns x with the bits shifted to the left by y places (and new bits on the right-hand-side are zeros). This is the same as multiplying x by 2**y.
+    x >> y
+    Returns x with the bits shifted to the right by y places. This is the same as //'ing x by 2**y.
+    x & y
+    Does a "bitwise and". Each bit of the output is 1 if the corresponding bit of x AND of y is 1, otherwise it's 0.
+    x | y
+    Does a "bitwise or". Each bit of the output is 0 if the corresponding bit of x AND of y is 0, otherwise it's 1.
+    ~ x
+    Returns the complement of x - the number you get by switching each 1 for a 0 and each 0 for a 1. This is the same as -x - 1.
+    x ^ y
+    Does a "bitwise exclusive or". Each bit of the output is the same as the corresponding bit in x if that bit in y is 0, and it's the complement of the bit in x if that bit in y is 1.
+    """
+    match op:
+        case 'LSHIFT':
+            return lvalue << rvalue
+        case 'RSHIFT':
+            return lvalue >> rvalue
+        case 'OR':
+            return lvalue | rvalue
+        case 'AND':
+            return lvalue & rvalue
+        case 'XOR':
+            return lvalue ^ rvalue
+        case 'NOT':
+            return ~ rvalue
+        case _:
+            raise ValueError(f'unknown operator {op}')
+
+def process(stack: list[dict[tuple]]) -> int:
+    vars = {}
+    total = 0
+    for item in stack:
+        for dest, expr in item.items():
+            print(f'{dest} = {expr}')
+        match expr:
+            case lvalue, None, None:
+                logger.debug(f'{dest} = {lvalue}')
+                vars[dest] = lvalue
+                value = lvalue
+
+            case op, None, rvalue:
+                logger.debug(f'{dest} = {op} {rvalue}')
+                try:
+                    rvalue = vars[rvalue]
+                except KeyError:
+                    pass
+                value = compute(None, op, rvalue)
+                vars[dest] = value
+
+            case lvalue, op, rvalue:
+                logger.debug(f'{dest} = {lvalue} {op} {rvalue}')
+                try:
+                    rvalue = vars[rvalue]
+                except KeyError:
+                    pass
+                try:
+                    lvalue = vars[lvalue]
+                except KeyError:
+                    pass
+                value = compute(lvalue, op, rvalue)
+                vars[dest] = value
+            case _:
+                raise ValueError(expr)
+        print(vars)
+        try:
+            total += value
+        except TypeError as te:
+            print(repr(te), f'{value = }')
+    return total
+
 def solution(quiz_input):
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
     zero = {k:0 for k in pass_test}
 
     ports = build_ports(quiz_input)
     stack = find_root('a', ports)
-    return zero
+    for item in reversed(stack):
+        print(item)
+    result = process(reversed(stack))
+    return result
 
 if __name__ == '__main__':
-    main.main(solution, level='INFO')
+    main.main(solution, level='DEBUG')
