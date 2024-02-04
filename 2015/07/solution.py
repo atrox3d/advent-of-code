@@ -89,21 +89,20 @@ REGEX_LR = r'^(.+)\s->\s(.+$)'
 REGEX_EXPR = r'^(\d+|\w+)*\s*(AND|OR|NOT|LSHIFT|RSHIFT)*\s*(\d+|\w+)*'
 
 def split_lr(line: str) -> tuple[tuple]:
-    logger.debug(f'{line = }')
     found = re.match(REGEX_LR, line)
+    return found.groups()
+
+def parse_expr(expr: str) -> tuple:
+    found = re.match(REGEX_EXPR, expr)
     return found.groups()
 
 def build_ports(quiz_input: list[str]) -> dict:
     ports = {}
     for line in quiz_input:
-        logger.debug(f'{line = }')
         expr, port = split_lr(line)
-        logger.debug(f'{expr, port = }')
         if ports.get(port, False):
             raise ValueError(f'multiple values for port {port}')
         ports[port] = parse_expr(expr)
-        logger.debug(f'ports[{port}] = {ports[port]}')
-
     return ports
 
 def find_root(port, ports, stack=[]):
@@ -132,12 +131,6 @@ def find_root(port, ports, stack=[]):
         case _:
             raise ValueError(expr)
     return stack
-
-def parse_expr(expr: str) -> tuple:
-    logger.debug(f'{expr = }')
-    found = re.match(REGEX_EXPR, expr)
-    # filtered
-    return found.groups()
 
 def solution(quiz_input):
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
