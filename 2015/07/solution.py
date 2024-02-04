@@ -106,11 +106,32 @@ def build_ports(quiz_input: list[str]) -> dict:
 
     return ports
 
-def build_dependencies(ports: dict[str, tuple[str]]) -> dict:
-    dependecies = {}
-    for port, expr in ports.items():
-        
+def find_root(port, ports, stack=[]):
+    try:
+        expr = ports[port]
+    except KeyError:
+        return stack
+    
+    stack.append(expr)
 
+    match expr:
+        case lvalue, None, None:
+            print(f'{port} = {lvalue}')
+            if isinstance(lvalue, str):
+                return find_root(lvalue, ports, stack)
+        case op, None, rvalue:
+            print(f'{port} = {op} {rvalue}')
+            if isinstance(rvalue, str):
+                return find_root(rvalue, ports, stack)
+        case lvalue, op, rvalue:
+            print(f'{port} = {lvalue} {op} {rvalue}')
+            if isinstance(lvalue, str):
+                return find_root(lvalue, ports, stack)
+            if isinstance(rvalue, str):
+                return  find_root(rvalue, ports, stack)
+        case _:
+            raise ValueError(expr)
+    return stack
 
 def parse_expr(expr: str) -> tuple:
     logger.debug(f'{expr = }')
@@ -123,7 +144,8 @@ def solution(quiz_input):
     zero = {k:0 for k in pass_test}
 
     ports = build_ports(quiz_input)
+    stack = find_root('a', ports)
     return zero
 
 if __name__ == '__main__':
-    main.main(solution, level='DEBUG')
+    main.main(solution, level='INFO')
