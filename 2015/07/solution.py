@@ -69,45 +69,46 @@ def solution(quiz_input):
     class Wire:
         items = {}
 
-        def __init__(self, inp, out):
-            self.output = out
-            self.inp = inp + ["", ""]
-            self.__class__.items[out] = self
-            self.val = None
+        def __init__(self, expression, dest_port):
+            self.dest_port = dest_port
+            self.expression = expression + ["", ""]
+            self.__class__.items[dest_port] = self
+            self.value = None
 
         def calc(self):
-            if self.val is not None:
-                return self.val
-            elif self.inp[1] == "AND":
-                self.val = get_port_value(self.inp[0]) & get_port_value(self.inp[2])
-            elif self.inp[1] == "OR":
-                self.val = get_port_value(self.inp[0]) | get_port_value(self.inp[2])
-            elif self.inp[1] == "LSHIFT":
-                self.val = get_port_value(self.inp[0]) << get_port_value(self.inp[2])
-            elif self.inp[1] == "RSHIFT":
-                self.val = get_port_value(self.inp[0]) >> get_port_value(self.inp[2])
-            elif self.inp[0] == "NOT":
-                self.val = ~get_port_value(self.inp[1])
+            if self.value is not None:
+                return self.value
+            elif self.expression[1] == "AND":
+                self.value = get_port_value(self.expression[0]) & get_port_value(self.expression[2])
+            elif self.expression[1] == "OR":
+                self.value = get_port_value(self.expression[0]) | get_port_value(self.expression[2])
+            elif self.expression[1] == "LSHIFT":
+                self.value = get_port_value(self.expression[0]) << get_port_value(self.expression[2])
+            elif self.expression[1] == "RSHIFT":
+                self.value = get_port_value(self.expression[0]) >> get_port_value(self.expression[2])
+            elif self.expression[0] == "NOT":
+                self.value = ~get_port_value(self.expression[1])
             else:
-                self.val = get_port_value(self.inp[0])
-            return self.val
+                self.value = get_port_value(self.expression[0])
+            return self.value
+    
     def get_port_value(key):
         try:
             return int(key)
         except:
             return Wire.items[key].calc()
 
-    def read(dir, teststr):
+    def load_wire_dict(dir, teststr):
         list(map(
                 lambda r: Wire(
-                        inp = r.split(" -> ")[0].split(" "), 
-                        out = r.split(" -> ")[1])
+                        expression = r.split(" -> ")[0].split(" "), 
+                        dest_port = r.split(" -> ")[1])
                 , teststr))
 
-    read(DIR, quiz_input)
+    load_wire_dict(DIR, quiz_input)
     x = get_port_value("a")
     for wire in Wire.items.values():
-        wire.val = x if wire.output == "b" else None
+        wire.value = x if wire.dest_port == "b" else None
     print(x, get_port_value("a"), sep="\n")
 
 if __name__ == '__main__':
