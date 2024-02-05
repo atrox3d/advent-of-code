@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def is_multiline(data=None, input_path=None):
     logger.debug(f'{input_path = }')
-    logger.debug(f'{data = }')
+    # logger.debug(f'{data = }')
     if input_path:
         with open(input_path) as fp:
             data = fp.read()
@@ -24,7 +24,7 @@ def get_input(input_path):
     logger.debug(f'{input_path = }')
     with open(input_path) as fp:
         data = fp.read()
-        logger.debug(f'{data = }')
+        # logger.debug(f'{data = }')
         if is_multiline(data=data):
             logger.debug(f'parsing input lines')
             data = [line.rstrip() for line in data.split('\n') if line]

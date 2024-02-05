@@ -215,7 +215,7 @@ def solution(quiz_input):
     ports = build_ports(quiz_input)
     stack = find_root('a', ports)
     for item in reversed(stack):
-        print(item)
+        logger.debug(item)
     result = process(reversed(stack))
     return result
 
