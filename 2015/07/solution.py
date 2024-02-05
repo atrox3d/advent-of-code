@@ -99,11 +99,8 @@ def solution(quiz_input):
             return Wire.items[key].calc()
 
     def load_wire_dict(dir, teststr):
-        list(map(
-                lambda r: Wire(
-                        expression = r.split(" -> ")[0].split(" "), 
-                        dest_port = r.split(" -> ")[1])
-                , teststr))
+        [Wire(expression = line.split(" -> ")[0].split(" "), dest_port = line.split(" -> ")[1])
+         for line in teststr]
 
     load_wire_dict(DIR, quiz_input)
     x = get_port_value("a")
