@@ -114,23 +114,26 @@ def find_root(port, ports, stack=[]):
     except KeyError:
         return stack
     
+    if {port:expr} in stack:
+        return stack
+    
     stack.append({port:expr})
 
     match expr:
         case lvalue, None, None:
             logger.debug(f'{port} = {lvalue}')
             if isinstance(lvalue, str):
-                return find_root(lvalue, ports, stack)
+                stack = find_root(lvalue, ports, stack)
         case op, None, rvalue:
             logger.debug(f'{port} = {op} {rvalue}')
             if isinstance(rvalue, str):
-                return find_root(rvalue, ports, stack)
+                stack = find_root(rvalue, ports, stack)
         case lvalue, op, rvalue:
             logger.debug(f'{port} = {lvalue} {op} {rvalue}')
             if isinstance(lvalue, str):
-                return find_root(lvalue, ports, stack)
+                stack = find_root(lvalue, ports, stack)
             if isinstance(rvalue, str):
-                return  find_root(rvalue, ports, stack)
+                stack = find_root(rvalue, ports, stack)
         case _:
             raise ValueError(expr)
     return stack
@@ -215,9 +218,9 @@ def solution(quiz_input):
     ports = build_ports(quiz_input)
     stack = find_root('a', ports)
     for item in reversed(stack):
-        logger.debug(item)
+        print(item)
     result = process(reversed(stack))
     return result
 
 if __name__ == '__main__':
-    main.main(solution, level='DEBUG')
+    main.main(solution, level='INFO')
