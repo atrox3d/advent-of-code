@@ -117,26 +117,34 @@ def find_root(port, ports, stack=[]):
         
         if {port:expr} in stack:
             return stack
+        else:
+            stack.append({port:expr})
         
-        stack.append({port:expr})
-
+        values = []
         match expr:
             case lvalue, None, None:
                 logger.debug(f'{port} = {lvalue}')
                 if isinstance(lvalue, str):
-                    stack = find_reversed_root(lvalue, ports, stack)
+                    values.append(lvalue)
+
             case op, None, rvalue:
                 logger.debug(f'{port} = {op} {rvalue}')
                 if isinstance(rvalue, str):
-                    stack = find_reversed_root(rvalue, ports, stack)
+                    values.append(rvalue)
+
             case lvalue, op, rvalue:
                 logger.debug(f'{port} = {lvalue} {op} {rvalue}')
                 if isinstance(lvalue, str):
-                    stack = find_reversed_root(lvalue, ports, stack)
+                    values.append(lvalue)
                 if isinstance(rvalue, str):
-                    stack = find_reversed_root(rvalue, ports, stack)
+                    values.append(rvalue)
+            
             case _:
                 raise ValueError(expr)
+            
+        for value in values:
+            stack = find_reversed_root(value, ports, stack)
+        
         return stack
     
     logger.info('find_reverse_root')
