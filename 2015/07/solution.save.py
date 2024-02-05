@@ -1,13 +1,3 @@
-import logging
-import sys, os
-import re
-
-
-sys.path.append(os.getcwd())
-from aoclib import main
-
-logger = logging.getLogger(__name__)
-
 """
 --- Day 7: Some Assembly Required ---
 This year, Santa brought little Bobby Tables a set of wires 
@@ -67,6 +57,16 @@ In little Bobby's kit's instructions booklet
 (provided as your puzzle input), what signal is ultimately 
 provided to wire a?
 """
+import logging
+import sys, os
+import re, json
+
+
+sys.path.append(os.getcwd())
+from aoclib import main
+
+logger = logging.getLogger(__name__)
+
 REGEX1 = (
         r'^(?P<left>'           # 0
         r'(\w+)|'               # 1 2
@@ -85,108 +85,157 @@ REGEX2 = (
         r'(\w+)$'
 )
 
+REGEX_LR = r'^(.+)\s->\s(.+$)'
+REGEX_EXPR = r'^(\d+|\w+)*\s*(AND|OR|NOT|LSHIFT|RSHIFT)*\s*(\d+|\w+)*'
+
+def split_lr(line: str) -> tuple[tuple]:
+    found = re.match(REGEX_LR, line)
+    return found.groups()
+
+def parse_expr(expr: str) -> tuple:
+    found = re.match(REGEX_EXPR, expr)
+    groups = [int(item) if item is not None and item.isnumeric()
+              else item
+              for item in found.groups()]
+    return groups
+
+def build_ports(quiz_input: list[str]) -> dict:
+    ports = {}
+    for line in quiz_input:
+        expr, port = split_lr(line)
+        if ports.get(port, False):
+            raise ValueError(f'multiple values for port {port}')
+        ports[port] = parse_expr(expr)
+    return ports
+
+def find_root(port, ports, stack=[]):
+    def find_reversed_root(port, ports, stack=[]):
+        try:
+            expr = ports[port]
+        except KeyError:
+            return stack
+        
+        if {port:expr} in stack:
+            return stack
+        else:
+            stack.append({port:expr})
+        
+        values = []
+        match expr:
+            case lvalue, None, None:
+                logger.debug(f'{port} = {lvalue}')
+                if isinstance(lvalue, str):
+                    values.append(lvalue)
+
+            case op, None, rvalue:
+                logger.debug(f'{port} = {op} {rvalue}')
+                if isinstance(rvalue, str):
+                    values.append(rvalue)
+
+            case lvalue, op, rvalue:
+                logger.debug(f'{port} = {lvalue} {op} {rvalue}')
+                if isinstance(lvalue, str):
+                    values.append(lvalue)
+                if isinstance(rvalue, str):
+                    values.append(rvalue)
+            
+            case _:
+                raise ValueError(expr)
+            
+        for value in values:
+            stack = find_reversed_root(value, ports, stack)
+        
+        return stack
+    
+    logger.info('find_reverse_root')
+    stack = find_reversed_root(port, ports, stack)
+    logger.info('reverse stack')
+    stack = list(reversed(stack))
+    logger.info('return stack')
+    return stack
+
+def compute(lvalue, op, rvalue):
+    match op:
+        case 'LSHIFT':
+            return lvalue << rvalue
+        case 'RSHIFT':
+            return lvalue >> rvalue
+        case 'OR':
+            return lvalue | rvalue
+        case 'AND':
+            return lvalue & rvalue
+        case 'XOR':
+            return lvalue ^ rvalue
+        case 'NOT':
+            return ~ rvalue
+        case _:
+            raise ValueError(f'unknown operator {op}')
+
+def process(stack: list[dict[tuple]]) -> int:
+    vars = {}
+    total = 0
+    for item in stack:
+        for dest, expr in item.items():
+            print(f'{dest} = {expr}')
+        match expr:
+            case lvalue, None, None:
+                logger.debug(f'{dest} = {lvalue}')
+                vars[dest] = lvalue
+                value = lvalue
+
+            case op, None, rvalue:
+                logger.debug(f'{dest} = {op} {rvalue}')
+                try:
+                    rvalue = vars[rvalue]
+                except KeyError:
+                    pass
+                value = compute(None, op, rvalue)
+                vars[dest] = value
+
+            case lvalue, op, rvalue:
+                logger.debug(f'{dest} = {lvalue} {op} {rvalue}')
+                try:
+                    rvalue = vars[rvalue]
+                except KeyError:
+                    pass
+                try:
+                    lvalue = vars[lvalue]
+                except KeyError:
+                    pass
+                value = compute(lvalue, op, rvalue)
+                vars[dest] = value
+            case _:
+                raise ValueError(expr)
+        print(vars)
+        try:
+            total += value
+        except TypeError as te:
+            print(repr(te), f'{value = }')
+    return total
+
+def repr_stack_item(item, printer=logger.debug):
+    port, expr = next(iter(item.items()))
+    match expr:
+        case lvalue, None, None:
+            printer(f'{port} = {lvalue}')
+        case op, None, rvalue:
+            printer(f'{port} = {op} {rvalue}')
+        case lvalue, op, rvalue:
+            printer(f'{port} = {lvalue} {op} {rvalue}')
+        case _:
+            raise ValueError(expr)
 
 def solution(quiz_input):
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
     zero = {k:0 for k in pass_test}
-    # logger.debug(f'{quiz_input = }')
-
-    initialized_ports = get_initialized_ports(quiz_input)
-    instructions_by_port = get_instructions_by_port(quiz_input)
-    # print_first_level_creation(quiz_input, port_inits, ports)
-    for port, value in initialized_ports.items():
-        for dest, line in instructions_by_port.items():
-            if port == dest:
-                logger.info(f'{dest = }')
-                logger.info(f'{port = }')
-                logger.info(f'CALL get_call_stack | {port =}, {line =}')
-                get_call_stack(port, instructions_by_port, [line], {port:value})
-        print()
-
-    return zero
-
-def get_call_stack(port, ports, stack=[], values={}):
-    tabs = ' ' * (len(stack)+1)
-    tabs = ''
-    logger.debug(f'{tabs}ENTER')
-    for dest, line in ports.items():
-        if port in line and port != dest and line not in stack:
-            for pos, needle in enumerate(stack[:10]):
-                logger.debug(f'{tabs}stack[{pos}] = {needle}')
-            if len(stack) > 10:
-                logger.debug(f'{tabs}stack[x] = ...')
-            stack.append(line)
-            logger.debug(f'{tabs}{port =}, {dest = }, {line =}')
-            statement = line[:-2]
-            trimmed = [item for item in statement if item is not None] 
-            match trimmed:
-                case left, op, right:
-                    logger.info(f'{tabs}{dest} = {left} {op} {right}')
-                    if any(isinstance(x, int) for x in (left, right)):
-                        if any(x in values for x in (left, right)):
-                            print('woooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo')
-
-                    if isinstance(left, str):
-                        get_call_stack(left, ports, stack, values)
-                    if isinstance(right, str):
-                        get_call_stack(right, ports, stack, values)
-                case op, right:
-                    logger.info(f'{tabs}{dest} = {op} {right}')
-                    if isinstance(right, str):
-                        get_call_stack(right, ports, stack, values)
-                    pass
-                case _:
-                    raise ValueError(f'{statement = }')
-            get_call_stack(dest, ports, stack)
-    logger.debug(f'{tabs}RETURN')
-
-
-def print_first_level_creation(quiz_input, port_inits, ports):
-    for initport in port_inits:
-        for port, line in ports.items():
-            if initport in line[:-2:]:
-                print(port, line)
-    
-def get_initialized_ports(quiz_input):
-    port_inits = {}
-    assign = re.compile(r'^(\d+) (->) (\w+)$')
-    for line in quiz_input:
-        found = assign.match(line)
-        if found is not None:
-            port = found.groups()[-1]
-            port_inits[port] = found[1]
-    return port_inits
-
-def get_instructions_by_port(quiz_input):
-    # from collections import defaultdict
-    ports = {}
-    for line in quiz_input:
-        groups = regex_tester(line, REGEX2)
-        groups = [int(item) if item and item.isnumeric() else item for item in groups]
-        port = groups[-1]
-        ports[port] = groups
-    return ports
-
-def regex_tester(line, regex):
-    tokens = re.compile(regex)
-    logger.debug(f'{line = }')
-    found = tokens.match(line)
-    logger.debug(f'{found = }')
-
-    if found:
-        groups = found.groups()
-        logger.debug(f'{groups = }')
-        # groupd = found.groupdict()
-        # logger.debug(f'{groupd = }')
-        trim = [val for val in groups if val]
-        logger.debug(f'{trim = }')
-        logger.debug(f'enumerate: {list(enumerate(groups))}')
-        logger.debug('')
-        return groups
-    else:
-        logger.error(f'not found: {line}')
-        exit()
-
+    ports = build_ports(quiz_input)
+    stack = find_root('a', ports)
+    # stack = list(reversed(stack))
+    for item in stack:
+        repr_stack_item(item, logger.info)
+    logger.info(f'{len(quiz_input), len(stack ) = }')
+    result = process(stack)
+    return result
 
 if __name__ == '__main__':
     main.main(solution, level='INFO')
