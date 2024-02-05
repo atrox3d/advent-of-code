@@ -109,33 +109,41 @@ def build_ports(quiz_input: list[str]) -> dict:
     return ports
 
 def find_root(port, ports, stack=[]):
-    try:
-        expr = ports[port]
-    except KeyError:
-        return stack
-    
-    if {port:expr} in stack:
-        return stack
-    
-    stack.append({port:expr})
+    def find_reversed_root(port, ports, stack=[]):
+        try:
+            expr = ports[port]
+        except KeyError:
+            return stack
+        
+        if {port:expr} in stack:
+            return stack
+        
+        stack.append({port:expr})
 
-    match expr:
-        case lvalue, None, None:
-            logger.debug(f'{port} = {lvalue}')
-            if isinstance(lvalue, str):
-                stack = find_root(lvalue, ports, stack)
-        case op, None, rvalue:
-            logger.debug(f'{port} = {op} {rvalue}')
-            if isinstance(rvalue, str):
-                stack = find_root(rvalue, ports, stack)
-        case lvalue, op, rvalue:
-            logger.debug(f'{port} = {lvalue} {op} {rvalue}')
-            if isinstance(lvalue, str):
-                stack = find_root(lvalue, ports, stack)
-            if isinstance(rvalue, str):
-                stack = find_root(rvalue, ports, stack)
-        case _:
-            raise ValueError(expr)
+        match expr:
+            case lvalue, None, None:
+                logger.debug(f'{port} = {lvalue}')
+                if isinstance(lvalue, str):
+                    stack = find_reversed_root(lvalue, ports, stack)
+            case op, None, rvalue:
+                logger.debug(f'{port} = {op} {rvalue}')
+                if isinstance(rvalue, str):
+                    stack = find_reversed_root(rvalue, ports, stack)
+            case lvalue, op, rvalue:
+                logger.debug(f'{port} = {lvalue} {op} {rvalue}')
+                if isinstance(lvalue, str):
+                    stack = find_reversed_root(lvalue, ports, stack)
+                if isinstance(rvalue, str):
+                    stack = find_reversed_root(rvalue, ports, stack)
+            case _:
+                raise ValueError(expr)
+        return stack
+    
+    logger.info('find_reverse_root')
+    stack = find_reversed_root(port, ports, stack)
+    logger.info('reverse stack')
+    stack = list(reversed(stack))
+    logger.info('return stack')
     return stack
 
 def compute(lvalue, op, rvalue):
@@ -215,7 +223,7 @@ def solution(quiz_input):
 
     ports = build_ports(quiz_input)
     stack = find_root('a', ports)
-    stack = list(reversed(stack))
+    # stack = list(reversed(stack))
     for item in stack:
         repr_stack_item(item, logger.info)
     result = process(stack)
