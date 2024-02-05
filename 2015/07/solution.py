@@ -61,13 +61,10 @@ import pathlib, sys, os
 sys.path.append(os.getcwd())
 from aoclib import main
 
+DIR = pathlib.Path(__file__).parent.absolute()
+
 
 def solution(quiz_input):
-
-    def read(dir, teststr):
-        with open(dir / "input.txt") as f:
-            s = (f.read() if teststr == "" else teststr).splitlines()
-        list(map(lambda r: Wire(r.split(" -> ")[0].split(" "), r.split(" -> ")[1]), s))
 
     class Wire:
         items = {}
@@ -82,32 +79,36 @@ def solution(quiz_input):
             if self.val is not None:
                 return self.val
             elif self.inp[1] == "AND":
-                self.val = v(self.inp[0]) & v(self.inp[2])
+                self.val = get_port_value(self.inp[0]) & get_port_value(self.inp[2])
             elif self.inp[1] == "OR":
-                self.val = v(self.inp[0]) | v(self.inp[2])
+                self.val = get_port_value(self.inp[0]) | get_port_value(self.inp[2])
             elif self.inp[1] == "LSHIFT":
-                self.val = v(self.inp[0]) << v(self.inp[2])
+                self.val = get_port_value(self.inp[0]) << get_port_value(self.inp[2])
             elif self.inp[1] == "RSHIFT":
-                self.val = v(self.inp[0]) >> v(self.inp[2])
+                self.val = get_port_value(self.inp[0]) >> get_port_value(self.inp[2])
             elif self.inp[0] == "NOT":
-                self.val = ~v(self.inp[1])
+                self.val = ~get_port_value(self.inp[1])
             else:
-                self.val = v(self.inp[0])
+                self.val = get_port_value(self.inp[0])
             return self.val
-
-    def v(key):
+    def get_port_value(key):
         try:
             return int(key)
         except:
             return Wire.items[key].calc()
 
-    teststr = """"""
-    DIR = pathlib.Path(__file__).parent.absolute()
-    read(DIR, teststr)
-    x = v("a")
+    def read(dir, teststr):
+        list(map(
+                lambda r: Wire(
+                        inp = r.split(" -> ")[0].split(" "), 
+                        out = r.split(" -> ")[1])
+                , teststr))
+
+    read(DIR, quiz_input)
+    x = get_port_value("a")
     for wire in Wire.items.values():
         wire.val = x if wire.output == "b" else None
-    print(x, v("a"), sep="\n")
+    print(x, get_port_value("a"), sep="\n")
 
 if __name__ == '__main__':
     main.main(solution, level='INFO')
