@@ -220,12 +220,12 @@ def repr_stack_item(item, printer=logger.debug):
 def solution(quiz_input):
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
     zero = {k:0 for k in pass_test}
-
     ports = build_ports(quiz_input)
     stack = find_root('a', ports)
     # stack = list(reversed(stack))
     for item in stack:
         repr_stack_item(item, logger.info)
+    logger.info(f'{len(quiz_input), len(stack ) = }')
     result = process(stack)
     return result
 
