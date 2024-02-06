@@ -57,10 +57,12 @@ In little Bobby's kit's instructions booklet
 (provided as your puzzle input), what signal is ultimately 
 provided to wire a?
 """
-import pathlib, sys, os
+import pathlib, sys, os, logging
 sys.path.append(os.getcwd())
+
 from aoclib import main
 
+logger = logging.getLogger(__name__)
 DIR = pathlib.Path(__file__).parent.absolute()
 
 
@@ -70,10 +72,10 @@ def solution(quiz_input):
         items = {}
 
         def __init__(self, expression, dest_port):
-            self.dest_port = dest_port
-            self.expression = expression + ["", ""]
-            self.__class__.items[dest_port] = self
-            self.value = None
+            self.dest_port = dest_port                  # save dest_port
+            self.expression = expression + ["", ""]     # save expression: ...
+            Wire.items[dest_port] = self                # save instance in class dict
+            self.value = None                           # no value for now
 
         def calc(self):
             if self.value is not None:
@@ -94,19 +96,27 @@ def solution(quiz_input):
     
     def get_port_value(key):
         try:
-            return int(key)
+            value = int(key)
+            logger.debug(f'found {value = }')
+            return value
         except:
+            logger.debug(f'NOT found value for {key = }')
+            # logger.debug(f'calling Wire.items[{key}].calc()')
             return Wire.items[key].calc()
 
-    def load_wire_dict(dir, teststr):
+    def load_wire_dict(dir, lines):
         [Wire(expression = line.split(" -> ")[0].split(" "), dest_port = line.split(" -> ")[1])
-         for line in teststr]
+         for line in lines]
 
     load_wire_dict(DIR, quiz_input)
-    x = get_port_value("a")
-    for wire in Wire.items.values():
-        wire.value = x if wire.dest_port == "b" else None
-    print(x, get_port_value("a"), sep="\n")
 
+    a = get_port_value("a")
+    
+    # for wire in Wire.items.values():
+    #     wire.value = x if wire.dest_port == "b" else None
+    
+    # print(x, get_port_value("a"), sep="\n")
+
+    print(f'{a = }')
 if __name__ == '__main__':
-    main.main(solution, level='INFO')
+    main.main(solution, level='DEBUG')
