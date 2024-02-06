@@ -85,18 +85,22 @@ REGEX2 = (
         r'(\w+)$'
 )
 
-REGEX_LR = r'^(.+)\s->\s(.+$)'
-REGEX_EXPR = r'^(\d+|\w+)*\s*(AND|OR|NOT|LSHIFT|RSHIFT)*\s*(\d+|\w+)*'
 
 def split_lr(line: str) -> tuple[tuple]:
     '''
     returns a tuple containing (left, right) parts of the expression
     separated by ' -> '
     '''
+    REGEX_LR = r'^(.+)\s->\s(.+$)'
     found = re.match(REGEX_LR, line)
     return found.groups()
 
 def parse_expr(expr: str) -> tuple:
+    '''
+    returns a tuple containing possible lvalue, operator and rvalue
+    tries to convert numeric values to integers, eg. a=10
+    '''
+    REGEX_EXPR = r'^(\d+|\w+)*\s*AND|OR|NOT|LSHIFT|RSHIFT)*\s*(\d+|\w+)*'
     found = re.match(REGEX_EXPR, expr)
     groups = [int(item) if item is not None and item.isnumeric()
               else item
@@ -104,6 +108,9 @@ def parse_expr(expr: str) -> tuple:
     return groups
 
 def build_ports(quiz_input: list[str]) -> dict:
+    '''
+    builds a dictionary with key = portname and value = expression tuple
+    '''
     ports = {}
     for line in quiz_input:
         expr, port = split_lr(line)
@@ -112,8 +119,15 @@ def build_ports(quiz_input: list[str]) -> dict:
         ports[port] = parse_expr(expr)
     return ports
 
-def find_root(port, ports, stack=[]):
-    def find_reversed_root(port, ports, stack=[]):
+def find_root(port: str, ports: dict, stack: list[dict]=[]) -> list[dict]:
+    '''
+    reverse the result of find_reversed_root
+    '''
+    def find_reversed_root(port: str, ports: dict, stack: list[dict]=[]) -> list[dict]:
+        '''
+        NOT working
+        scans the lines tring to build a call stack
+        '''
         try:
             expr = ports[port]
         except KeyError:
@@ -158,7 +172,7 @@ def find_root(port, ports, stack=[]):
     logger.info('return stack')
     return stack
 
-def compute(lvalue, op, rvalue):
+def compute(lvalue: str|int, op: str, rvalue: str|int) -> int:
     match op:
         case 'LSHIFT':
             return lvalue << rvalue
@@ -176,6 +190,9 @@ def compute(lvalue, op, rvalue):
             raise ValueError(f'unknown operator {op}')
 
 def process(stack: list[dict[tuple]]) -> int:
+    '''
+    process the stack trying to compute port value
+    '''
     vars = {}
     total = 0
     for item in stack:
@@ -217,7 +234,10 @@ def process(stack: list[dict[tuple]]) -> int:
             print(repr(te), f'{value = }')
     return total
 
-def repr_stack_item(item, printer=logger.debug):
+def repr_stack_item(item: dict[str, tuple], printer=logger.debug) -> None:
+    '''
+    prints the human format: p = a op b
+    '''
     port, expr = next(iter(item.items()))
     match expr:
         case lvalue, None, None:
@@ -230,6 +250,8 @@ def repr_stack_item(item, printer=logger.debug):
             raise ValueError(expr)
 
 def solution(quiz_input):
+    '''
+    '''
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
     zero = {k:0 for k in pass_test}
     ports = build_ports(quiz_input)
