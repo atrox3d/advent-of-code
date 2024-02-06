@@ -85,121 +85,6 @@ REGEX2 = (
         r'(\w+)$'
 )
 
-
-# def find_root(port: str, ports: dict, stack: list[dict]=[]) -> list[dict]:
-#     '''
-#     reverse the result of find_reversed_root
-#     '''
-#     def find_reversed_root(port: str, ports: dict, stack: list[dict]=[]) -> list[dict]:
-#         '''
-#         NOT working
-#         scans the lines tring to build a call stack
-#         '''
-#         try:
-#             expr = ports[port]
-#         except KeyError:
-#             return stack
-        
-#         if {port:expr} in stack:
-#             return stack
-#         else:
-#             stack.append({port:expr})
-        
-#         values = []
-#         match expr:
-#             case lvalue, None, None:
-#                 logger.debug(f'{port} = {lvalue}')
-#                 if isinstance(lvalue, str):
-#                     values.append(lvalue)
-
-#             case op, None, rvalue:
-#                 logger.debug(f'{port} = {op} {rvalue}')
-#                 if isinstance(rvalue, str):
-#                     values.append(rvalue)
-
-#             case lvalue, op, rvalue:
-#                 logger.debug(f'{port} = {lvalue} {op} {rvalue}')
-#                 if isinstance(lvalue, str):
-#                     values.append(lvalue)
-#                 if isinstance(rvalue, str):
-#                     values.append(rvalue)
-            
-#             case _:
-#                 raise ValueError(expr)
-            
-#         for value in values:
-#             stack = find_reversed_root(value, ports, stack)
-        
-#         return stack
-    
-#     logger.info('find_reverse_root')
-#     stack = find_reversed_root(port, ports, stack)
-#     logger.info('reverse stack')
-#     stack = list(reversed(stack))
-#     logger.info('return stack')
-#     return stack
-
-# def compute(lvalue: str|int, op: str, rvalue: str|int) -> int:
-#     match op:
-#         case 'LSHIFT':
-#             return lvalue << rvalue
-#         case 'RSHIFT':
-#             return lvalue >> rvalue
-#         case 'OR':
-#             return lvalue | rvalue
-#         case 'AND':
-#             return lvalue & rvalue
-#         case 'XOR':
-#             return lvalue ^ rvalue
-#         case 'NOT':
-#             return ~ rvalue
-#         case _:
-#             raise ValueError(f'unknown operator {op}')
-
-# def process(stack: list[dict[tuple]]) -> int:
-#     '''
-#     process the stack trying to compute port value
-#     '''
-#     vars = {}
-#     total = 0
-#     for item in stack:
-#         for dest, expr in item.items():
-#             print(f'{dest} = {expr}')
-#         match expr:
-#             case lvalue, None, None:
-#                 logger.debug(f'{dest} = {lvalue}')
-#                 vars[dest] = lvalue
-#                 value = lvalue
-
-#             case op, None, rvalue:
-#                 logger.debug(f'{dest} = {op} {rvalue}')
-#                 try:
-#                     rvalue = vars[rvalue]
-#                 except KeyError:
-#                     pass
-#                 value = compute(None, op, rvalue)
-#                 vars[dest] = value
-
-#             case lvalue, op, rvalue:
-#                 logger.debug(f'{dest} = {lvalue} {op} {rvalue}')
-#                 try:
-#                     rvalue = vars[rvalue]
-#                 except KeyError:
-#                     pass
-#                 try:
-#                     lvalue = vars[lvalue]
-#                 except KeyError:
-#                     pass
-#                 value = compute(lvalue, op, rvalue)
-#                 vars[dest] = value
-#             case _:
-#                 raise ValueError(expr)
-#         print(vars)
-#         try:
-#             total += value
-#         except TypeError as te:
-#             print(repr(te), f'{value = }')
-#     return total
 def split_lr(line: str) -> tuple[tuple]:
     '''
     returns a tuple containing (left, right) parts of the expression
@@ -232,21 +117,6 @@ def build_wires(quiz_input: list[str]) -> dict:
             raise ValueError(f'multiple values for wire {wid}')
         wires[wid] = parse_gate(gate)
     return wires
-
-def repr_wire(wire: dict[str, tuple], printer=logger.debug) -> None:
-    '''
-    prints the human format: p = a op b
-    '''
-    wid, wire = next(iter(wire.items()))
-    match wire:
-        case lvalue, None, None:
-            printer(f'{wid} = {lvalue}')
-        case op, None, rvalue:
-            printer(f'{wid} = {op} {rvalue}')
-        case lvalue, op, rvalue:
-            printer(f'{wid} = {lvalue} {op} {rvalue}')
-        case _:
-            raise ValueError(wire)
 
 def wire2str(wire: dict[str, tuple]) -> str:
     '''
@@ -301,7 +171,6 @@ def get_wire_value(wid:str, wires: dict[str, tuple]) -> int:
     if isinstance(value, int):
         wires[wid] = value
     return value
-
 
 def solution(quiz_input):
     '''
