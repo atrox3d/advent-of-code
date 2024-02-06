@@ -72,26 +72,54 @@ def solution(quiz_input):
         items = {}
 
         def __init__(self, expression, dest_port):
+            logger.debug(f'{expression, dest_port = }')
             self.dest_port = dest_port                  # save dest_port
-            self.expression = expression + ["", ""]     # save expression: ...
+            # self.expression = expression + ["", ""]     # save expression: ...
+            self.expression = expression                # save expression: ...
+            logger.debug(f'{self.expression = }')
             Wire.items[dest_port] = self                # save instance in class dict
             self.value = None                           # no value for now
 
         def calc(self):
             if self.value is not None:
+                logger.debug(f'self.value is not None: {self.value = }')
                 return self.value
-            elif self.expression[1] == "AND":
-                self.value = get_port_value(self.expression[0]) & get_port_value(self.expression[2])
-            elif self.expression[1] == "OR":
-                self.value = get_port_value(self.expression[0]) | get_port_value(self.expression[2])
-            elif self.expression[1] == "LSHIFT":
-                self.value = get_port_value(self.expression[0]) << get_port_value(self.expression[2])
-            elif self.expression[1] == "RSHIFT":
-                self.value = get_port_value(self.expression[0]) >> get_port_value(self.expression[2])
-            elif self.expression[0] == "NOT":
-                self.value = ~get_port_value(self.expression[1])
             else:
-                self.value = get_port_value(self.expression[0])
+                logger.debug(f'match {self.dest_port, self.expression = }')
+                match self.expression:
+                    case lvalue, op, rvalue:
+                        logger.debug(f'{lvalue, op, rvalue =}')
+                        match op:
+                            case 'AND':
+                                self.value = get_port_value(lvalue) & get_port_value(rvalue)
+                            case 'OR':
+                                self.value = get_port_value(lvalue) | get_port_value(rvalue)
+                            case 'LSHIFT':
+                                self.value = get_port_value(lvalue) << get_port_value(rvalue)
+                            case 'RSHIFT':
+                                self.value = get_port_value(lvalue) >> get_port_value(rvalue)
+                    case op, rvalue,:
+                        logger.debug(f'{op, rvalue=}')
+                        match op:
+                            case 'NOT':
+                                self.value = ~get_port_value(rvalue)
+                    case lvalue,:
+                        logger.debug(f'{lvalue=}')
+                        self.value = get_port_value(lvalue)
+                    case _:
+                        raise ValueError(f'{self.expression}')
+            # elif self.expression[1] == "AND":
+            #     self.value = get_port_value(self.expression[0]) & get_port_value(self.expression[2])
+            # elif self.expression[1] == "OR":
+            #     self.value = get_port_value(self.expression[0]) | get_port_value(self.expression[2])
+            # elif self.expression[1] == "LSHIFT":
+            #     self.value = get_port_value(self.expression[0]) << get_port_value(self.expression[2])
+            # elif self.expression[1] == "RSHIFT":
+            #     self.value = get_port_value(self.expression[0]) >> get_port_value(self.expression[2])
+            # elif self.expression[0] == "NOT":
+            #     self.value = ~get_port_value(self.expression[1])
+            # else:
+            #     self.value = get_port_value(self.expression[0])
             return self.value
     
     def get_port_value(key):
