@@ -89,6 +89,10 @@ REGEX_LR = r'^(.+)\s->\s(.+$)'
 REGEX_EXPR = r'^(\d+|\w+)*\s*(AND|OR|NOT|LSHIFT|RSHIFT)*\s*(\d+|\w+)*'
 
 def split_lr(line: str) -> tuple[tuple]:
+    '''
+    returns a tuple containing (left, right) parts of the expression
+    separated by ' -> '
+    '''
     found = re.match(REGEX_LR, line)
     return found.groups()
 
