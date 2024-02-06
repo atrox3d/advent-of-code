@@ -72,11 +72,8 @@ def solution(quiz_input):
         items = {}
 
         def __init__(self, expression, dest_port):
-            logger.debug(f'{expression, dest_port = }')
             self.dest_port = dest_port                  # save dest_port
-            # self.expression = expression + ["", ""]     # save expression: ...
             self.expression = expression                # save expression: ...
-            logger.debug(f'{self.expression = }')
             Wire.items[dest_port] = self                # save instance in class dict
             self.value = None                           # no value for now
 
@@ -104,22 +101,10 @@ def solution(quiz_input):
                             case 'NOT':
                                 self.value = ~get_port_value(rvalue)
                     case lvalue,:
-                        logger.debug(f'{lvalue=}')
+                        logger.debug(f'assign: {lvalue=}')
                         self.value = get_port_value(lvalue)
                     case _:
                         raise ValueError(f'{self.expression}')
-            # elif self.expression[1] == "AND":
-            #     self.value = get_port_value(self.expression[0]) & get_port_value(self.expression[2])
-            # elif self.expression[1] == "OR":
-            #     self.value = get_port_value(self.expression[0]) | get_port_value(self.expression[2])
-            # elif self.expression[1] == "LSHIFT":
-            #     self.value = get_port_value(self.expression[0]) << get_port_value(self.expression[2])
-            # elif self.expression[1] == "RSHIFT":
-            #     self.value = get_port_value(self.expression[0]) >> get_port_value(self.expression[2])
-            # elif self.expression[0] == "NOT":
-            #     self.value = ~get_port_value(self.expression[1])
-            # else:
-            #     self.value = get_port_value(self.expression[0])
             return self.value
     
     def get_port_value(key):
