@@ -188,6 +188,12 @@ def solution(quiz_input):
         print(wire2str(wire))
     
     value = get_wire_value('a', wires)
+    value = get_wire_value('a', wires)
+    print(value)
+
+    wires = build_wires(quiz_input)
+    wires['b'] = value
+    value = get_wire_value('a', wires)
     print(value)
     
 if __name__ == '__main__':
