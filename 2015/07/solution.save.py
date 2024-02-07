@@ -133,33 +133,34 @@ def wire2str(wire: dict[str, tuple]) -> str:
         case _:
             raise ValueError(gate)
 
-def get_wire_value(wid:str, wires: dict[str, tuple], levels=[]) -> int:
-    indent_level = len(levels)
-    indent = '' * indent_level
-    levels.append(indent_level)
+def get_wire_value(wid:str, wires: dict[str, tuple], stack=[]) -> int:
+    stack_len = len(stack)
+    # indent = '' * indent_level
+    stack_pos = f'stack: [{stack_len}] '
+    stack.append(stack_len)
 
     if isinstance(wid, int):
-        logger.debug(f'{indent}{wid = } is int, returning')
+        logger.debug(f'{stack_pos}{wid = } is int, returning')
         return wid
     
     gate = wires[wid]
     if isinstance(gate, int):
-        logger.debug(f'{indent}{wid=} {gate = } is int, returning')
+        logger.debug(f'{stack_pos}{wid=} {gate = } is int, returning')
         return gate
     
     match gate:
         case lvalue, None, None:
-            logger.debug(f'{indent}match: {wid} = {lvalue}')
+            logger.debug(f'{stack_pos}match: {wid} = {lvalue}')
             value = get_wire_value(lvalue, wires)
         
         case op, None, rvalue,:
-            logger.debug(f'{indent}match: {wid} = {op} {rvalue}')
+            logger.debug(f'{stack_pos}match: {wid} = {op} {rvalue}')
             match op:
                 case 'NOT':
                     value = ~get_wire_value(rvalue, wires)
         
         case lvalue, op, rvalue:
-            logger.debug(f'{indent}match: {wid} = {lvalue} {op} {rvalue}')
+            logger.debug(f'{stack_pos}match: {wid} = {lvalue} {op} {rvalue}')
             match op:
                 case 'AND':
                     value = get_wire_value(lvalue, wires) & get_wire_value(rvalue, wires)
@@ -170,10 +171,10 @@ def get_wire_value(wid:str, wires: dict[str, tuple], levels=[]) -> int:
                 case 'RSHIFT':
                     value = get_wire_value(lvalue, wires) >> get_wire_value(rvalue, wires)
         case _:
-            raise ValueError(f'{indent}{gate}')
+            raise ValueError(f'{stack_pos}{gate}')
     
     if isinstance(value, int):
-        logger.debug(f'{indent}updating wires[{wid}] = {value}')
+        logger.debug(f'{stack_pos}updating wires[{wid}] = {value}')
         wires[wid] = value
     return value
 
