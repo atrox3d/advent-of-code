@@ -133,30 +133,33 @@ def wire2str(wire: dict[str, tuple]) -> str:
         case _:
             raise ValueError(gate)
 
-def get_wire_value(wid:str, wires: dict[str, tuple]) -> int:
+def get_wire_value(wid:str, wires: dict[str, tuple], levels=[]) -> int:
+    indent_level = len(levels)
+    indent = '' * indent_level
+    levels.append(indent_level)
+
     if isinstance(wid, int):
-        logger.debug(f'{wid = } is int, returning')
+        logger.debug(f'{indent}{wid = } is int, returning')
         return wid
     
     gate = wires[wid]
     if isinstance(gate, int):
-        logger.debug(f'{wid=} {gate = } is int, returning')
+        logger.debug(f'{indent}{wid=} {gate = } is int, returning')
         return gate
-    # logger.debug(f'{gate = }')
     
     match gate:
         case lvalue, None, None:
-            logger.debug(f'match: {wid} = {lvalue}')
+            logger.debug(f'{indent}match: {wid} = {lvalue}')
             value = get_wire_value(lvalue, wires)
         
         case op, None, rvalue,:
-            logger.debug(f'match: {wid} = {op} {rvalue}')
+            logger.debug(f'{indent}match: {wid} = {op} {rvalue}')
             match op:
                 case 'NOT':
                     value = ~get_wire_value(rvalue, wires)
         
         case lvalue, op, rvalue:
-            logger.debug(f'match: {wid} = {lvalue} {op} {rvalue}')
+            logger.debug(f'{indent}match: {wid} = {lvalue} {op} {rvalue}')
             match op:
                 case 'AND':
                     value = get_wire_value(lvalue, wires) & get_wire_value(rvalue, wires)
@@ -167,10 +170,10 @@ def get_wire_value(wid:str, wires: dict[str, tuple]) -> int:
                 case 'RSHIFT':
                     value = get_wire_value(lvalue, wires) >> get_wire_value(rvalue, wires)
         case _:
-            raise ValueError(f'{gate}')
+            raise ValueError(f'{indent}{gate}')
     
     if isinstance(value, int):
-        logger.debug(f'updating wires[{wid}] = {value}')
+        logger.debug(f'{indent}updating wires[{wid}] = {value}')
         wires[wid] = value
     return value
 
@@ -180,13 +183,6 @@ def solution(quiz_input):
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
     zero = {k:0 for k in pass_test}
     wires = build_wires(quiz_input)
-    # stack = find_root('a', ports)
-    # stack = list(reversed(stack))
-    # for item in stack:
-        # repr_stack_item(item, logger.info)
-    # logger.info(f'{len(quiz_input), len(stack ) = }')
-    # result = process(stack)
-    # return result
     for wire in wires.items():
         print(wire2str(wire))
     
