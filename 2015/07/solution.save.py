@@ -60,7 +60,7 @@ provided to wire a?
 import logging
 import sys, os
 import re, json
-
+from pathlib import Path
 
 sys.path.append(os.getcwd())
 from aoclib import main
@@ -192,4 +192,8 @@ def solution(quiz_input):
     print(value)
     
 if __name__ == '__main__':
-    main.main(solution, level='DEBUG')
+    handlers = [
+        logging.FileHandler(str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'),
+        logging.StreamHandler()
+    ]
+    main.main(solution, level='DEBUG', handlers=handlers)

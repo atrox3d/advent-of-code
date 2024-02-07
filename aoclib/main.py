@@ -6,10 +6,11 @@ from . import parse
 
 logger = logging.getLogger(__name__)
 
-def main(solution, level='DEBUG'):
+def main(solution, level='DEBUG', **loggerargs):
     logging.basicConfig(
                 level=level, 
-                format='%(levelname)5.5s|%(module)10.10s|%(funcName)15.15s| %(message)s'
+                format='%(levelname)5.5s|%(module)10.10s|%(funcName)15.15s| %(message)s',
+                **loggerargs
                 )
     options = parse.get_parser().parse_args()
     logger.debug(f'{options = }')
