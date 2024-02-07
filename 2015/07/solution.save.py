@@ -134,28 +134,29 @@ def wire2str(wire: dict[str, tuple]) -> str:
             raise ValueError(gate)
 
 def get_wire_value(wid:str, wires: dict[str, tuple]) -> int:
-    
     if isinstance(wid, int):
+        logger.debug(f'{wid = } is int, returning')
         return wid
     
     gate = wires[wid]
     if isinstance(gate, int):
+        logger.debug(f'{wid=} {gate = } is int, returning')
         return gate
+    # logger.debug(f'{gate = }')
     
-    logger.debug(f'{gate = }')
     match gate:
         case lvalue, None, None:
-            logger.debug(f'assign: {lvalue=}')
+            logger.debug(f'match: {wid} = {lvalue}')
             value = get_wire_value(lvalue, wires)
         
         case op, None, rvalue,:
-            logger.debug(f'{op, rvalue=}')
+            logger.debug(f'match: {wid} = {op} {rvalue}')
             match op:
                 case 'NOT':
                     value = ~get_wire_value(rvalue, wires)
         
         case lvalue, op, rvalue:
-            logger.debug(f'{lvalue, op, rvalue =}')
+            logger.debug(f'match: {wid} = {lvalue} {op} {rvalue}')
             match op:
                 case 'AND':
                     value = get_wire_value(lvalue, wires) & get_wire_value(rvalue, wires)
@@ -169,6 +170,7 @@ def get_wire_value(wid:str, wires: dict[str, tuple]) -> int:
             raise ValueError(f'{gate}')
     
     if isinstance(value, int):
+        logger.debug(f'updating wires[{wid}] = {value}')
         wires[wid] = value
     return value
 
@@ -193,7 +195,10 @@ def solution(quiz_input):
     
 if __name__ == '__main__':
     handlers = [
-        logging.FileHandler(str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'),
+        logging.FileHandler(
+            str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log',
+            mode='w'
+            ),
         logging.StreamHandler()
     ]
     main.main(solution, level='DEBUG', handlers=handlers)
