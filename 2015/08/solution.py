@@ -14,8 +14,10 @@ from aoclib import main
 logger = logging.getLogger(__name__)
 
 def solution(quiz_input):
+    
     total_chars = sum(len(s) for s in quiz_input)
     print(total_chars)
+
     total_mem = sum(len(eval(s)) for s in quiz_input)
     print(total_mem)
 
