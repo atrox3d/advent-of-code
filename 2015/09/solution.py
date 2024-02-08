@@ -46,9 +46,29 @@ def solution(quiz_input):
     Belfast -> London -> Dublin = 982
     '''
 
+    cities = set()
+    routes = []
     for start, end, distance in distances:
-        print(start, end, distance)
+        print(f'{start, end, distance = }')
+        print(f'add city: {start}')
+        cities.add(start)
+        for location1, location2, dist in distances:
+            if location1 == end:
+                route = (start, end, location2, distance + dist)
+                routes.append(route)
+    print()
+    for start, end, distance in distances:
+        print(f'{start, end, distance = }')
+        print(f'add city: {end}')
+        cities.add(end)
+        for location1, location2, dist in distances:
+            if location1 == end:
+                route = (start, end, location2, distance + dist)
+                routes.append(route)
+    
 
+    print(f'{cities = }')
+    print(f'{routes = }')
 
 
 if __name__ == '__main__':
