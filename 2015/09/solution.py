@@ -60,8 +60,8 @@ def solution(quiz_input):
             print(city, name, distance)
             for name in maap:
                 if name != city:
+                    pass
 
-    
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
     handlers = [
