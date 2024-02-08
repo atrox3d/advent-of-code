@@ -53,7 +53,7 @@ def solution(quiz_input):
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
     '''
-    routes = 
+    routes = []
     for city, dests in maap.items():
         for dest in dests:
             name, distance = next(iter(dest.items()))
