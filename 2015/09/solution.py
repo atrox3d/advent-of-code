@@ -13,23 +13,35 @@ from aoclib import main
 
 REGEX = r'^(\w+) to (\w+) = (\d+)$'
 logger = logging.getLogger(__name__)
-def solution(quiz_input):
-    distances = [(start, end, int(distance)) for start, end, distance in 
-                 [re.match(REGEX, line).groups() for line in quiz_input]]
-    print(f'{distances = }')
 
+def parse_distances(quiz_input):
+    return [(start, end, int(distance)) for start, end, distance in 
+                 [re.match(REGEX, line).groups() for line in quiz_input]]
+
+def build_map(distances):
     maap = defaultdict(list)
     for start, end, distance in distances:
         maap[start].append({end:distance})
-    jmap = json.dumps(maap)
-    print(f'{jmap = }')
+    return maap
 
+def get_city_list(distances):
     cities = [city for city in 
             #   [city for record in distances for city in record[:2]]
               {city for record in distances for city in record[:2]}
               ]
-    print(f'{cities = }')
+    return cities
 
+
+def solution(quiz_input):
+    distances = parse_distances(quiz_input)
+    print(f'{distances = }')
+
+    maap = build_map(distances)
+    jmap = json.dumps(maap)
+    print(f'{jmap = }')
+
+    cities = get_city_list(distances)
+    print(f'{cities = }')
     '''
     Dublin -> London -> Belfast = 982
     London -> Dublin -> Belfast = 605
@@ -38,12 +50,6 @@ def solution(quiz_input):
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
     '''
-    import itertools
-    product = list(itertools.product(cities, cities, cities,))
-    print(f'{product = }')
-    uniqueproduct = list((a, b, c) for a, b, c in product if a != b and a != c and b!= c)
-    print(f'{uniqueproduct = }')
-    
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
