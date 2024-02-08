@@ -22,6 +22,7 @@ def build_map(distances):
     maap = defaultdict(list)
     for start, end, distance in distances:
         maap[start].append({end:distance})
+        maap[end].append({start:distance})
     return maap
 
 def get_city_list(distances):
@@ -34,23 +35,33 @@ def get_city_list(distances):
 
 def solution(quiz_input):
     distances = parse_distances(quiz_input)
-    print(f'{distances = }')
+    logger.info(f'{distances = }')
 
     maap = build_map(distances)
-    jmap = json.dumps(maap)
-    print(f'{jmap = }')
+    # jmap = json.dumps(maap, indent=2)
+    # logger.info(f'{jmap}')
+    for city, cities in maap.items():
+        print(city, cities)
 
     cities = get_city_list(distances)
-    print(f'{cities = }')
+    logger.info(f'{cities = }')
     '''
-    Dublin -> London -> Belfast = 982
     London -> Dublin -> Belfast = 605
     London -> Belfast -> Dublin = 659
+    Dublin -> London -> Belfast = 982
     Dublin -> Belfast -> London = 659
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
     '''
+    routes = 
+    for city, dests in maap.items():
+        for dest in dests:
+            name, distance = next(iter(dest.items()))
+            print(city, name, distance)
+            for name in maap:
+                if name != city:
 
+    
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
     handlers = [
