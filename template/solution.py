@@ -15,10 +15,7 @@ def solution(quiz_input):
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
     handlers = [
-        logging.FileHandler(
-            LOGFILE,
-            mode='w'
-            ),
+        logging.FileHandler(LOGFILE, mode='w'),
         logging.StreamHandler()
     ]
     main.main(solution, level='DEBUG', handlers=handlers)
