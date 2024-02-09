@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from .helpers import helpers
+from .helpers import datainput
 from . import tests
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ def get_parser() -> argparse.ArgumentParser:
                        const=tests.TESTS_PATH)
     
     parser.add_argument('-i', '--input_path', 
-                        default=helpers.INPUT_PATH)
+                        default=datainput.INPUT_PATH)
     return parser
 
 def log_options(options: argparse.Namespace):

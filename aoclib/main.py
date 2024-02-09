@@ -1,6 +1,6 @@
 import logging
 
-from .helpers import helpers
+from .helpers import datainput
 from . import tests
 from . import parse
 
@@ -26,12 +26,12 @@ def main(solution, level='DEBUG', **loggerargs):
         tests.test_solution(solution, input_path=options.test) 
 
     elif options.print:
-        quiz_input = helpers.get_input(options.input_path)
+        quiz_input = datainput.get_input(options.input_path)
         logger.info(f'printing input')
-        helpers.print_input(quiz_input)
+        datainput.print_input(quiz_input)
 
     else:
-        quiz_input = helpers.get_input(options.input_path)
+        quiz_input = datainput.get_input(options.input_path)
         logger.info('running solution')
         result = solution(quiz_input)
         logger.info(f'{result = }')
