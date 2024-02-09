@@ -2,9 +2,9 @@ import logging
 import sys
 from pathlib import Path
 
-from aoclib.helpers.testing.loading import get_loader
+from .loading import get_loader
 
-from .. import datainput
+from ..helpers import datainput
 
 logger = logging.getLogger(__name__)
 

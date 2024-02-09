@@ -1,7 +1,7 @@
 import logging
 
 from .helpers import datainput
-from .helpers.testing import testing
+from .testing import testing
 from . import parse
 
 logger = logging.getLogger(__name__)

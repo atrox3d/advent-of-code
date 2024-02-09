@@ -2,7 +2,7 @@ import argparse
 import logging
 
 from .helpers import datainput
-from .helpers.testing import testing
+from .testing import testing
 
 logger = logging.getLogger(__name__)
 
