@@ -2,7 +2,7 @@ import argparse
 import logging
 
 from .helpers import datainput
-from . import tests
+from .helpers.testing import testing
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ def get_parser() -> argparse.ArgumentParser:
     mutex = parser.add_mutually_exclusive_group()
     mutex.add_argument('-p', '--print', action='store_true')
     mutex.add_argument('-t', '--test', nargs='?', default=None, 
-                       const=tests.TESTS_PATH)
+                       const=testing.TESTS_PATH)
     
     parser.add_argument('-i', '--input_path', 
                         default=datainput.INPUT_PATH)

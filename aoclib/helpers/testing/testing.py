@@ -4,7 +4,7 @@ import csv
 import sys
 from pathlib import Path
 
-from .helpers import datainput
+from .. import datainput
 
 logger = logging.getLogger(__name__)
 

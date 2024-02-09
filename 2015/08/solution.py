@@ -8,7 +8,7 @@ import re, json
 from pathlib import Path
 import re
 
-sys.path.append(os.getcwd())
+sys.path.insert(0, os.getcwd())
 from aoclib import main
 
 logger = logging.getLogger(__name__)
