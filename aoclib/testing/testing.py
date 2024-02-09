@@ -24,7 +24,7 @@ def test_param(solution, param: str, input_path: str):
 
 def test_solution(solution, tests=None, input_path=None):
     tests = load_tests(input_path)
-
+    # TODO manage .txt
     for test in tests:
         logger.debug(f'{test = }')
         if isinstance(test, tuple|list):
