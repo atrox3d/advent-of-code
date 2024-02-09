@@ -8,15 +8,6 @@ logger = logging.getLogger(__name__)
 
 from pathlib import Path
 
-def str_to_val(value):
-    if value.isnumeric():
-        value = int(value)
-    elif value.lower() in ('true', 'false'):
-        value = bool(value)
-    elif value.lower() == 'none':
-        value = None
-    return value
-
 def get_loader(input_path):
 
     suffix = Path(input_path).suffix
