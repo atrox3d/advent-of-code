@@ -1,8 +1,8 @@
 import argparse
 import logging
 
-from .helpers import datainput
-from .testing import testing
+from . import datainput
+from ..testing import testing
 
 logger = logging.getLogger(__name__)
 
