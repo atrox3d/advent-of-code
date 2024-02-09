@@ -8,7 +8,9 @@ import re, json
 from pathlib import Path
 import re
 
-sys.path.insert(0, os.getcwd())
+# force import of aoclib
+project_path = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_path))
 from aoclib import main
 
 logger = logging.getLogger(__name__)
