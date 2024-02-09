@@ -1,6 +1,6 @@
 import logging
 
-from . import helpers
+from .helpers import helpers
 from . import tests
 from . import parse
 

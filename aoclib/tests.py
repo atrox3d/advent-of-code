@@ -4,7 +4,7 @@ import csv
 import sys
 from pathlib import Path
 
-from . import helpers
+from .helpers import helpers
 
 logger = logging.getLogger(__name__)
 
