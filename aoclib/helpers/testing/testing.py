@@ -2,7 +2,7 @@ import logging
 import sys
 from pathlib import Path
 
-from aoclib.helpers.testing.loaders import get_loader
+from aoclib.helpers.testing.loading import get_loader
 
 from .. import datainput
 

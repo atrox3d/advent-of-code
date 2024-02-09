@@ -1,11 +1,11 @@
 import logging
 
-from aoclib.helpers.testing.json_loader import json_loader
+from .loaders.csv_loader import csv_loader
+from .loaders.json_loader import json_loader
 
 logger = logging.getLogger(__name__)
 
 
-import csv
 from pathlib import Path
 
 def str_to_val(value):
@@ -16,15 +16,6 @@ def str_to_val(value):
     elif value.lower() == 'none':
         value = None
     return value
-
-def csv_loader(input_path):
-    with open(input_path) as fp:
-        reader = csv.reader(fp,)
-        lines = [list(map(str.strip, line)) for line in reader]
-        logger.debug(f'{lines = }')
-        convert = [[str_to_val(value) for value in values] for values in lines]
-        return convert
-
 
 def get_loader(input_path):
 
