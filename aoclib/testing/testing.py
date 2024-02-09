@@ -24,22 +24,26 @@ def test_param(solution, param: str, input_path: str):
 
 def test_solution(solution, tests=None, input_path=None):
     tests = load_tests(input_path)
-    # TODO manage .txt
-    for test in tests:
-        logger.debug(f'{test = }')
-        if isinstance(test, tuple|list):
-            _input, expected = test
-        else:
-            raise ValueError(f'test must be a tuple or list {test = }')
-        logger.info(f'{_input = }')
-        logger.info(f'{expected = }')
-        
-        # result = test_param(solution, _input)
-        result = solution(_input)
-        try:
-            assert expected == result, f'{expected=} != {result=}'
-            logger.info(f'PASS: {expected=} != {result=}')
-        except AssertionError as ae:
-            logger.error(f'FAIL: {expected=} != {result=}')
-        finally:
-            print()
+
+    if Path(input_path).suffix == '.txt':
+        # TODO manage .txt
+        solution(tests)
+    else:
+        for test in tests:
+            logger.debug(f'{test = }')
+            if isinstance(test, tuple|list):
+                _input, expected = test
+            else:
+                raise ValueError(f'test must be a tuple or list {test = }')
+            logger.info(f'{_input = }')
+            logger.info(f'{expected = }')
+            
+            # result = test_param(solution, _input)
+            result = solution(_input)
+            try:
+                assert expected == result, f'{expected=} != {result=}'
+                logger.info(f'PASS: {expected=} != {result=}')
+            except AssertionError as ae:
+                logger.error(f'FAIL: {expected=} != {result=}')
+            finally:
+                print()
