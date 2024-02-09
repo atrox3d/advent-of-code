@@ -2,6 +2,7 @@ import logging
 
 from .loaders.csv_loader import csv_loader
 from .loaders.json_loader import json_loader
+from ..helpers.datainput import get_input
 
 logger = logging.getLogger(__name__)
 
@@ -17,5 +18,7 @@ def get_loader(input_path):
     elif suffix == '.csv':
         logger.info(f'csv loader')
         return csv_loader
+    elif suffix == '.txt':
+        return get_input
     else:
         raise NotImplementedError(f'file type {suffix} not implemented')

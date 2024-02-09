@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 
 from .loading import get_loader
-
 from ..helpers import datainput
 
 logger = logging.getLogger(__name__)
@@ -31,7 +30,7 @@ def test_solution(solution, tests=None, input_path=None):
         if isinstance(test, tuple|list):
             _input, expected = test
         else:
-            raise ValueError(f'tes must be a tuple or list {test = }')
+            raise ValueError(f'test must be a tuple or list {test = }')
         logger.info(f'{_input = }')
         logger.info(f'{expected = }')
         
