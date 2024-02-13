@@ -15,15 +15,16 @@ REGEX = r'^(\w+) to (\w+) = (\d+)$'
 logger = logging.getLogger(__name__)
 
 def parse_distances(quiz_input):
-    return [(start, end, int(distance)) for start, end, distance in 
-                 [re.match(REGEX, line).groups() for line in quiz_input]]
+    return [(start, end, int(distance)) 
+            for start, end, distance in [re.match(REGEX, line).groups() 
+            for line in quiz_input]]
 
-# def build_map(distances):
-#     maap = defaultdict(list)
-#     for start, end, distance in distances:
-#         maap[start].append({end:distance})
-#         maap[end].append({start:distance})
-#     return maap
+def build_map(distances):
+    maap = defaultdict(list)
+    for start, end, distance in distances:
+        maap[start].append({end:distance})
+        maap[end].append({start:distance})
+    return maap
 
 def get_city_list(distances):
     # use a set to eliminate duplicates
@@ -75,9 +76,12 @@ def solution(quiz_input):
     Belfast -> London -> Dublin = 982
     '''
     print(f'{distances = }')
+
+    maap = build_map(distances)
+    print(f'{maap = }')
+    exit()
     cities = get_city_list(distances)
     print(f'{cities = }')
-    # exit()
     print()
     permutations = rpermute(cities)
     
