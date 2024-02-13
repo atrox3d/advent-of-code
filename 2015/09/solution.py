@@ -50,26 +50,23 @@ def rpermute(cities):
             perms.append(ret)
     return perms
 
-
-def get_routes(perms, distances):
+def get_routes(perms, maap):
     # routes = {'from': 'london', 'to': 'belfast', 'dist': 100}
     routes = []
     for perm in perms:
-        print(f'{perm = }')
+        logger.debug(f'{perm = }')
         # routes[perm] = 0
         total = 0
-        for segment in zip(perm, perm[1:]):
-            print(f'{segment = }')
-            for start, end, dist in distances:
-                if segment == (start, end) or segment == (end, start):
-                    print(segment, dist)
-                    total += dist
-        print(f'{total = }')
+        for start, end in zip(perm, perm[1:]):
+            logger.debug(f'{start, end = }')
+            logger.debug(f'{maap[start][end] = }')
+            total += maap[start][end]
+        logger.debug(f'{total = }')
         routes.append([*perm, total])
+    return routes
 
 
 def solution(quiz_input):
-    distances = parse_distances(quiz_input)
     # logger.info(f'{distances = }')
     '''
     London Dublin 464
@@ -83,18 +80,21 @@ def solution(quiz_input):
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
     '''
-    print(f'{distances = }\n')
+    distances = parse_distances(quiz_input)
+    logger.info(f'{distances = }\n')
 
     maap = build_map(distances)
-    print(f'{maap = }\n')
-    exit()
-    cities = get_city_list(distances)
-    print(f'{cities = }\n')
-    print()
-    permutations = rpermute(cities)
+    logger.info(f'{maap = }\n')
     
-    routes = get_routes(permutations, distances)
-    print(f'{routes = }')
+    cities = get_city_list(distances)
+    logger.info(f'{cities = }\n')
+
+    permutations = rpermute(cities)
+    logger.info(f'{permutations = }\n')
+    
+    routes = get_routes(permutations, maap)
+    logger.info(f'{routes = }')
+    exit()
 
 
 if __name__ == '__main__':
@@ -103,4 +103,4 @@ if __name__ == '__main__':
         logging.FileHandler(LOGFILE, mode='w'),
         logging.StreamHandler()
     ]
-    main.main(solution, level='DEBUG', handlers=handlers)
+    main.main(solution, level='INFO', handlers=handlers)
