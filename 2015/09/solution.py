@@ -33,19 +33,32 @@ def get_city_list(distances):
     return cities
 
 def rpermute(cities):
-    # print(f'{cities = }')
     if len(cities) == 1:
         return [cities]
     
-    out = []
+    perms = []
     for city in cities:
-        for res in rpermute([c for c in cities if c!=city]):
-            # print(f'{res = }')
-            ret = [city,  *res]
-            # print(f'{city = }')
-            # print(f'{ret = }')
-            out.append((tuple(ret)))
-    return tuple(out)
+        for perm in rpermute([c for c in cities if c!=city]):
+            ret = [city,  *perm]
+            perms.append(ret)
+    return perms
+
+
+def get_routes(perms, distances):
+    # routes = {'from': 'london', 'to': 'belfast', 'dist': 100}
+    routes = []
+    for perm in perms:
+        print(f'{perm = }')
+        # routes[perm] = 0
+        total = 0
+        for segment in zip(perm, perm[1:]):
+            print(f'{segment = }')
+            for start, end, dist in distances:
+                if segment == (start, end) or segment == (end, start):
+                    print(segment, dist)
+                    total += dist
+        print(f'{total = }')
+        routes.append([*perm, total])
 
 
 def solution(quiz_input):
@@ -63,13 +76,15 @@ def solution(quiz_input):
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
     '''
-    print(distances)
+    print(f'{distances = }')
     cities = get_city_list(distances)
-    print(cities)
+    print(f'{cities = }')
     print()
     permutations = rpermute(cities)
-    for perm in permutations:
-        print(perm)
+    
+    routes = get_routes(permutations, distances)
+    print(routes)
+
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
