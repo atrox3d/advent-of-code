@@ -32,44 +32,43 @@ def get_city_list(distances):
               ]
     return cities
 
-def rpermute(cities):
-    # print(f'{cities = }')
-    if len(cities) == 1:
-        return [cities]
-    
-    out = []
-    for city in cities:
-        for res in rpermute([c for c in cities if c!=city]):
-            # print(f'{res = }')
-            ret = [city,  *res]
-            # print(f'{city = }')
-            # print(f'{ret = }')
-            out.append((tuple(ret)))
-    return tuple(out)
-
 
 def solution(quiz_input):
     distances = parse_distances(quiz_input)
-    # logger.info(f'{distances = }')
+    logger.info(f'{distances = }')
     '''
-    London Dublin 464
-    London Belfast 518
-    Dublin Belfast 141
-
-    Dublin -> London -> Belfast = 982
-    Dublin -> Belfast -> London = 659
     London -> Dublin -> Belfast = 605
     London -> Belfast -> Dublin = 659
+    Dublin -> London -> Belfast = 982
+    Dublin -> Belfast -> London = 659
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
     '''
-    print(distances)
-    cities = get_city_list(distances)
-    print(cities)
+
+    cities = set()
+    routes = []
+    for start, end, distance in distances:
+        print(f'{start, end, distance = }')
+        print(f'add city: {start}')
+        cities.add(start)
+        for location1, location2, dist in distances:
+            if location1 == end:
+                route = (start, end, location2, distance + dist)
+                routes.append(route)
     print()
-    permutations = rpermute(cities)
-    for perm in permutations:
-        print(perm)
+    for start, end, distance in distances:
+        print(f'{start, end, distance = }')
+        print(f'add city: {end}')
+        cities.add(end)
+        for location1, location2, dist in distances:
+            if location1 == end:
+                route = (start, end, location2, distance + dist)
+                routes.append(route)
+    
+
+    print(f'{cities = }')
+    print(f'{routes = }')
+
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
