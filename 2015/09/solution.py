@@ -20,15 +20,7 @@ def parse_distances(quiz_input):
             for line in quiz_input]]
 
 def build_map(distances):
-    '''
-    x = {'london':{'dublin':15,'belfast':100}}
-    x['london']
-    {'dublin': 15, 'belfast': 100}
-    x['london']['dublin']
-    15
-    '''
     maap = defaultdict(dict)
-    # maap = {}
     for start, end, distance in distances:
         maap[start].update({end:distance})
         maap[end].update({start:distance})
@@ -56,10 +48,7 @@ def get_routes(perms, maap):
         logger.debug(f'{perm = }')
         total = 0
         for start, end in zip(perm, perm[1:]):
-            logger.debug(f'{start, end = }')
-            logger.debug(f'{maap[start][end] = }')
             total += maap[start][end]
-        logger.debug(f'{total = }')
         routes[tuple(perm)] = total
     return routes
 
@@ -95,21 +84,21 @@ def solution(quiz_input):
     What is the distance of the shortest route? 141
     '''
     distances = parse_distances(quiz_input)
-    logger.info(f'{distances = }\n')
+    logger.debug(f'{distances = }\n')
 
     maap = build_map(distances)
-    logger.info(f'{maap = }\n')
+    logger.debug(f'{maap = }\n')
     
     cities = get_city_list(distances)
-    logger.info(f'{cities = }\n')
+    logger.debug(f'{cities = }\n')
 
     permutations = rpermute(cities)
-    logger.info(f'{permutations = }\n')
+    logger.debug(f'{permutations = }\n')
     
     routes = get_routes(permutations, maap)
-    logger.info(f'{routes = }')
+    logger.debug(f'{routes = }')
 
-    return min(routes.values())
+    return min(routes.values()), max(routes.values()) 
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
