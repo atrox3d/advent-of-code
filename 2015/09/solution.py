@@ -75,18 +75,18 @@ def solution(quiz_input):
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
     '''
-    print(f'{distances = }')
+    print(f'{distances = }\n')
 
     maap = build_map(distances)
-    print(f'{maap = }')
-    exit()
+    print(f'{maap = }\n')
     cities = get_city_list(distances)
-    print(f'{cities = }')
+    print(f'{cities = }\n')
     print()
     permutations = rpermute(cities)
     
     routes = get_routes(permutations, distances)
-    print(routes)
+    print(f'{routes = }')
+    exit()
 
 
 if __name__ == '__main__':
