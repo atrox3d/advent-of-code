@@ -6,7 +6,7 @@ from .helpers import parse
 
 logger = logging.getLogger(__name__)
 
-def main(solution, level='DEBUG', **loggerargs):
+def main(solution, level='DEBUG', input=None, **loggerargs):
     logging.basicConfig(
                 level=level, 
                 format='%(levelname)5.5s|%(module)10.10s|%(funcName)15.15s| %(message)s',
@@ -16,7 +16,13 @@ def main(solution, level='DEBUG', **loggerargs):
     logger.debug(f'{options = }')
     parse.log_options(options)
 
-    if options.test_param:
+    if input is not None:
+        logger.info('running solution from parameter')
+        logger.info(f'{input = }')
+        result = solution(input)
+        logger.info(f'{result = }')
+    
+    elif options.test_param:
         logger.info(f'testing solution against {options.test_param}')
         testing.test_param(solution, options.test_param,
                          options.input_path)
