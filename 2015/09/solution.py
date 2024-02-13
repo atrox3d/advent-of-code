@@ -51,34 +51,48 @@ def rpermute(cities):
     return perms
 
 def get_routes(perms, maap):
-    # routes = {'from': 'london', 'to': 'belfast', 'dist': 100}
-    routes = []
+    routes = {}
     for perm in perms:
         logger.debug(f'{perm = }')
-        # routes[perm] = 0
         total = 0
         for start, end in zip(perm, perm[1:]):
             logger.debug(f'{start, end = }')
             logger.debug(f'{maap[start][end] = }')
             total += maap[start][end]
         logger.debug(f'{total = }')
-        routes.append([*perm, total])
+        routes[tuple(perm)] = total
     return routes
 
 
 def solution(quiz_input):
-    # logger.info(f'{distances = }')
     '''
-    London Dublin 464
-    London Belfast 518
-    Dublin Belfast 141
+    --- Day 9: All in a Single Night ---
+    Every year, Santa manages to deliver all of his presents 
+    in a single night.
+
+    This year, however, he has some new locations to visit; 
+    his elves have provided him the distances between every pair 
+    of locations. He can start and end at any two (different) 
+    locations he wants, but he must visit each location exactly once. 
+    What is the shortest distance he can travel to achieve this?
+
+    For example, given the following distances:
+
+    London to Dublin = 464
+    London to Belfast = 518
+    Dublin to Belfast = 141
+    
+    The possible routes are therefore:
 
     Dublin -> London -> Belfast = 982
-    Dublin -> Belfast -> London = 659
     London -> Dublin -> Belfast = 605
     London -> Belfast -> Dublin = 659
+    Dublin -> Belfast -> London = 659
     Belfast -> Dublin -> London = 605
     Belfast -> London -> Dublin = 982
+    The shortest of these is London -> Dublin -> Belfast = 605, and so the answer is 605 in this example.
+
+    What is the distance of the shortest route? 141
     '''
     distances = parse_distances(quiz_input)
     logger.info(f'{distances = }\n')
@@ -94,8 +108,8 @@ def solution(quiz_input):
     
     routes = get_routes(permutations, maap)
     logger.info(f'{routes = }')
-    exit()
 
+    return min(routes.values())
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
