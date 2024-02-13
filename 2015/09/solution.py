@@ -18,18 +18,16 @@ def parse_distances(quiz_input):
     return [(start, end, int(distance)) for start, end, distance in 
                  [re.match(REGEX, line).groups() for line in quiz_input]]
 
-def build_map(distances):
-    maap = defaultdict(list)
-    for start, end, distance in distances:
-        maap[start].append({end:distance})
-        maap[end].append({start:distance})
-    return maap
+# def build_map(distances):
+#     maap = defaultdict(list)
+#     for start, end, distance in distances:
+#         maap[start].append({end:distance})
+#         maap[end].append({start:distance})
+#     return maap
 
 def get_city_list(distances):
-    cities = [city for city in 
-            #   [city for record in distances for city in record[:2]]
-              {city for record in distances for city in record[:2]}
-              ]
+    # use a set to eliminate duplicates
+    cities = {city for record in distances for city in record[:2]}
     return cities
 
 def rpermute(cities):
@@ -79,6 +77,7 @@ def solution(quiz_input):
     print(f'{distances = }')
     cities = get_city_list(distances)
     print(f'{cities = }')
+    # exit()
     print()
     permutations = rpermute(cities)
     
