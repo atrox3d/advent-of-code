@@ -20,11 +20,19 @@ def parse_distances(quiz_input):
             for line in quiz_input]]
 
 def build_map(distances):
-    maap = defaultdict(list)
+    '''
+    x = {'london':{'dublin':15,'belfast':100}}
+    x['london']
+    {'dublin': 15, 'belfast': 100}
+    x['london']['dublin']
+    15
+    '''
+    maap = defaultdict(dict)
+    # maap = {}
     for start, end, distance in distances:
-        maap[start].append({end:distance})
-        maap[end].append({start:distance})
-    return maap
+        maap[start].update({end:distance})
+        maap[end].update({start:distance})
+    return dict(maap)
 
 def get_city_list(distances):
     # use a set to eliminate duplicates
@@ -79,6 +87,7 @@ def solution(quiz_input):
 
     maap = build_map(distances)
     print(f'{maap = }\n')
+    exit()
     cities = get_city_list(distances)
     print(f'{cities = }\n')
     print()
@@ -86,7 +95,6 @@ def solution(quiz_input):
     
     routes = get_routes(permutations, distances)
     print(f'{routes = }')
-    exit()
 
 
 if __name__ == '__main__':
