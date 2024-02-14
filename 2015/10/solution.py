@@ -36,30 +36,27 @@ def solution(quiz_input):
     111221 becomes 312211 (three 1s, two 2s, and one 1).
     Starting with the digits in your puzzle input, apply 
     this process 40 times. 
-    What is the length of the result?    
+    What is the length of the result? 252594
     '''
     print(f'{quiz_input = }')
 
     string= quiz_input
-    for step in range(40):
-        pos = count = 0
-        sequence = []
-        while pos <= (len(string) -1):
-            char = string[pos]
+    for _ in range(40):
+        print(_)
+        prev_char = ''
+        count = 0
+        result = ''
+        for char in string:
+            if char != prev_char:
+                if prev_char != '':
+                    result += f'{count}{prev_char}'
+                    count = 0
             count += 1
-            try:
-                while string[pos+1] == char:
-                    count += 1
-                    pos += 1
-            except IndexError:
-                pass
-            sequence.append((count, char))
-            count = 0
-            pos += 1
-        
-        string = [''.join(map(str, group)) for group in sequence]
-        string = ''.join(string)
-    return len(string)
+            prev_char = char
+        result += f'{count}{char}'
+        string = result
+
+    return len(result)
 
 
 
