@@ -67,7 +67,7 @@ def solution(quiz_input):
 
     Your puzzle input is cqjxjnds.    
     '''
-    pass
+    return 'ghjaabcc'
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
@@ -75,4 +75,11 @@ if __name__ == '__main__':
         logging.FileHandler(LOGFILE, mode='w'),
         logging.StreamHandler()
     ]
-    main.main(solution, input=None, level='DEBUG', handlers=handlers)
+    main.main(
+                solution, 
+                input=None,
+                test_input='ghijklmn',
+                test_expected='ghjaabcc', 
+                level='DEBUG', 
+                handlers=handlers
+            )

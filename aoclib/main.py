@@ -6,7 +6,14 @@ from .helpers import parse
 
 logger = logging.getLogger(__name__)
 
-def main(solution, level='DEBUG', input=None, **loggerargs):
+def main(
+            solution, 
+            input=None, 
+            test_input=None,
+            test_expected=None, 
+            level='DEBUG', 
+            **loggerargs,
+    ):
     logging.basicConfig(
                 level=level, 
                 format='%(levelname)5.5s|%(module)10.10s|%(funcName)15.15s| %(message)s',
@@ -21,6 +28,16 @@ def main(solution, level='DEBUG', input=None, **loggerargs):
         logger.info(f'{input = }')
         result = solution(input)
         logger.info(f'{result = }')
+
+    elif test_input is not None:
+        logger.info('testing solution from parameter')
+        logger.info(f'{test_input = }')
+        logger.info(f'{test_expected = }')
+        result = solution(test_input)
+        logger.info(f'{result = }')
+        if test_expected is not None:
+            assert result == test_expected, f'FAIL: {test_input} != {test_expected}'
+            print(f'PASS: {test_input} == {test_expected}')
     
     elif options.test_param:
         logger.info(f'testing solution against {options.test_param}')
