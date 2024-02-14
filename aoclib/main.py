@@ -36,8 +36,8 @@ def main(
         result = solution(test_input)
         logger.info(f'{result = }')
         if test_expected is not None:
-            assert result == test_expected, f'FAIL: {test_input} != {test_expected}'
-            print(f'PASS: {test_input} == {test_expected}')
+            assert result == test_expected, f'FAIL: {result} != {test_expected}'
+            print(f'PASS: {result} == {test_expected}')
     
     elif options.test_param:
         logger.info(f'testing solution against {options.test_param}')
