@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 def increment(password: str) -> str:
     '''
     Incrementing is just like counting with numbers: 
@@ -7,7 +12,7 @@ def increment(password: str) -> str:
     next letter to the left until one doesn't wrap around.
     '''
     from string import ascii_lowercase
-    print(password)
+    # print(password)
     # print(password[::-1])
     newpassword = ''
     for pos, char in enumerate(password[::-1]):
@@ -21,5 +26,11 @@ def increment(password: str) -> str:
             new_char = ascii_lowercase[0]
             newpassword += new_char
     
-    print (newpassword[::-1])
+    # print (newpassword[::-1])
     return newpassword[::-1]
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level='DEBUG')
+    logger.setLevel('DEBUG')
+    print(increment('ghizzzzz'))

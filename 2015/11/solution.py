@@ -73,35 +73,45 @@ def solution(quiz_input):
     Given Santa's current password (your puzzle input), 
     what should his next password be?
 
-    Your puzzle input is cqjxjnds.    
+    Your puzzle input is cqjxjnds. cqjxkkaa   
     '''
-    from string import ascii_lowercase
-    
     from increment import increment
     from rincrement import rincrement
-    from straight import check_straight
+    from valid import is_valid, valid_chars
 
-    forbidden = 'iol'
-    valid_chars = ''.join(char for char in ascii_lowercase if char not in forbidden)
+    result = quiz_input
+    # result = 'ghizzzzz'
+    logger.debug(f'{result = }')
+    while not is_valid(result):
+        if result == 'ghjaabcc':
+            print(f'{quiz_input = } {result = }')
+            input('ERROR')
 
-    result = rincrement(quiz_input, valid_chars)
-    if not check_straight(result, valid_chars):
-        pass
+        # os.system('clear')
+        # logger.debug(f'{result = }')
+        result = rincrement(result, valid_chars)
+        # print(f'{quiz_input = }, {result = }')
+        # if result.startswith('ghia'):
+            # logger.info(f'{result = }')
     return result
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
-    handlers = [logging.FileHandler(LOGFILE, mode='w'), logging.StreamHandler()]
+    handlers = [
+        logging.FileHandler(LOGFILE, mode='w'), 
+        logging.StreamHandler()
+        ]
 
     for test_input, test_expected in (
         ('abcdefgh', 'abcdffaa'),
         ('ghijklmn', 'ghjaabcc'),
+        ('cqjxjnds', 'boh'),
     ):
         main.main(
                     solution, 
                     input=None,
                     test_input=test_input,
                     test_expected=test_expected, 
-                    level='DEBUG', 
+                    level='INFO', 
                     handlers=handlers
                 )
