@@ -64,9 +64,9 @@ def solution(quiz_input):
     abbcegjk fails the third requirement, because it only has one 
     double letter (bb).
     
-    The next password after abcdefgh is abcdffaa.
+    -> The next password after abcdefgh is abcdffaa.
 
-    The next password after ghijklmn is ghjaabcc, 
+    -> The next password after ghijklmn is ghjaabcc, 
     because you eventually skip all the passwords that start with 
     ghi..., since i is not allowed.
     
@@ -75,10 +75,18 @@ def solution(quiz_input):
 
     Your puzzle input is cqjxjnds.    
     '''
+    from string import ascii_lowercase
+    
     from increment import increment
     from rincrement import rincrement
-                
-    result = rincrement(quiz_input)
+    from straight import check_straight
+
+    forbidden = 'iol'
+    valid_chars = ''.join(char for char in ascii_lowercase if char not in forbidden)
+
+    result = rincrement(quiz_input, valid_chars)
+    if not check_straight(result, valid_chars):
+        pass
     return result
 
 if __name__ == '__main__':

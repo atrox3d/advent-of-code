@@ -1,10 +1,4 @@
-from string import ascii_lowercase
-
-
-def rincrement(password: str) -> str:
-    forbidden = 'iol'
-    valid = ''.join(char for char in ascii_lowercase if char not in forbidden)
-
+def rincrement(password: str, valid: str) -> str:
     incremented = _rincrement(password[::-1], valid)[::-1]
     return incremented
 
