@@ -41,16 +41,17 @@ def solution(quiz_input):
     Unfortunately for Santa, a new Security-Elf recently started, 
     and he has imposed some additional password requirements:
 
-    Passwords must include one increasing straight of at least 
-    three letters, like abc, bcd, cde, and so on, up to xyz. 
-    They cannot skip letters; abd doesn't count.
+    -   Passwords must include one increasing straight of at least 
+        three letters, like abc, bcd, cde, and so on, up to xyz. 
+        They cannot skip letters; abd doesn't count.
     
-    Passwords may not contain the letters i, o, or l, 
-    as these letters can be mistaken for other characters and 
-    are therefore confusing.
+    -   Passwords may not contain the letters i, o, or l, 
+        as these letters can be mistaken for other characters and 
+        are therefore confusing.
     
-    Passwords must contain at least two different, 
-    non-overlapping pairs of letters, like aa, bb, or zz.
+    -   Passwords must contain at least two different, 
+        non-overlapping pairs of letters, like aa, bb, or zz.
+    
     For example:
 
     hijklmmn meets the first requirement (because it contains the 
@@ -82,15 +83,17 @@ def solution(quiz_input):
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
-    handlers = [
-        logging.FileHandler(LOGFILE, mode='w'),
-        logging.StreamHandler()
-    ]
-    main.main(
-                solution, 
-                input=None,
-                test_input='abcdefgh',
-                test_expected='abcdffaa', 
-                level='DEBUG', 
-                handlers=handlers
-            )
+    handlers = [logging.FileHandler(LOGFILE, mode='w'), logging.StreamHandler()]
+
+    for test_input, test_expected in (
+        ('abcdefgh', 'abcdffaa'),
+        ('ghijklmn', 'ghjaabcc'),
+    ):
+        main.main(
+                    solution, 
+                    input=None,
+                    test_input=test_input,
+                    test_expected=test_expected, 
+                    level='DEBUG', 
+                    handlers=handlers
+                )

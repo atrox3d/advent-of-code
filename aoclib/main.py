@@ -30,14 +30,17 @@ def main(
         logger.info(f'{result = }')
 
     elif test_input is not None:
-        logger.info('testing solution from parameter')
+        logger.info('testing solution from parameters:')
         logger.info(f'{test_input = }')
         logger.info(f'{test_expected = }')
         result = solution(test_input)
         logger.info(f'{result = }')
         if test_expected is not None:
-            assert result == test_expected, f'FAIL: {result} != {test_expected}'
-            print(f'PASS: {result} == {test_expected}')
+            try:
+                assert result == test_expected, f'FAIL: {result} != {test_expected}'
+                print(f'PASS: {result} == {test_expected}')
+            except AssertionError as ae:
+                print(repr(ae))
     
     elif options.test_param:
         logger.info(f'testing solution against {options.test_param}')

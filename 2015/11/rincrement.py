@@ -6,7 +6,7 @@ def rincrement(password: str) -> str:
     valid = ''.join(char for char in ascii_lowercase if char not in forbidden)
 
     incremented = _rincrement(password[::-1], valid)[::-1]
-    
+    return incremented
 
 def _rincrement(password: str, valid_chars) -> str:
     '''
@@ -26,6 +26,3 @@ def _rincrement(password: str, valid_chars) -> str:
     else:
         newchar = valid_chars[0] # a
         return newchar + _rincrement(password[1:], valid_chars)
-
-result = rincrement('aaz')
-print(f'{result = }')
