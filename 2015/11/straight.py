@@ -12,11 +12,17 @@ def has_straight(string: str, valid: str, length: int=3) -> bool:
     three letters, like abc, bcd, cde, and so on, up to xyz. 
     They cannot skip letters; abd doesn't count.
     '''
-    # logger.debug(string)
-    for pos, _ in enumerate(string + ' '*length):
+    logger.debug(f'{string = }')
+    for pos, _ in enumerate(string):
         pattern = string[pos:pos+length]
-        logger.debug(f'{pattern = }')
-        if pattern in valid:
-            return True
+        if len(pattern) == length: 
+            logger.debug(f'{pattern = }')
+            if pattern in valid:
+                return True
     return False
 
+if __name__ == '__main__':
+    logging.basicConfig(level='DEBUG')
+    logger.setLevel('DEBUG')
+    for string in ['abcdffaa', 'ghjaabcc', 'cqjxkkaa']:
+        print(has_straight(string, valid))

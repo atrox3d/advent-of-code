@@ -38,7 +38,7 @@ def main(
         if test_expected is not None:
             try:
                 assert result == test_expected, f'FAIL: {result} != {test_expected}'
-                print(f'PASS: {result} == {test_expected}')
+                print(f'PASS: {test_input = } {result} == {test_expected}')
             except AssertionError as ae:
                 print(repr(ae))
     

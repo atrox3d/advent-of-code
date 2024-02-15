@@ -29,4 +29,5 @@ def is_valid(string:str, valid_chars=valid_chars, forbidden=forbidden) -> bool:
 if __name__ == '__main__':
     logging.basicConfig(level='DEBUG')
     logger.setLevel('DEBUG')
-    print(is_valid('ghjaabcc'))
+    for string in ['abcdffaa', 'ghjaabcc', 'cqjxkkaa']:
+        print(is_valid(string))
