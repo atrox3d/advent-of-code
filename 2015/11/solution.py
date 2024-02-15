@@ -89,8 +89,8 @@ if __name__ == '__main__':
     main.main(
                 solution, 
                 input=None,
-                test_input='ghijklmnz',
-                test_expected='ghjaabcc', 
+                test_input='abcdefgh',
+                test_expected='abcdffaa', 
                 level='DEBUG', 
                 handlers=handlers
             )
