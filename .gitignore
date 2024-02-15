@@ -3,3 +3,7 @@ venv/
 *.egg-info/
 deleteme.*
 *.log
+*.ignore
+*.delete
+*.deleteme
+
