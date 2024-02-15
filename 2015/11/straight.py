@@ -14,8 +14,9 @@ def has_straight(string: str, valid: str, length: int=3) -> bool:
     '''
     # logger.debug(string)
     for pos, _ in enumerate(string + ' '*length):
-        t = string[pos:pos+length]
-        if t in valid:
+        pattern = string[pos:pos+length]
+        logger.debug(f'{pattern = }')
+        if pattern in valid:
             return True
     return False
 

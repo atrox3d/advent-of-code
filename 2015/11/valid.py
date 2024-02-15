@@ -12,18 +12,18 @@ valid_chars = ''.join(char for char in ascii_lowercase if char not in forbidden)
 
 
 def is_valid(string:str, valid_chars=valid_chars, forbidden=forbidden) -> bool:
-    # logger.debug(f'isvalid: {string}')
+    logger.debug(f'isvalid: {string}')
     if not has_doubles(string):
-        # logger.debug(f'{string} not has_doubles')
+        logger.debug(f'{string} not has_doubles')
         return False
     if not has_straight(string, valid_chars):
-        # logger.debug(f'{string} not has_straight')
+        logger.debug(f'{string} not has_straight')
         return False
     for ch in string:
         if ch in forbidden:
-            # logger.debug(f'{string} has forbidden')
+            logger.debug(f'{string} has forbidden')
             return False
-    # logger.info(f'valid! {string}')
+    logger.info(f'valid! {string}')
     return True
 
 if __name__ == '__main__':

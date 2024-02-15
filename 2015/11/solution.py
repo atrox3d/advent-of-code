@@ -80,7 +80,6 @@ def solution(quiz_input):
     from valid import is_valid, valid_chars
 
     result = quiz_input
-    # result = 'ghizzzzz'
     logger.debug(f'{result = }')
     while not is_valid(result):
         if result == 'ghjaabcc':

@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def increment(password: str) -> str:
+def increment(password: str, valid_chars: str) -> str:
     '''
     Incrementing is just like counting with numbers: 
     xx, xy, xz, ya, yb, and so on. 
@@ -11,22 +11,18 @@ def increment(password: str) -> str:
     if it was z, it wraps around to a, and repeat with the 
     next letter to the left until one doesn't wrap around.
     '''
-    from string import ascii_lowercase
-    # print(password)
-    # print(password[::-1])
     newpassword = ''
     for pos, char in enumerate(password[::-1]):
-        find = ascii_lowercase.index(char)
+        find = valid_chars.index(char)
         try:
-            new_char = ascii_lowercase[find+1]
+            new_char = valid_chars[find+1]
             newpassword += new_char
             newpassword += password[::-1][pos+1:]
             break
         except IndexError:
-            new_char = ascii_lowercase[0]
+            new_char = valid_chars[0]
             newpassword += new_char
     
-    # print (newpassword[::-1])
     return newpassword[::-1]
 
 

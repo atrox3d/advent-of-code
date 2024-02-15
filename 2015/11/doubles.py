@@ -10,12 +10,12 @@ def has_doubles(string:str) -> bool:
     redoubles = re.compile(r'([a-z])\1')
     redoubles = re.compile(r'([a-z])\1.*([a-z])\2')
     doubles = redoubles.search(string)
-    # logger.debug(f'{doubles = }')
+    logger.debug(f'{doubles = }')
 
     if doubles is not None:
         prev = ''
         for item in doubles.groups():
-            # logger.debug(f'{prev = }, {item = }')
+            logger.debug(f'{prev = }, {item = }')
             if prev == item:
                 return False
             prev = item
