@@ -1,9 +1,10 @@
 import logging
 from valid import valid_chars
+from string import ascii_lowercase
 
 logger = logging.getLogger(__name__)
 
-def rincrement(password: str, valid: str) -> str:
+def rincrement(password: str, valid: str=ascii_lowercase) -> str:
     incremented = _rincrement(password[::-1], valid)[::-1]
     return incremented
 
@@ -36,4 +37,4 @@ def _rincrement(password: str, valid_chars: str) -> str:
 if __name__ == '__main__':
     logging.basicConfig(level='DEBUG')
     logger.setLevel('DEBUG')
-    print(rincrement('ghizzzzz', valid_chars))
+    print(rincrement('ghizzzzz', ascii_lowercase))

@@ -82,16 +82,7 @@ def solution(quiz_input):
     result = quiz_input
     logger.debug(f'{result = }')
     while not is_valid(result):
-        if result == 'ghjaabcc':
-            print(f'{quiz_input = } {result = }')
-            input('ERROR')
-
-        # os.system('clear')
-        # logger.debug(f'{result = }')
-        result = rincrement(result, valid_chars)
-        # print(f'{quiz_input = }, {result = }')
-        # if result.startswith('ghia'):
-            # logger.info(f'{result = }')
+        result = rincrement(result)
     return result
 
 if __name__ == '__main__':

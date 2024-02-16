@@ -1,9 +1,10 @@
 import logging
+from string import ascii_lowercase
 
 logger = logging.getLogger(__name__)
 
 
-def increment(password: str, valid_chars: str) -> str:
+def increment(password: str, valid_chars: str=ascii_lowercase) -> str:
     '''
     Incrementing is just like counting with numbers: 
     xx, xy, xz, ya, yb, and so on. 

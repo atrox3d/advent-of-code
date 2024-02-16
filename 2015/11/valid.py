@@ -13,21 +13,32 @@ valid_chars = ''.join(char for char in ascii_lowercase if char not in forbidden)
 
 def is_valid(string:str, valid_chars=valid_chars, forbidden=forbidden) -> bool:
     logger.debug(f'isvalid: {string}')
+
     if not has_doubles(string):
-        logger.debug(f'{string} not has_doubles')
+        logger.debug(f'FAIL: {string} ! has_doubles')
         return False
+    logger.debug(f'OK: {string} has_doubles')
+
     if not has_straight(string, valid_chars):
-        logger.debug(f'{string} not has_straight')
+        logger.debug(f'FAIL: {string} ! has_straight')
         return False
+    logger.debug(f'OK: {string} has_straight')
+
     for ch in string:
         if ch in forbidden:
-            logger.debug(f'{string} has forbidden')
+            logger.debug(f'FAIL: {string} has forbidden')
             return False
-    logger.info(f'valid! {string}')
+    logger.debug(f'OK: {string} ! has forbidden')
+    logger.info(f'OK: valid! {string}')
     return True
 
 if __name__ == '__main__':
     logging.basicConfig(level='DEBUG')
     logger.setLevel('DEBUG')
-    for string in ['abcdffaa', 'ghjaabcc', 'cqjxkkaa']:
+    for string in [
+        # 'abcdffaa', 
+        'gjaabbcd', 
+        'ghjaabcc',
+        ]:
         print(is_valid(string))
+        print()
