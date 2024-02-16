@@ -77,7 +77,7 @@ def solution(quiz_input):
     '''
     from increment import increment
     from rincrement import rincrement
-    from valid import is_valid, valid_chars
+    from valid import is_valid
 
     result = quiz_input
     logger.debug(f'{result = }')
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     for test_input, test_expected in (
         ('abcdefgh', 'abcdffaa'),
         ('ghijklmn', 'ghjaabcc'),
-        ('cqjxjnds', 'boh'),
+        ('cqjxjnds', 'cqjxxyzz'),
     ):
         main.main(
                     solution, 
