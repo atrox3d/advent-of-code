@@ -82,7 +82,7 @@ def solution(quiz_input):
     result = quiz_input
     logger.debug(f'{result = }')
     while not is_valid(result):
-        result = rincrement(result)
+        result = increment(result)
     return result
 
 if __name__ == '__main__':
