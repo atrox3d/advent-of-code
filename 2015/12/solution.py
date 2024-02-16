@@ -17,9 +17,6 @@ def solution(quiz_input):
     
     print(json.dumps(data, indent=2))
 
-    # with open(Path(__file__).parent / 'output.json', 'w') as jfp:
-        # json.dump(jfp, data, indent=2)
-
 
 
 if __name__ == '__main__':
