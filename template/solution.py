@@ -20,4 +20,11 @@ if __name__ == '__main__':
         logging.FileHandler(LOGFILE, mode='w'),
         logging.StreamHandler()
     ]
-    main.main(solution, input=None, level='DEBUG', handlers=handlers)
+    main.main(
+                solution, 
+                input=None,
+                test_input=None,
+                test_expected=None, 
+                level='INFO', 
+                handlers=handlers
+            )
