@@ -16,7 +16,7 @@ def solution(quiz_input):
         data = json.load(jfp)
         # print(json.dumps(data, indent=2))
 
-    def find_numbers(data, numbers=None):
+    def find_numbers(data, skip=None, numbers=None):
         numbers = [] if numbers is None else numbers
 
         if isinstance(data, int):
@@ -24,15 +24,16 @@ def solution(quiz_input):
             numbers.append(data)
         if isinstance(data, list):
             for element in data:
-                find_numbers(element, numbers)
+                find_numbers(element, skip, numbers)
         elif isinstance(data, dict):
-            for k, v in data.items():
-                print(f'{k=}')
-                find_numbers(v, numbers)
+            if skip not in data.values():
+                for k, v in data.items():
+                    find_numbers(v, skip, numbers)
         return numbers
     
     numbers = find_numbers(data)
-    return sum(numbers)
+    numbersnotred = find_numbers(data, skip='red')
+    return sum(numbers), sum(numbersnotred)
 
 
 if __name__ == '__main__':
