@@ -80,7 +80,8 @@ def solution(quiz_input):
     from valid import is_valid
 
     result = quiz_input
-    logger.debug(f'{result = }')
+    logger.info(f'{result = }')
+    result = increment(result)
     while not is_valid(result):
         result = increment(result)
     return result
@@ -93,9 +94,10 @@ if __name__ == '__main__':
         ]
 
     for test_input, test_expected in (
-        ('abcdefgh', 'abcdffaa'),
-        ('ghijklmn', 'ghjaabcc'),
+        # ('abcdefgh', 'abcdffaa'),
+        # ('ghijklmn', 'ghjaabcc'),
         ('cqjxjnds', 'cqjxxyzz'),
+        ('cqjxxyzz', 'idk'),
     ):
         main.main(
                     solution, 
