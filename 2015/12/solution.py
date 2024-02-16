@@ -14,9 +14,25 @@ logger = logging.getLogger(__name__)
 def solution(quiz_input):
     with open(Path(__file__).parent / 'input.json') as jfp:
         data = json.load(jfp)
-    
-    print(json.dumps(data, indent=2))
+        # print(json.dumps(data, indent=2))
 
+    def find_numbers(data, numbers=None):
+        numbers = [] if numbers is None else numbers
+
+        if isinstance(data, int):
+            print(f'returning {data}')
+            numbers.append(data)
+        if isinstance(data, list):
+            for element in data:
+                find_numbers(element, numbers)
+        elif isinstance(data, dict):
+            for k, v in data.items():
+                print(f'{k=}')
+                find_numbers(v, numbers)
+        return numbers
+    
+    numbers = find_numbers(data)
+    return sum(numbers)
 
 
 if __name__ == '__main__':
