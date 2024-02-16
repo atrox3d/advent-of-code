@@ -8,7 +8,7 @@ def rincrement(password: str, valid: str=ascii_lowercase) -> str:
     incremented = _rincrement(password[::-1], valid)[::-1]
     return incremented
 
-def _rincrement(password: str, valid_chars: str) -> str:
+def _rincrement(password: str, valid_chars: str=ascii_lowercase) -> str:
     '''
     Incrementing is just like counting with numbers: 
     xx, xy, xz, ya, yb, and so on. 
@@ -37,4 +37,5 @@ def _rincrement(password: str, valid_chars: str) -> str:
 if __name__ == '__main__':
     logging.basicConfig(level='DEBUG')
     logger.setLevel('DEBUG')
-    print(rincrement('ghizzzzz', ascii_lowercase))
+    print(rincrement('ghizzzzz'))
+    print(rincrement('aaaaaaaa'))

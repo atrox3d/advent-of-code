@@ -31,3 +31,4 @@ if __name__ == '__main__':
     logging.basicConfig(level='DEBUG')
     logger.setLevel('DEBUG')
     print(increment('ghizzzzz'))
+    print(increment('aaaaaaaa'))
