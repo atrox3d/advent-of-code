@@ -12,7 +12,15 @@ from aoclib import main
 
 logger = logging.getLogger(__name__)
 def solution(quiz_input):
-    pass
+    with open(Path(__file__).parent / 'input.json') as jfp:
+        data = json.load(jfp)
+    
+    print(json.dumps(data, indent=2))
+
+    # with open(Path(__file__).parent / 'output.json', 'w') as jfp:
+        # json.dump(jfp, data, indent=2)
+
+
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
@@ -25,6 +33,6 @@ if __name__ == '__main__':
                 input=None,
                 test_input=None,
                 test_expected=None, 
-                level='INFO', 
+                level='DEBUG', 
                 handlers=handlers
             )
