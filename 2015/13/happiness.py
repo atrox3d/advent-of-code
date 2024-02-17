@@ -41,18 +41,6 @@ def recurse(table, target=None):
             print()
         return values
 
-def permute(items):
-    if len(items) == 1:
-        return [items]
-    
-    out = []
-    item = items[0]
-    for res in rpermute([c for c in items if c!=item]):
-        ret = [item,  *res]
-        out.append(ret)
-    return out
-
-
 if __name__ == '__main__':
     import json
     from test_data import input_text
@@ -67,4 +55,4 @@ if __name__ == '__main__':
 
     # find_max_happiness(table)
     # recurse(table)
-    print(permute([place for place in table]))
+    print(rpermute([place for place in table]))
