@@ -40,9 +40,10 @@ if __name__ == '__main__':
     ]
     main.main(
                 solution, 
-                input=None,
+                input_param=None,
                 test_input=None,
                 test_expected=None, 
+                # level='DEBUG', 
                 level='INFO', 
                 handlers=handlers
             )

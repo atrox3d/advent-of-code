@@ -20,9 +20,9 @@ def get_parser() -> argparse.ArgumentParser:
                         default=datainput.INPUT_PATH)
     return parser
 
-def log_options(options: argparse.Namespace):
+def log_cmdline_options(options: argparse.Namespace, log=logger.info):
     for k, v in vars(options).items():
-        logger.debug(f'{k} = {v}')
+        log(f'{k} = {v}')
     
 if __name__ == '__main__':
     print(get_parser().parse_args())

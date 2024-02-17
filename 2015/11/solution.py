@@ -101,7 +101,7 @@ if __name__ == '__main__':
     ):
         main.main(
                     solution, 
-                    input=None,
+                    input_param=None,
                     test_input=test_input,
                     test_expected=test_expected, 
                     level='INFO', 
