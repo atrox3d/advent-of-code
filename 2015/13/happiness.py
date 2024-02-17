@@ -71,15 +71,13 @@ if __name__ == '__main__':
     totals = []
     for combo in combos:
         prev = ''
-        first = ''
+        first = combo[0]
+        last = combo[-1]
         total = 0
         for place in combo:
             if prev:
                 total += table[place][prev]+table[prev][place]
-            else:
-                first = place
             prev = place
-        last = place
         total += table[last][first]+table[first][last]
         totals.append(total)
     print(max(totals))
