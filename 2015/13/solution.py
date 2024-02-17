@@ -61,12 +61,20 @@ you find that this one is the most optimal, with a total change in happiness of 
 What is the total change in happiness for the optimal seating arrangement of the actual 
 guest list?
 '''
-    from happiness import find_max_happiness, setup_table
+    from happiness import get_happiness, totals, rpermute
 
-    table = setup_table(quiz_input)
-    print('table=', json.dumps(table, indent=2))
+    happiness = get_happiness(quiz_input)
+    print('table=', json.dumps(happiness, indent=2))
 
-    find_max_happiness(table)
+    names = [name for name in happiness]
+    permutations = rpermute(names)
+    combos = [item for item in permutations if item[0]==names[0]]
+    print(combos)
+
+    best = (max(totals(happiness, combos)))
+    print(best)
+    return best
+
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
