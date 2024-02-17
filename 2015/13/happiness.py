@@ -6,6 +6,7 @@ def setup_table(quiz_input: list[str]) -> dict[dict]:
             case name, 'would', op, qty, what, 'units', 'by', 'sitting', 'next', 'to', whom:
                 op = -1 if op == 'lose' else 1
                 qty = int(qty) * op
+                whom = whom[:-1]
                 table[name] = table.get(name, {})
                 table[name].update({whom:qty})
             case _:
@@ -19,21 +20,38 @@ def find_max_happiness(table: dict):
         for near, happiness in table[name].items():
             print(f'{near, happiness=}')
 
+def recurse(table, target=None):
+    print(f'{table, target = }')
+    if isinstance(table, int):
+        print(f'return {table}')
+        return table
+    
+    if target is None:
+        values = []
+        for target in table:
+            print(f'{target = }') # A B C D
+            values.append(recurse(table[target], target))
+        print(values)
+    else:
+        print(f'{target = }, {table = }')
+        values = []
+        for target in table:
+            print(target)
+            values.append(recurse(table[target], target))
+            print()
+        return values
+
 if __name__ == '__main__':
-    input_text = '''A would gain 54 happiness units by sitting next to B.
-A would lose 79 happiness units by sitting next to C.
-A would lose 2 happiness units by sitting next to D.
-B would gain 83 happiness units by sitting next to A.
-B would lose 7 happiness units by sitting next to C.
-B would lose 63 happiness units by sitting next to D.
-C would lose 62 happiness units by sitting next to A.
-C would gain 60 happiness units by sitting next to B.
-C would gain 55 happiness units by sitting next to D.
-D would gain 46 happiness units by sitting next to A.
-D would lose 7 happiness units by sitting next to B.
-D would gain 41 happiness units by sitting next to C.'''
+    import json
+    from test_data import input_text
+
     lines = input_text.split('\n')
     for line in lines:
         print(line)
     
-    print(setup_table(lines))
+    table = setup_table(lines)
+    print(json.dumps(table, indent=4))
+
+    # find_max_happiness(table)
+
+    recurse(table)
