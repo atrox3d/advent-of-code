@@ -12,19 +12,6 @@ from aoclib import main
 
 logger = logging.getLogger(__name__)
 
-def setup_table(quiz_input: list[str]) -> dict[dict]:
-    table = {}
-    for line in quiz_input:
-        match line.split():
-            case name, 'would', op, qty, what, 'units', 'by', 'sitting', 'next', 'to', whom:
-                op = -1 if op == 'lose' else 1
-                qty = int(qty) * op
-                table[name] = table.get(name, {})
-                table[name].update({whom:qty})
-            case _:
-                raise ValueError()
-    return table
-
 def solution(quiz_input):
     '''
 --- Day 13: Knights of the Dinner Table ---
@@ -74,14 +61,10 @@ you find that this one is the most optimal, with a total change in happiness of 
 What is the total change in happiness for the optimal seating arrangement of the actual 
 guest list?
 '''
+    from happiness import find_max_happiness, setup_table
+
     table = setup_table(quiz_input)
     print('table=', json.dumps(table, indent=2))
-
-    def find_max_happiness(table: dict):
-        for name in table:
-            print(f'{name = }')
-            for near, happiness in table[name].items():
-                print(f'{near, happiness=}')
 
     find_max_happiness(table)
 
