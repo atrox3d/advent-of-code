@@ -8,7 +8,8 @@ from ..helpers import datainput
 logger = logging.getLogger(__name__)
 
 TESTS_FILE = 'tests.json'
-TESTS_PATH = Path(sys.argv[0]).parent / TESTS_FILE
+TESTS_DIR = Path(sys.argv[0]).parent
+TESTS_PATH =  TESTS_DIR / TESTS_FILE
 
 def load_tests(input_path=TESTS_PATH):
     loader = get_loader(input_path)

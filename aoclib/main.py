@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from .helpers import datainput
 from .testing import testing
@@ -52,11 +53,7 @@ def main(
     logger.debug(f'{options = }')
     parse.log_cmdline_options(options)
 
-    if options.input_path:
-        # DEFAULT process input
-        process_inputfile(solution, options.input_path)
-
-    elif input_param is not None:
+    if input_param is not None:
         #  use parameter as input value
         process_inputparam(solution, input_param)
 
@@ -70,9 +67,13 @@ def main(
         testing.test_param(solution, options.test_param, options.input_path)
     
     elif options.test_path:
-        # test solution again tests inside file
+        # test solution again tests inside 
+        test_path = Path(options.test_path)
+        if not test_path.exists() and not test_path.is_absolute():
+            test_path = testing.TESTS_DIR / test_path.name
+            logger.warning(f'fixing test input path: {test_path = }')
         logger.info(f'testing solution against tests')
-        testing.test_solution(solution, input_path=options.test_path) 
+        testing.test_solution(solution, input_path=test_path) 
 
     elif options.print:
         # prints input and exit
@@ -80,5 +81,8 @@ def main(
         logger.info(f'printing input')
         datainput.print_input(quiz_input)
 
+    elif options.input_path:
+        # DEFAULT process input
+        process_inputfile(solution, options.input_path)
     else:
         raise ValueError(f'check parser: {options = }')
