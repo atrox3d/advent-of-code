@@ -65,4 +65,21 @@ if __name__ == '__main__':
 
     # find_max_happiness(table)
     # recurse(table)
-    print(rpermute([place for place in table]))
+    combos = [item for item in rpermute([place for place in table]) if item[0]=='A']
+    print(combos)
+
+    totals = []
+    for combo in combos:
+        prev = ''
+        first = ''
+        total = 0
+        for place in combo:
+            if prev:
+                total += table[place][prev]+table[prev][place]
+            else:
+                first = place
+            prev = place
+        last = place
+        total += table[last][first]+table[first][last]
+        totals.append(total)
+    print(max(totals))
