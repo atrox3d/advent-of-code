@@ -60,20 +60,47 @@ you find that this one is the most optimal, with a total change in happiness of 
 
 What is the total change in happiness for the optimal seating arrangement of the actual 
 guest list?
+
+--- Part Two ---
+In all the commotion, you realize that you forgot to seat yourself. 
+At this point, you're pretty apathetic toward the whole thing, and your happiness 
+wouldn't really go up or down regardless of who you sit next to. 
+You assume everyone else would be just as ambivalent about sitting next to you, too.
+
+So, add yourself to the list, and give all happiness relationships that involve you 
+a score of 0.
+
+What is the total change in happiness for the optimal seating arrangement that actually includes 
+yourself?
 '''
     from happiness import get_happiness, totals, rpermute
 
     happiness = get_happiness(quiz_input)
-    print('table=', json.dumps(happiness, indent=2))
+    print('happiness=', json.dumps(happiness, indent=2))
 
     names = [name for name in happiness]
     permutations = rpermute(names)
     combos = [item for item in permutations if item[0]==names[0]]
-    print(combos)
 
     best = (max(totals(happiness, combos)))
     print(best)
-    return best
+
+    me = {}
+    for name in happiness:
+        me.update({name:0})
+    happiness['me'] = me
+    for name in happiness:
+        happiness[name].update({'me':0})
+    print('happiness=', json.dumps(happiness, indent=2))
+
+    names = [name for name in happiness]
+    permutations = rpermute(names)
+    combos = [item for item in permutations if item[0]==names[0]]
+
+    bestme = (max(totals(happiness, combos)))
+    print(bestme)
+
+    return best, bestme
 
 
 if __name__ == '__main__':
