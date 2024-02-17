@@ -77,6 +77,13 @@ guest list?
     table = setup_table(quiz_input)
     print('table=', json.dumps(table, indent=2))
 
+    def find_max_happiness(table: dict):
+        for name in table:
+            print(f'{name = }')
+            for near, happiness in table[name].items():
+                print(f'{near, happiness=}')
+
+    find_max_happiness(table)
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
