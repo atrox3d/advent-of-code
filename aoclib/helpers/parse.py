@@ -12,11 +12,11 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('test_param', nargs='?')
     
     mutex = parser.add_mutually_exclusive_group()
-    mutex.add_argument('-p', '--print', action='store_true')
-    mutex.add_argument('-t', '--test', nargs='?', default=None, 
-                       const=testing.TESTS_PATH)
+    mutex.add_argument('-p', '--print', action='store_true', help='print input')
+    mutex.add_argument('-t', '--test_path', help='test against file')
     
-    parser.add_argument('-i', '--input_path', 
+    # default with no args
+    parser.add_argument('-i', '--input_path', help='run against file (DEFAULT)',
                         default=datainput.INPUT_PATH)
     return parser
 

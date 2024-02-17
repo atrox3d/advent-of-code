@@ -21,4 +21,4 @@ def get_loader(input_path):
     elif suffix == '.txt':
         return get_input
     else:
-        raise NotImplementedError(f'file type {suffix} not implemented')
+        raise NotImplementedError(f'file type {suffix!r} not implemented')
