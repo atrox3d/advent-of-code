@@ -68,16 +68,42 @@ if __name__ == '__main__':
     combos = [item for item in rpermute([place for place in table]) if item[0]=='A']
     print(combos)
 
-    totals = []
-    for combo in combos:
-        prev = ''
-        first = combo[0]
-        last = combo[-1]
-        total = 0
-        for place in combo:
-            if prev:
-                total += table[place][prev]+table[prev][place]
-            prev = place
-        total += table[last][first]+table[first][last]
-        totals.append(total)
-    print(max(totals))
+    def totals1(table, combos):
+        totals = []
+        ops = []
+        for combo in combos:
+            prev = ''
+            total = 0
+            subops = []
+            for place in combo + [combo[0]]:
+                if prev:
+                    subtotal = table[prev][place]+table[place][prev]
+                    # subops.append(f'{prev}{place}+{place}{prev}={subtotal}')
+                    # subops.append(f'{table[prev][place]}+{table[place][prev]}={subtotal}')
+                    total += subtotal
+                prev = place
+            # ops.append(subops)
+            totals.append(total)
+        # print(ops)
+        print(totals)
+        print(max(totals))
+    
+    def totals2(table, combos):
+        totals = []
+        ops = []
+        for combo in combos:
+            total = 0
+            subops = []
+            for prev, next in zip(combo, combo[1:]+combo[0:1]):
+                subtotal = table[prev][next]+table[next][prev]
+                # subops.append(f'{prev}{next}+{next}{prev}={subtotal}')
+                # subops.append(f'{table[prev][next]}+{table[next][prev]}={subtotal}')
+                total += subtotal
+            # ops.append(subops)
+            totals.append(total)
+        # print(ops)
+        print(totals)
+        print(max(totals))
+    
+    totals1(table, combos)
+    totals2(table, combos)
