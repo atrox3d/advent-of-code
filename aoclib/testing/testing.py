@@ -23,12 +23,18 @@ def test_param(solution, param: str, input_path: str):
         return solution(param)
 
 
-def test_solution(solution, tests=None, input_path=None):
+def test_solution(solution, expected=None, tests=None, input_path=None):
     tests = load_tests(input_path)
 
     if Path(input_path).suffix == '.txt':
         # TODO manage .txt
-        solution(tests)
+        result = solution(tests)
+        if expected is not None:
+            try:
+                assert result == expected, f'{result=} != {expected=}'
+            except AssertionError as ae:
+                print(f'{ae!r}')
+                exit()
     else:
         for test in tests:
             logger.debug(f'{test = }')

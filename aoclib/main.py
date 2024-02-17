@@ -63,6 +63,7 @@ def main(
     
     elif options.test_param:
         # TODO: verify
+        raise NotImplementedError('TODO: implement test_param correctly')
         logger.info(f'testing solution against {options.test_param}')
         testing.test_param(solution, options.test_param, options.input_path)
     
@@ -72,8 +73,9 @@ def main(
         if not test_path.exists() and not test_path.is_absolute():
             test_path = testing.TESTS_DIR / test_path.name
             logger.warning(f'fixing test input path: {test_path = }')
+        
         logger.info(f'testing solution against tests')
-        testing.test_solution(solution, input_path=test_path) 
+        testing.test_solution(solution, expected=options.expected, input_path=test_path) 
 
     elif options.print:
         # prints input and exit
