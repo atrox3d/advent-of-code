@@ -89,7 +89,7 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             data[temp['name']] = {k:int(v) for k,v in temp.items() if k != 'name'}
         return data
 
-    def race1(finaltime, reindeers, print_step=False, print_result=True):
+    def race1(finaltime, reindeers, print_step=False, print_result=False):
         win_distance = 0
         winner = None
         for name, stats in reindeers.items():
@@ -120,38 +120,38 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             print(f'{winner = }')
             print(f'{win_distance = }')
             print()
-        return win_distance
+        return winner, win_distance
 
     def race2(finaltime, reindeers):
+        winner_name = None
+        winner_points = 0
+
         for name, stats in reindeers.items():
             stats['points'] = 0
-        print(reindeers)
-
+        
         for seconds in range(1, finaltime+1):
-            for name, stats in reindeers.items():
-                speed, fly, rest, prevpoints = stats.values()
-                fly_rest_block = fly+rest
-                remainder = seconds % fly_rest_block
-                # points = prevpoints
-                # if remainder <= fly:
-                #     points = prevpoints + 1
-                # logger.info(f'{seconds}:{name}: {block=}, {remainder=}, {fly=}::{prevpoints=}->{points=}')
-                # reindeers[name]['points'] = points
-                if remainder <= fly:
-                    pass
+            winner, distance = race1(seconds, reindeers)
+            reindeers[winner]['points'] += 1
+            points = reindeers[winner]['points']
+            print(f'{seconds, winner, distance, points = }')
+            if points >= winner_points:
+                winner_name = winner
+                winner_points = points
+        return winner_name, winner_points
 
     reindeers = parse_reindeers(quiz_input)
     print(reindeers)
 
     finaltime = 10
-    finaltime = 1000
     finaltime = 2503
+    finaltime = 1000
     
-    solution1 = race1(finaltime, reindeers, True, True)
-    # solution2 = race2(1000, reindeers)
-    # print(reindeers)
+    winner, solution1 = race1(finaltime, reindeers)
+    winner, solution2 = race2(finaltime, reindeers)
+    print(reindeers)
     
-    return solution1
+    print(solution1, solution2)
+    return solution1, solution2
 
 
 if __name__ == '__main__':
