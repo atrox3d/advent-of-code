@@ -89,7 +89,7 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             data[temp['name']] = {k:int(v) for k,v in temp.items() if k != 'name'}
         return data
 
-    def part1(finaltime, reindeers, output=True):
+    def race1(finaltime, reindeers, output=True):
         windistance = 0
         winner = None
         if output:
@@ -117,10 +117,17 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             print(f'{windistance = }')
         return windistance
 
+    def race2(finaltime, reindeers):
+        return 0
+    
     reindeers = parse_reindeers(quiz_input)
     finaltime = 2503
-    solution1 = part1(finaltime, reindeers)
-    return solution1
+    
+    solution1 = race1(finaltime, reindeers)
+    solution2 = race2(finaltime, reindeers)
+    
+    
+    return solution1, solution2
 
 
 if __name__ == '__main__':
