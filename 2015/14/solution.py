@@ -90,8 +90,6 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
         return data
 
     def race1(finaltime, reindeers, print_step=False, print_result=False):
-        win_distance = 0
-        winner = None
         for name, stats in reindeers.items():
             # a single unit of fly and rest
             fly_rest_block = stats['flytime'] + stats['resttime']
@@ -104,9 +102,11 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             distance = (complete_blocks * stats['speed'] * stats['flytime']) \
                         + (partial_block * stats['speed'])
             
-            if distance > win_distance:
-                win_distance = distance
-                winner = name
+            stats['distance'] = distance
+            
+            # if distance > win_distance:
+                # win_distance = distance
+                # winner = name
             if print_step:
                 print(f'{name = }')
                 print(f'{fly_rest_block = }')
@@ -115,12 +115,28 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
                 print(f'{partial_block = }')
                 print(f'{distance = }')
                 print()
+
+        win_distance = 0
+        winners = []
+        for name, stats in reindeers.items():
+            distance = stats['distance']
+            # print(f'{name}, {distance=}, {win_distance=}')
+            if  distance > win_distance:
+                winners = []
+                win_distance = distance
+                winners.append((name, distance))
+            elif distance == win_distance:
+                winners.append((name, distance))
+        
+            # elif distance == win_distance:
+                # winners.append((name, distance))
+        
         if print_result:
             print(f'{finaltime = }')
-            print(f'{winner = }')
+            print(f'{winners = }')
             print(f'{win_distance = }')
             print()
-        return winner, win_distance
+        return winners
 
     def race2(finaltime, reindeers):
         winner_name = None
@@ -130,28 +146,32 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             stats['points'] = 0
         
         for seconds in range(1, finaltime+1):
-            winner, distance = race1(seconds, reindeers)
-            reindeers[winner]['points'] += 1
-            points = reindeers[winner]['points']
-            print(f'{seconds, winner, distance, points = }')
-            if points >= winner_points:
-                winner_name = winner
-                winner_points = points
+            winners = race1(seconds, reindeers)
+            print(f'{winners = }')
+            for winner, distance in winners:
+                reindeers[winner]['points'] += 1
+                points = reindeers[winner]['points']
+                print(f'{seconds, winner, distance, points = }')
+                if points >= winner_points:
+                    winner_name = winner
+                    winner_points = points
         return winner_name, winner_points
 
     reindeers = parse_reindeers(quiz_input)
     print(reindeers)
 
     finaltime = 10
-    finaltime = 2503
     finaltime = 1000
+    finaltime = 2503
     
-    winner, solution1 = race1(finaltime, reindeers)
+    winners = race1(finaltime, reindeers)
+    print(winners)
+    print(reindeers)
     winner, solution2 = race2(finaltime, reindeers)
     print(reindeers)
-    
-    print(solution1, solution2)
-    return solution1, solution2
+    print(solution2)
+    # print(solution1, solution2)
+    # return solution1, solution2
 
 
 if __name__ == '__main__':
