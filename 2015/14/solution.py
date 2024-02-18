@@ -90,31 +90,37 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
         return data
 
     def race1(finaltime, reindeers, print_step=False, print_result=True):
-        windistance = 0
+        win_distance = 0
         winner = None
         for name, stats in reindeers.items():
-
+            # a single unit of fly and rest
             fly_rest_block = stats['flytime'] + stats['resttime']
+            # how many units until time
             complete_blocks = finaltime // fly_rest_block
+            # how many seconds inside the last block
             remainder = finaltime % fly_rest_block
-            partial_block = 1 if remainder >= stats['flytime'] else 0
-            distance = (complete_blocks + partial_block) * stats['speed'] * stats['flytime']
-            if distance > windistance:
-                windistance = distance
+            # the remainder FLY part of the last block
+            partial_block = min(remainder, stats['flytime'])
+            distance = (complete_blocks * stats['speed'] * stats['flytime']) \
+                        + (partial_block * stats['speed'])
+            
+            if distance > win_distance:
+                win_distance = distance
                 winner = name
             if print_step:
                 print(f'{name = }')
                 print(f'{fly_rest_block = }')
                 print(f'{complete_blocks = }')
+                print(f'{remainder = }')
                 print(f'{partial_block = }')
                 print(f'{distance = }')
                 print()
         if print_result:
             print(f'{finaltime = }')
             print(f'{winner = }')
-            print(f'{windistance = }')
+            print(f'{win_distance = }')
             print()
-        return windistance
+        return win_distance
 
     def race2(finaltime, reindeers):
         for name, stats in reindeers.items():
@@ -124,25 +130,28 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
         for seconds in range(1, finaltime+1):
             for name, stats in reindeers.items():
                 speed, fly, rest, prevpoints = stats.values()
-                block = fly+rest
-                remainder = seconds % block
-                points = prevpoints
+                fly_rest_block = fly+rest
+                remainder = seconds % fly_rest_block
+                # points = prevpoints
+                # if remainder <= fly:
+                #     points = prevpoints + 1
+                # logger.info(f'{seconds}:{name}: {block=}, {remainder=}, {fly=}::{prevpoints=}->{points=}')
+                # reindeers[name]['points'] = points
                 if remainder <= fly:
-                    points = prevpoints + 1
-                logger.info(f'{seconds}:{name}: {block=}, {remainder=}, {fly=}::{prevpoints=}->{points=}')
-                reindeers[name]['points'] = points
-
+                    pass
 
     reindeers = parse_reindeers(quiz_input)
     print(reindeers)
 
+    finaltime = 10
+    finaltime = 1000
     finaltime = 2503
     
-    solution1 = race1(finaltime, reindeers)
-    solution2 = race2(1000, reindeers)
-    print(reindeers)
+    solution1 = race1(finaltime, reindeers, True, True)
+    # solution2 = race2(1000, reindeers)
+    # print(reindeers)
     
-    return solution1, solution2
+    return solution1
 
 
 if __name__ == '__main__':
