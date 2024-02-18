@@ -89,13 +89,10 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             data[temp['name']] = {k:int(v) for k,v in temp.items() if k != 'name'}
         return data
 
-    def race1(finaltime, reindeers, output=True):
+    def race1(finaltime, reindeers, print_step=False, print_result=True):
         windistance = 0
         winner = None
-        if output:
-            print(reindeers)
         for name, stats in reindeers.items():
-            print(f'{name = }')
 
             fly_rest_block = stats['flytime'] + stats['resttime']
             complete_blocks = finaltime // fly_rest_block
@@ -105,27 +102,45 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             if distance > windistance:
                 windistance = distance
                 winner = name
-            if output:
+            if print_step:
+                print(f'{name = }')
                 print(f'{fly_rest_block = }')
                 print(f'{complete_blocks = }')
                 print(f'{partial_block = }')
                 print(f'{distance = }')
                 print()
-        if output:
+        if print_result:
             print(f'{finaltime = }')
             print(f'{winner = }')
             print(f'{windistance = }')
+            print()
         return windistance
 
     def race2(finaltime, reindeers):
-        return 0
-    
+        for name, stats in reindeers.items():
+            stats['points'] = 0
+        print(reindeers)
+
+        for seconds in range(1, finaltime+1):
+            for name, stats in reindeers.items():
+                speed, fly, rest, prevpoints = stats.values()
+                block = fly+rest
+                remainder = seconds % block
+                points = prevpoints
+                if remainder <= fly:
+                    points = prevpoints + 1
+                logger.info(f'{seconds}:{name}: {block=}, {remainder=}, {fly=}::{prevpoints=}->{points=}')
+                reindeers[name]['points'] = points
+
+
     reindeers = parse_reindeers(quiz_input)
+    print(reindeers)
+
     finaltime = 2503
     
     solution1 = race1(finaltime, reindeers)
-    solution2 = race2(finaltime, reindeers)
-    
+    solution2 = race2(1000, reindeers)
+    print(reindeers)
     
     return solution1, solution2
 
