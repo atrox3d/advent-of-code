@@ -55,17 +55,20 @@ Given the ingredients in your kitchen and their properties,
 what is the total score of the highest-scoring cookie you can make?    
 '''
     print(quiz_input)
-    import re
 
-    pattern = r'(?P<name>\w+): capacity (?P<capacity>-?\d+), '\
-              r'durability (?P<durability>-?\d+), flavor (?P<flavor>-?\d+), '\
-              r'texture (?P<texture>-?\d+), calories (?P<calories>-?\d+)'
-    ingredients = {}
-    for line in quiz_input:
-        match = re.match(pattern, line)
-        temp = match.groupdict()
-        ingredients[temp['name']] = {k:v for k, v in temp.items() if k != 'name'}
-    
+    def load_ingredients(quiz_input) -> dict:
+        import re
+        pattern = r'(?P<name>\w+): capacity (?P<capacity>-?\d+), '\
+                r'durability (?P<durability>-?\d+), flavor (?P<flavor>-?\d+), '\
+                r'texture (?P<texture>-?\d+), calories (?P<calories>-?\d+)'
+        ingredients = {}
+        for line in quiz_input:
+            match = re.match(pattern, line)
+            temp = match.groupdict()
+            ingredients[temp['name']] = {k:v for k, v in temp.items() if k != 'name'}
+        return ingredients
+
+    ingredients = load_ingredients(quiz_input)        
     print(ingredients)
 
 if __name__ == '__main__':
