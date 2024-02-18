@@ -54,7 +54,7 @@ it would have instead become zero, causing the whole score to multiply to zero.
 Given the ingredients in your kitchen and their properties, 
 what is the total score of the highest-scoring cookie you can make?    
 '''
-    print(quiz_input)
+    # print(quiz_input)
 
     def load_ingredients(quiz_input) -> dict:
         import re
@@ -68,7 +68,7 @@ what is the total score of the highest-scoring cookie you can make?
             ingredients[temp['name']] = {k:v for k, v in temp.items() if k != 'name'}
         return ingredients
 
-    ingredients = load_ingredients(quiz_input)        
+    ingredients = load_ingredients(quiz_input)
     print(ingredients)
 
 if __name__ == '__main__':
