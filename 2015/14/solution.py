@@ -47,6 +47,34 @@ For example, suppose you have the following Reindeer:
 
 Given the descriptions of each reindeer (in your puzzle input), 
 after exactly 2503 seconds, what distance has the winning reindeer traveled?
+
+--- Part Two ---
+Seeing how reindeer move in bursts, Santa decides he's not pleased with 
+the old scoring system.
+
+Instead, at the end of each second, he awards one point to the reindeer 
+currently in the lead. 
+(If there are multiple reindeer tied for the lead, they each get one point.) 
+He keeps the traditional 2503 second time limit, of course, as doing otherwise would be entirely ridiculous.
+
+Given the example reindeer from above, after the first second, 
+- Dancer is in the lead and gets one point. 
+  - He stays in the lead until several seconds into Comet's second burst: 
+
+- after the 140th second, Comet pulls into the lead and gets his first point. 
+
+- Of course, since Dancer had been in the lead for the 139 seconds before that, 
+  he has accumulated 139 points by the 140th second. 
+
+- After the 1000th second, 
+    - Dancer has accumulated 689 points, 
+    - while poor Comet, our old champion, only has 312. 
+
+- So, with the new scoring system, Dancer would win 
+  (if the race ended at 1000 seconds).
+
+Again given the descriptions of each reindeer (in your puzzle input), 
+after exactly 2503 seconds, how many points does the winning reindeer have?
 '''
     def parse_reindeers(quiz_input):
         import re
@@ -58,33 +86,39 @@ after exactly 2503 seconds, what distance has the winning reindeer traveled?
             temp = match.groupdict()
             data[temp['name']] = {k:int(v) for k,v in temp.items() if k != 'name'}
         return data
-        
+
+    def part1(finaltime, reindeers, output=True):
+        windistance = 0
+        winner = None
+        if output:
+            print(reindeers)
+        for name, stats in reindeers.items():
+            print(f'{name = }')
+
+            fly_rest_block = stats['flytime'] + stats['resttime']
+            complete_blocks = finaltime // fly_rest_block
+            remainder = finaltime % fly_rest_block
+            partial_block = 1 if remainder >= stats['flytime'] else 0
+            distance = (complete_blocks + partial_block) * stats['speed'] * stats['flytime']
+            if distance > windistance:
+                windistance = distance
+                winner = name
+            if output:
+                print(f'{fly_rest_block = }')
+                print(f'{complete_blocks = }')
+                print(f'{partial_block = }')
+                print(f'{distance = }')
+                print()
+        if output:
+            print(f'{finaltime = }')
+            print(f'{winner = }')
+            print(f'{windistance = }')
+        return windistance
+
     reindeers = parse_reindeers(quiz_input)
-    print(reindeers)
-
     finaltime = 2503
-    windistance = 0
-    winner = None
-    for name, stats in reindeers.items():
-        print(f'{name = }')
-
-        fly_rest_block = stats['flytime'] + stats['resttime']
-        complete_blocks = finaltime // fly_rest_block
-        remainder = finaltime % fly_rest_block
-        partial_block = 1 if remainder >= stats['flytime'] else 0
-        distance = (complete_blocks + partial_block) * stats['speed'] * stats['flytime']
-        if distance > windistance:
-            windistance = distance
-            winner = name
-        
-        print(f'{fly_rest_block = }')
-        print(f'{complete_blocks = }')
-        print(f'{partial_block = }')
-        print(f'{distance = }')
-        print()
-    print(f'{finaltime = }')
-    print(f'{winner = }')
-    print(f'{windistance = }')
+    solution1 = part1(finaltime, reindeers)
+    return solution1
 
 
 if __name__ == '__main__':
