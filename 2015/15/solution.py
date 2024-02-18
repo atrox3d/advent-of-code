@@ -54,7 +54,19 @@ it would have instead become zero, causing the whole score to multiply to zero.
 Given the ingredients in your kitchen and their properties, 
 what is the total score of the highest-scoring cookie you can make?    
 '''
-    pass
+    print(quiz_input)
+    import re
+
+    pattern = r'(?P<name>\w+): capacity (?P<capacity>-?\d+), '\
+              r'durability (?P<durability>-?\d+), flavor (?P<flavor>-?\d+), '\
+              r'texture (?P<texture>-?\d+), calories (?P<calories>-?\d+)'
+    ingredients = {}
+    for line in quiz_input:
+        match = re.match(pattern, line)
+        temp = match.groupdict()
+        ingredients[temp['name']] = {k:v for k, v in temp.items() if k != 'name'}
+    
+    print(ingredients)
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
