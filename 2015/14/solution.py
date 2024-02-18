@@ -104,9 +104,6 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
             
             stats['distance'] = distance
             
-            # if distance > win_distance:
-                # win_distance = distance
-                # winner = name
             if print_step:
                 print(f'{name = }')
                 print(f'{fly_rest_block = }')
@@ -120,16 +117,13 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
         winners = []
         for name, stats in reindeers.items():
             distance = stats['distance']
-            # print(f'{name}, {distance=}, {win_distance=}')
             if  distance > win_distance:
                 winners = []
                 win_distance = distance
                 winners.append((name, distance))
             elif distance == win_distance:
+                # tie
                 winners.append((name, distance))
-        
-            # elif distance == win_distance:
-                # winners.append((name, distance))
         
         if print_result:
             print(f'{finaltime = }')
@@ -152,7 +146,7 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
                 reindeers[winner]['points'] += 1
                 points = reindeers[winner]['points']
                 print(f'{seconds, winner, distance, points = }')
-                if points >= winner_points:
+                if points > winner_points:
                     winner_name = winner
                     winner_points = points
         return winner_name, winner_points
