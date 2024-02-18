@@ -141,31 +141,27 @@ after exactly 2503 seconds, how many points does the winning reindeer have?
         
         for seconds in range(1, finaltime+1):
             winners = race1(seconds, reindeers)
-            print(f'{winners = }')
+            # print(f'{winners = }')
             for winner, distance in winners:
                 reindeers[winner]['points'] += 1
                 points = reindeers[winner]['points']
-                print(f'{seconds, winner, distance, points = }')
+                # print(f'{seconds, winner, distance, points = }')
                 if points > winner_points:
                     winner_name = winner
                     winner_points = points
         return winner_name, winner_points
 
     reindeers = parse_reindeers(quiz_input)
-    print(reindeers)
+    # print(reindeers)
 
-    finaltime = 10
-    finaltime = 1000
     finaltime = 2503
     
     winners = race1(finaltime, reindeers)
     print(winners)
-    print(reindeers)
+    # print(reindeers)
     winner, solution2 = race2(finaltime, reindeers)
-    print(reindeers)
+    # print(reindeers)
     print(solution2)
-    # print(solution1, solution2)
-    # return solution1, solution2
 
 
 if __name__ == '__main__':
