@@ -43,6 +43,20 @@ Given the descriptions of each reindeer (in your puzzle input),
 after exactly 2503 seconds, what distance has the winning reindeer traveled?
 '''
     print(quiz_input)
+    
+    def parse_reindeers(quiz_input):
+        import re
+        pattern = r'(?P<name>\w+) can fly (?P<speed>\d+) km/s for (?P<flytime>\d+) seconds,' \
+                r' but then must rest for (?P<resttime>\d+) seconds.'
+        data = {}
+        for line in quiz_input:
+            match = re.match(pattern, line)
+            temp = match.groupdict()
+            data[temp['name']] = {k:v for k,v in temp.items() if k != 'name'}
+        return data
+        
+    reindeers = parse_reindeers(quiz_input)
+    
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
