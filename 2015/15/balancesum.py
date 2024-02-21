@@ -8,7 +8,7 @@
     0 1 2
     0 0 3
 '''
-verbose = True
+verbose = False
 def vprint(*args, **kwargs):
     if verbose:
         print(*args, **kwargs)
@@ -25,16 +25,23 @@ def rng(start, end, direction=None):
     else:
         ret = rng(start, end -1, direction)
         vprint(f'{ret = }')
-        for val in ret:
-            vprint(f'{val = }')
-            if direction > 0:
-                for r in [val] + [end]:
-                    vprint(f'yield {r=}')
-                    yield r
-            elif direction < 0:
-                for r in [end] + [val]:
-                    vprint(f'yield {r=}')
-                    yield r
+        if direction > 0:
+            for val in ret:
+                vprint(f'{val = }')
+                # for r in [val] + [end]:
+                vprint(f'yield {val=}')
+                yield val
+            yield end
+        elif direction < 0:
+            yield end
+            for val in ret:
+                vprint(f'{val = }')
+                # for r in [val] + [end]:
+                vprint(f'yield {val=}')
+                yield val
+                # for r in [end] + [val]:
+                    # vprint(f'yield {r=}')
+                    # yield r
             # else:
                 # yield []
 
@@ -44,6 +51,6 @@ def rng(start, end, direction=None):
 
 # print(rng(0, 2))
 # print(rng(2, 0))
-for x in rng(0, 2): print(f'{x = }')
+for x in rng(0, 200): print(f'{x = }')
 print()
-for x in rng(2, 0): print(f'{x = }')
+for x in rng(200, 0): print(f'{x = }')
