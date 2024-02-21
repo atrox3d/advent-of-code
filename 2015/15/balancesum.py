@@ -17,28 +17,33 @@ def subrange (n):
     #      [0]      1
     #      [0,1]    2
     #      [0,1,2]  3
-    return ret   + [n]
-    # or
-    # return [*ret] + [n]
+    return ret   + [n]      # or return [*ret] + [n]
     
     # normal
     #       1    [0]
     #       2    [1,0]
     #       3    [2,1,0]
-    return [n] + ret
-    # or
-    # return [n] + [*ret]
+    return [n] + ret        # or return [n] + [*ret]
 
-def y (n, k=0):
-    if k == n:
-        return []
+def add_range (n, start=0):
+    if start == n:
+        return []                   # base case
     
-    ret = y(n, k+1)
+    ret = add_range(n, start+1)     # towards base case
     print(ret)  # [0], [1, 0], [2, 1, 0], ...
-    return [k] + ret
+    # normal
+    #         2      []
+    #         1      [2]
+    #         0      [1,2]
+    return [start] + ret    # or [start] + [*ret]
+    # reverse
+    #      []     2
+    #      [2]    1
+    #      [2,1]  0
+    return ret + [start]    # or [*ret] + [start]
 
 print(subrange(5))
-# print(y(7))
+print(add_range(3))
 
 def rng(start, end):
     if start - end == 0:
