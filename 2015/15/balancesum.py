@@ -42,13 +42,25 @@ def add_range (n, start=0):
     #      [2,1]  0
     return ret + [start]    # or [*ret] + [start]
 
-print(subrange(5))
-print(add_range(3))
+def rng(start, end, direction=None):
+    if direction is None:
+        direction = (end-start) // abs(end-start)
 
-def rng(start, end):
-    if start - end == 0:
+    if end == start:
+        print(f'{start, end, direction = }')
+        return [end]
+
+    ret = rng(start, end-1, direction)
+    if direction > 0:
+        return ret + [end]
+    elif direction < 0:
+        return [end] + ret
+    else:
         return []
-    # if end - start > 0:
-        # 
-    # else:
-        
+
+
+# print(subrange(5))
+# print(add_range(3))
+
+print(rng(0, 2))
+print(rng(2, 0))
