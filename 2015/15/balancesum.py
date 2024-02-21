@@ -45,12 +45,14 @@ def add_range (n, start=0):
 def rng(start, end, direction=None):
     if direction is None:
         direction = (end-start) // abs(end-start)
+        if direction < 0:
+            end, start = start, end
 
+    # print(f'{start, end, direction = }')
     if end == start:
-        print(f'{start, end, direction = }')
         return [end]
 
-    ret = rng(start, end-1, direction)
+    ret = rng(start, end -1, direction)
     if direction > 0:
         return ret + [end]
     elif direction < 0:
