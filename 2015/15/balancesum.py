@@ -42,33 +42,35 @@ def add_range (n, start=0):
     #      [2,1]  0
     return ret + [start]    # or [*ret] + [start]
 
+verbose = True
+def vprint(*args, **kwargs):
+    if verbose:
+        print(*args, **kwargs)
+
 def rng(start, end, direction=None):
     if direction is None:
         direction = (end-start) // abs(end-start)
         if direction < 0:
             end, start = start, end
 
-    print(f'{start, end, direction = }')
+    vprint(f'{start, end, direction = }')
     if end == start:
         yield end
     else:
         ret = rng(start, end -1, direction)
-        print(f'{ret = }')
+        vprint(f'{ret = }')
         for val in ret:
-            print(f'{val = }')
+            vprint(f'{val = }')
             if direction > 0:
-                # print(f'yield {val=} + {[end]=}')
-                # yield val + [end]
                 for r in [val] + [end]:
-                    print(f'yield {r=}')
+                    vprint(f'yield {r=}')
                     yield r
             elif direction < 0:
-                # yield [end] + val
                 for r in [end] + [val]:
-                    print(f'yield {r=}')
+                    vprint(f'yield {r=}')
                     yield r
-            else:
-                yield []
+            # else:
+                # yield []
 
 
 # print(subrange(5))
@@ -77,3 +79,5 @@ def rng(start, end, direction=None):
 # print(rng(0, 2))
 # print(rng(2, 0))
 for x in rng(0, 2): print(f'{x = }')
+print()
+for x in rng(2, 0): print(f'{x = }')
