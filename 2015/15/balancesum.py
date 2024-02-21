@@ -48,21 +48,32 @@ def rng(start, end, direction=None):
         if direction < 0:
             end, start = start, end
 
-    # print(f'{start, end, direction = }')
+    print(f'{start, end, direction = }')
     if end == start:
-        return [end]
-
-    ret = rng(start, end -1, direction)
-    if direction > 0:
-        return ret + [end]
-    elif direction < 0:
-        return [end] + ret
+        yield end
     else:
-        return []
+        ret = rng(start, end -1, direction)
+        print(f'{ret = }')
+        for val in ret:
+            print(f'{val = }')
+            if direction > 0:
+                # print(f'yield {val=} + {[end]=}')
+                # yield val + [end]
+                for r in [val] + [end]:
+                    print(f'yield {r=}')
+                    yield r
+            elif direction < 0:
+                # yield [end] + val
+                for r in [end] + [val]:
+                    print(f'yield {r=}')
+                    yield r
+            else:
+                yield []
 
 
 # print(subrange(5))
 # print(add_range(3))
 
-print(rng(0, 2))
-print(rng(2, 0))
+# print(rng(0, 2))
+# print(rng(2, 0))
+for x in rng(0, 2): print(f'{x = }')
