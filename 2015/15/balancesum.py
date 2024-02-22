@@ -18,6 +18,9 @@ def rng(start, end, direction=None):
         direction = (end-start) // abs(end-start)
         if direction < 0:
             end, start = start, end
+            start += 1
+        else:
+            end -= 1
 
     vprint(f'{start, end, direction = }')
     if end == start:
@@ -51,6 +54,11 @@ def rng(start, end, direction=None):
 
 # print(rng(0, 2))
 # print(rng(2, 0))
-for x in rng(0, 20): print(f'{x = }')
+for x in rng(0, 5): print(f'{x = }')
 print()
-for x in rng(20, 0): print(f'{x = }')
+for x in rng(5, 0): print(f'{x = }')
+print()
+for x in rng(-3, 5): print(f'{x = }')
+print()
+for x in rng(5, -3): print(f'{x = }')
+print()
