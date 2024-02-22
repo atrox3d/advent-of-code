@@ -1,31 +1,26 @@
 def rng(start, end, direction=None):
-    # detect direction on the first call
-    if direction is None:
-        direction = (end-start) // abs(end-start)
-        # invert start, end if reverse
-        if direction < 0:
+    if direction is None:                   # only the first time
+        direction = (
+            (end-start) // abs(end-start)   # detect direction       
+            )
+        if direction < 0:                   # invert params if reverse
             end, start = start, end
-            # non inclusive of last element
-            start += 1
+            start += 1                      # exclude last element
         else:
-            # non inclusive of last element
-            end -= 1
+            end -= 1                        # exclude last element
 
-    # base case
-    if end == start:
+    if end == start:                        # base case
         yield end
     else:
-        # recursive case, ret is a generator
-        ret = rng(start, end -1, direction)
-        # yield elements in the right order
-        if direction > 0:
-            for val in ret:
-                yield val
-            yield end
+        ret = rng(start, end-1, direction)  # recursive case
+        if direction > 0:                   # use the right order
+            for val in ret:                 # ret is a generator
+                yield val                   # yield each element
+            yield end                       # before the last
         elif direction < 0:
-            yield end
+            yield end                       # yield the last first
             for val in ret:
-                yield val
+                yield val                   # then everything else
 
 if __name__ == '__main__':
     for x in rng(0, 5): print(f'{x = }')
