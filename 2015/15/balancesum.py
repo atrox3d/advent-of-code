@@ -51,6 +51,6 @@ def rng(start, end, direction=None):
 
 # print(rng(0, 2))
 # print(rng(2, 0))
-for x in rng(0, 200): print(f'{x = }')
+for x in rng(0, 20): print(f'{x = }')
 print()
-for x in rng(200, 0): print(f'{x = }')
+for x in rng(20, 0): print(f'{x = }')
