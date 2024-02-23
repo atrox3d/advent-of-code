@@ -30,3 +30,5 @@ def bestmixes(target, portions, max, level=None, cache=None):
                 except:
                     pass
     return combo
+
+bestmixes(10, 4, 4)
