@@ -3,6 +3,9 @@ import os
 import sys
 from pathlib import Path
 
+from atrox3d.logger import logmanager
+from atrox3d.logger import modulelogging
+
 from run import run
 from setup import setup
 
@@ -28,28 +31,34 @@ def get_path(base_dir:Path, year:str, day:str) -> Path:
 
 if __name__ == '__main__':
     args = parse()
-    print(args)
+
+    logmanager.setup_logging()
+    logger = logmanager.get_logger(__name__, 'DEBUG')
+    modulelogging.set_logger_level_for_modules('DEBUG', setup, run)
+    logger.info(args)
 
     CUR_DIR = Path(os.getcwd())
     SCRIPT_DIR = Path(sys.path[0])
 
     target_path = get_path(SCRIPT_DIR, args.year, args.day)
+    logger.info(f'{target_path = }')
 
     try:
         problems = True
+        logger.debug(f'{args.command = }')
         if args.command == 'setup':
             setup(target_path)
     
         if args.command == 'run':
             run(target_path)
     except FileExistsError as fee:
-        print(f'ERROR | {fee}')
+        logger.error(f'{fee}')
     except FileNotFoundError as fnfe:
-        print(f'ERROR | {fnfe}')
+        logger.error(f'{fnfe}')
     else:
         problems = False
-        print(f'{args.command} on {target_path} executed succesfully')
+        logger.info(f'{args.command} on {target_path} executed succesfully')
+        logger.info('quitting')
     finally:
         if problems:
-            print(f'errors executing {args.command} on {target_path}')
-        print('quitting')
+            logger.fatal(f'errors executing {args.command} on {target_path}')
