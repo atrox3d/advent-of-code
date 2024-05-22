@@ -32,9 +32,10 @@ def get_path(base_dir:Path, year:str, day:str) -> Path:
 if __name__ == '__main__':
     args = parse()
 
-    logmanager.setup_logging()
-    logger = logmanager.get_logger(__name__, 'DEBUG')
+    logmanager.setup_logging('DEBUG')
+    modulelogging.set_logger_level_for_modules('INFO', logmanager, modulelogging)
     modulelogging.set_logger_level_for_modules('DEBUG', setup, run)
+    logger = logmanager.get_logger(__name__, 'DEBUG')
     logger.info(args)
 
     CUR_DIR = Path(os.getcwd())

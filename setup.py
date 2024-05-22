@@ -13,13 +13,14 @@ def create_json_tests(target_path:Path, filename:str):
         json.dump(data, fp)
 
 def create_csv_tests(target_path:Path, filename:str):
-    data = [{"input": None, "expected": None}]
+    data = [{"input": 'None', "expected": 'None'}]
     output_path = target_path / filename
     logger.info(f'creating csv tests: {output_path!s}')
-    with open(str(output_path), 'w') as fp:
+    with open(str(output_path), 'w', newline='') as fp:
         writer = csv.DictWriter(fp, data[0].keys())
         writer.writeheader()
         for row in data:
+            logger.debug(f'writing {row=} to {output_path!s}')
             writer.writerow(row)
 
 def create_input(target_path:Path, filename:str):
