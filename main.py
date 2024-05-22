@@ -3,6 +3,9 @@ import os
 import sys
 from pathlib import Path
 
+from run import run
+from setup import setup
+
 def parse():
     parser = argparse.ArgumentParser()
 
@@ -22,17 +25,6 @@ def get_path(base_dir:Path, year:str, day:str) -> Path:
     day = f'{day:>02}'
     target_path = base_dir / year / day
     return target_path
-
-def setup(target_path:Path|str):
-    print(f'setting up {target_path!s}')
-    if target_path.exists():
-        raise FileExistsError(f'target path exists: {target_path}')
-
-def run(target_path:Path|str):
-    print(f'running {target_path!s}')
-    if not target_path.exists():
-        raise FileNotFoundError(f'target path not found: {target_path}')
-
 
 if __name__ == '__main__':
     args = parse()
