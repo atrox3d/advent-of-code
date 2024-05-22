@@ -47,10 +47,20 @@ if __name__ == '__main__':
         problems = True
         logger.debug(f'{args.command = }')
         if args.command == 'setup':
-            setup(target_path)
+            setup(
+                    target_path=target_path, 
+                    year=args.year, 
+                    day=args.day,
+                    json_filename='tests.json',
+                    csv_filename='tests.csv',
+                    input1_filename='input1.txt',
+                    input2_filename='input2.txt',
+                    readme_filename='README.md',
+                    aoc_url='https://adventofcode.com'
+            )
     
         if args.command == 'run':
-            run(target_path)
+            run(target_path, args.year, args.day)
     except FileExistsError as fee:
         logger.error(f'{fee}')
     except FileNotFoundError as fnfe:
