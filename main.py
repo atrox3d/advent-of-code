@@ -44,13 +44,20 @@ if __name__ == '__main__':
     target_path = get_path(SCRIPT_DIR, args.year, args.day)
 
     try:
+        problems = True
         if args.command == 'setup':
-                setup(target_path)
+            setup(target_path)
+    
         if args.command == 'run':
             run(target_path)
-    except FileExistsError as fnfe:
-        print(f'ERROR | {fnfe}')
+    except FileExistsError as fee:
+        print(f'ERROR | {fee}')
     except FileNotFoundError as fnfe:
         print(f'ERROR | {fnfe}')
+    else:
+        problems = False
+        print(f'{args.command} on {target_path} executed succesfully')
     finally:
+        if problems:
+            print(f'errors executing {args.command} on {target_path}')
         print('quitting')
