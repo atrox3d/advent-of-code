@@ -43,20 +43,8 @@ def create_python_solution(target_path:Path, filename:str):
     output_path = target_path / filename
     logger.info(f'creating python script: {output_path!s}')
     script = '''
-if __name__ == '__main__':
-LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
-handlers = [
-    logging.FileHandler(LOGFILE, mode='w'),
-    logging.StreamHandler()
-]
-main.main(
-            solution, 
-            input_param=None,
-            test_input=None,
-            test_expected=None, 
-            level='INFO', 
-            handlers=handlers
-        )
+def main():
+    pass
     '''
     with open(str(output_path), 'w') as fp:
         fp.write(script)
