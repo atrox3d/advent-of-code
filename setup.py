@@ -38,7 +38,29 @@ def create_readme(target_path:Path, year:str, day:str, filename:str, aoc_url='ht
     with open(str(output_path), 'w') as fp:
         for line in lines:
             fp.write(f'{line}\n\n')
-    
+
+def create_python_solution(target_path:Path, filename:str):
+    output_path = target_path / filename
+    logger.info(f'creating python script: {output_path!s}')
+    script = '''
+if __name__ == '__main__':
+LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
+handlers = [
+    logging.FileHandler(LOGFILE, mode='w'),
+    logging.StreamHandler()
+]
+main.main(
+            solution, 
+            input_param=None,
+            test_input=None,
+            test_expected=None, 
+            level='INFO', 
+            handlers=handlers
+        )
+    '''
+    with open(str(output_path), 'w') as fp:
+        fp.write(script)
+
 def setup(
             target_path:Path|str, 
             year:str, 
@@ -48,6 +70,7 @@ def setup(
             input1_filename:str,
             input2_filename:str,
             readme_filename:str,
+            python_filename:str,
             aoc_url:str
     ):
     target_path = Path(target_path)
@@ -63,3 +86,4 @@ def setup(
     create_input(target_path, input1_filename)
     create_input(target_path, input2_filename)
     create_readme(target_path, year, day, readme_filename, aoc_url)
+    create_python_solution(target_path, python_filename)

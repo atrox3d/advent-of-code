@@ -57,11 +57,22 @@ if __name__ == '__main__':
                     input1_filename='input1.txt',
                     input2_filename='input2.txt',
                     readme_filename='README.md',
+                    python_filename='solution.py',
                     aoc_url='https://adventofcode.com'
             )
     
         if args.command == 'run':
-            run(target_path, args.year, args.day)
+            run(
+                    target_path=target_path, 
+                    year=args.year, 
+                    day=args.day,
+                    json_filename='tests.json',
+                    csv_filename='tests.csv',
+                    input1_filename='input1.txt',
+                    input2_filename='input2.txt',
+                    readme_filename='README.md',
+                    aoc_url='https://adventofcode.com'
+            )
     except FileExistsError as fee:
         logger.error(f'{fee}')
     except FileNotFoundError as fnfe:
