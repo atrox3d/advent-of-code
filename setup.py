@@ -44,7 +44,7 @@ def create_python_solution(target_path:Path, filename:str):
     logger.info(f'creating python script: {output_path!s}')
     script = '''
 def main():
-    pass
+    print(__file__)
     '''
     with open(str(output_path), 'w') as fp:
         fp.write(script)
