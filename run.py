@@ -10,6 +10,8 @@ def run(
             target_path:Path|str, 
             year:str, 
             day:str,
+            expected1,
+            expected2,
             json_filename:str,
             csv_filename:str,
             input1_filename:str,
@@ -32,5 +34,5 @@ def run(
     # Verify contents of the module:
     print(dir(module))
     print('running main')
-    module.main()
+    module.main(target_path, input1_filename, input2_filename, expected1, expected2)
     print('runned main')

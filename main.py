@@ -66,6 +66,8 @@ if __name__ == '__main__':
                     target_path=target_path, 
                     year=args.year, 
                     day=args.day,
+                    expected1=None,
+                    expected2=None,
                     json_filename='tests.json',
                     csv_filename='tests.csv',
                     input1_filename='input1.txt',
@@ -78,6 +80,8 @@ if __name__ == '__main__':
         logger.error(f'{fee}')
     except FileNotFoundError as fnfe:
         logger.error(f'{fnfe}')
+    except AssertionError as ae:
+        logger.error(f'{ae}')
     else:
         problems = False
         logger.info(f'{args.command} on {target_path} executed succesfully')
