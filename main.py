@@ -71,6 +71,7 @@ if __name__ == '__main__':
                     input1_filename='input1.txt',
                     input2_filename='input2.txt',
                     readme_filename='README.md',
+                    python_filename='solution.py',
                     aoc_url='https://adventofcode.com'
             )
     except FileExistsError as fee:
