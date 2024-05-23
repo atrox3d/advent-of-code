@@ -9,7 +9,7 @@ from atrox3d.logger import modulelogging
 from run import run
 from setup import setup
 
-def parse():
+def parse(*args):
     parser = argparse.ArgumentParser()
 
     subparsers = parser.add_subparsers(dest='command', help='Commands to run', required=True)
@@ -17,12 +17,14 @@ def parse():
     setup = subparsers.add_parser('setup')
     setup.add_argument('year')
     setup.add_argument('day')
+    setup.add_argument('-o', '--overwrite', action='store_true', default=False)
+    setup.add_argument('-y', '--confirm', action='store_true', default=False)
 
     run = subparsers.add_parser('run')
     run.add_argument('year')
     run.add_argument('day')
 
-    return parser.parse_args()
+    return parser.parse_args(*args)
 
 def get_path(base_dir:Path, year:str, day:str) -> Path:
     day = f'{day:>02}'
@@ -58,7 +60,9 @@ if __name__ == '__main__':
                     input2_filename='input2.txt',
                     readme_filename='README.md',
                     python_filename='solution.py',
-                    aoc_url='https://adventofcode.com'
+                    aoc_url='https://adventofcode.com',
+                    overwrite=args.overwrite,
+                    confirm=args.confirm
             )
     
         if args.command == 'run':

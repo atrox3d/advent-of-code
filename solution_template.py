@@ -17,4 +17,4 @@ def main(path, input_file1, input_file2, expected1, expected2):
         input_path = path / input_file
         input_value = load_input(input_path)
         result = solution1(input_value)
-        assert result == 'hello', 'not expected'
+        assert result == expected, f'{result=} != {expected}'
