@@ -5,6 +5,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def prepared(target_path:Path, filename:str, subject, data=None):
+    data = data or [{"input": None, "expected": None}]
+    output_path = target_path / filename
+    def decorator(fn):
+        def wrapper(fp, *args, **kwargs):
+            with open(str(output_path), 'w') as fp:
+                logger.info(f'creating {subject}: {output_path!s}')
+                return fn(fp, *args, **kwargs)
+        return wrapper
+    return decorator
+            
 def create_json_tests(target_path:Path, filename:str):
     data = [{"input": None, "expected": None}]
     
