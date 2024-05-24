@@ -5,68 +5,50 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def prepared(target_path:Path, filename:str, subject, data=None):
+def prepared(subject, *prepared_args, data=None, **prepared_kwargs):
     data = data or [{"input": None, "expected": None}]
-    output_path = target_path / filename
     def decorator(fn):
-        def wrapper(fp, *args, **kwargs):
-            with open(str(output_path), 'w') as fp:
-                logger.info(f'creating {subject}: {output_path!s}')
-                return fn(fp, *args, **kwargs)
+        def wrapper(target_path:Path, filename:str, *args, **kwargs):
+            output_path = target_path / filename
+            logger.info(f'creating {subject}: {output_path!s}')
+            newline = prepared_kwargs.pop('newline', None)
+            with open(str(output_path), 'w', newline=newline) as fp:
+                args = list(prepared_args) + list(args)
+                kwargs = prepared_kwargs | kwargs
+                return fn(data, fp, output_path, *args, **kwargs)
         return wrapper
     return decorator
-            
-def create_json_tests(target_path:Path, filename:str):
-    data = [{"input": None, "expected": None}]
-    
-    output_path = target_path / filename
-    logger.info(f'creating json tests: {output_path!s}')
-    
-    with open(str(output_path), 'w') as fp:
-        json.dump(data, fp)
 
-def create_csv_tests(target_path:Path, filename:str):
-    data = [{"input": 'None', "expected": 'None'}]
+@prepared('json tests')
+def create_json_tests(data, fp, output_path, *args, **kwargs):
+    json.dump(data, fp)
 
-    output_path = target_path / filename
-    logger.info(f'creating csv tests: {output_path!s}')
+@prepared('csv tests', newline='')
+def create_csv_tests(data, fp, output_path, *args, **kwargs):
+    writer = csv.DictWriter(fp, data[0].keys())
+    writer.writeheader()
+    for row in data:
+        logger.debug(f'writing {row=} to {output_path!s}')
+        writer.writerow(row)
 
-    with open(str(output_path), 'w', newline='') as fp:
-        writer = csv.DictWriter(fp, data[0].keys())
-        writer.writeheader()
-        for row in data:
-            logger.debug(f'writing {row=} to {output_path!s}')
-            writer.writerow(row)
+@prepared('input file')
+def create_input(data, fp, output_path, *args, **kwargs):
+    pass
 
-def create_input(target_path:Path, filename:str):
-
-    output_path = target_path / filename
-    logger.info(f'creating input file: {output_path!s}')
-
-    (output_path).touch()
-
-def create_readme(target_path:Path, year:str, day:str, filename:str, aoc_url='https://adventofcode.com'):
-    
-    output_path = target_path / filename
-    logger.info(f'creating README: {output_path!s}')
-    
+@prepared('README')
+def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adventofcode.com'):
     lines = [
         f'{aoc_url}/{year}/day/{day}',
         f'{aoc_url}/{year}/day/{day}#part2',
     ]
-    with open(str(output_path), 'w') as fp:
-        for line in lines:
-            fp.write(f'{line}\n\n')
+    for line in lines:
+        fp.write(f'{line}\n\n')
 
-def create_python_solution(target_path:Path, filename:str):
-    
-    output_path = target_path / filename
-    logger.info(f'creating python script: {output_path!s}')
-    
-    with open('solution_template.py') as infp:
+@prepared('python script', 'solution_template.py')
+def create_python_solution(data, fp, output_path, template):
+    with open(template) as infp:
         script = infp.read()
-        with open(str(output_path), 'w') as outfp:
-            outfp.write(script)
+        fp.write(script)
 
 def setup(
             target_path:Path|str, 
@@ -103,5 +85,5 @@ def setup(
     create_csv_tests(target_path, csv_filename)
     create_input(target_path, input1_filename)
     create_input(target_path, input2_filename)
-    create_readme(target_path, year, day, readme_filename, aoc_url)
+    create_readme(target_path, readme_filename, year, day, aoc_url)
     create_python_solution(target_path, python_filename)
