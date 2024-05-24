@@ -5,25 +5,44 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def prepared(subject, *prepared_args, data=None, **prepared_kwargs):
+def common_prepare(subject, *prepare_args, data=None, **prepare_kwargs):
+    '''
+        performs the operations in common between all functions
+            - dummy data
+            - logging
+            - opening of dest file
+        
+        the function runs inside the with context manager
+        
+        parameters are intended for the decorator
+
+        any other arg or kwarg is merged into function's args and kwargs
+        
+        the function may or may not use these parameters
+    '''
+    # prepare commond vars
     data = data or [{"input": None, "expected": None}]
+    newline = prepare_kwargs.pop('newline', None)
     def decorator(fn):
         def wrapper(target_path:Path, filename:str, *args, **kwargs):
+            # build output path for fn
             output_path = target_path / filename
-            logger.info(f'creating {subject}: {output_path!s}')
-            newline = prepared_kwargs.pop('newline', None)
+            
             with open(str(output_path), 'w', newline=newline) as fp:
-                args = list(prepared_args) + list(args)
-                kwargs = prepared_kwargs | kwargs
+                # merge remaining extra args, kwargs
+                args = list(prepare_args) + list(args)
+                kwargs = prepare_kwargs | kwargs
+                
+                logger.info(f'creating {subject}: {output_path!s}')
                 return fn(data, fp, output_path, *args, **kwargs)
         return wrapper
     return decorator
 
-@prepared('json tests')
+@common_prepare(subject='json tests')
 def create_json_tests(data, fp, output_path, *args, **kwargs):
     json.dump(data, fp)
 
-@prepared('csv tests', newline='')
+@common_prepare(subject='csv tests', newline='')
 def create_csv_tests(data, fp, output_path, *args, **kwargs):
     writer = csv.DictWriter(fp, data[0].keys())
     writer.writeheader()
@@ -31,11 +50,12 @@ def create_csv_tests(data, fp, output_path, *args, **kwargs):
         logger.debug(f'writing {row=} to {output_path!s}')
         writer.writerow(row)
 
-@prepared('input file')
+@common_prepare(subject='input file')
 def create_input(data, fp, output_path, *args, **kwargs):
+    ''' just touches the file '''
     pass
 
-@prepared('README')
+@common_prepare(subject='README')
 def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adventofcode.com'):
     lines = [
         f'{aoc_url}/{year}/day/{day}',
@@ -44,7 +64,7 @@ def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adv
     for line in lines:
         fp.write(f'{line}\n\n')
 
-@prepared('python script', 'solution_template.py')
+@common_prepare(subject='python script', template='solution_template.py')
 def create_python_solution(data, fp, output_path, template):
     with open(template) as infp:
         script = infp.read()
