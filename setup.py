@@ -2,21 +2,24 @@ from pathlib import Path
 import json
 import csv
 import logging
-import typing
 
 logger = logging.getLogger(__name__)
 
 def create_json_tests(target_path:Path, filename:str):
     data = [{"input": None, "expected": None}]
+    
     output_path = target_path / filename
     logger.info(f'creating json tests: {output_path!s}')
+    
     with open(str(output_path), 'w') as fp:
         json.dump(data, fp)
 
 def create_csv_tests(target_path:Path, filename:str):
     data = [{"input": 'None', "expected": 'None'}]
+
     output_path = target_path / filename
     logger.info(f'creating csv tests: {output_path!s}')
+
     with open(str(output_path), 'w', newline='') as fp:
         writer = csv.DictWriter(fp, data[0].keys())
         writer.writeheader()
@@ -25,13 +28,17 @@ def create_csv_tests(target_path:Path, filename:str):
             writer.writerow(row)
 
 def create_input(target_path:Path, filename:str):
+
     output_path = target_path / filename
     logger.info(f'creating input file: {output_path!s}')
+
     (output_path).touch()
 
 def create_readme(target_path:Path, year:str, day:str, filename:str, aoc_url='https://adventofcode.com'):
+    
     output_path = target_path / filename
     logger.info(f'creating README: {output_path!s}')
+    
     lines = [
         f'{aoc_url}/{year}/day/{day}',
         f'{aoc_url}/{year}/day/{day}#part2',
@@ -41,8 +48,10 @@ def create_readme(target_path:Path, year:str, day:str, filename:str, aoc_url='ht
             fp.write(f'{line}\n\n')
 
 def create_python_solution(target_path:Path, filename:str):
+    
     output_path = target_path / filename
     logger.info(f'creating python script: {output_path!s}')
+    
     with open('solution_template.py') as infp:
         script = infp.read()
         with open(str(output_path), 'w') as outfp:
