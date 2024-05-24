@@ -39,11 +39,11 @@ def common_ctxman(subject, *prepare_args, data=None, **prepare_kwargs):
     return decorator
 
 @common_ctxman(subject='json tests')
-def create_json_tests(data, fp, output_path, *args, **kwargs):
+def create_json_tests(data, fp, output_path):
     json.dump(data, fp)
 
 @common_ctxman(subject='csv tests', newline='')
-def create_csv_tests(data, fp, output_path, *args, **kwargs):
+def create_csv_tests(data, fp, output_path):
     writer = csv.DictWriter(fp, data[0].keys())
     writer.writeheader()
     for row in data:
@@ -51,7 +51,7 @@ def create_csv_tests(data, fp, output_path, *args, **kwargs):
         writer.writerow(row)
 
 @common_ctxman(subject='input file')
-def create_input(data, fp, output_path, *args, **kwargs):
+def create_input(data, fp, output_path):
     ''' just touches the file '''
     pass
 
