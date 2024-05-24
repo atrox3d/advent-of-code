@@ -73,6 +73,8 @@ def setup(
             if not confirm:
                 logger.warning('use -y option to confirm overwrite')
                 raise FileExistsError(f'target path exists: {target_path}')
+            else:
+                logger.warning(f'overwriting {target_path}')
     
     logger.info(f'creating dir {target_path!s}')
     target_path.mkdir(parents=True, exist_ok=confirm)
