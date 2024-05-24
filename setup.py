@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def common_prepare(subject, *prepare_args, data=None, **prepare_kwargs):
+def common_ctxman(subject, *prepare_args, data=None, **prepare_kwargs):
     '''
         performs the operations in common between all functions
             - dummy data
@@ -38,11 +38,11 @@ def common_prepare(subject, *prepare_args, data=None, **prepare_kwargs):
         return wrapper
     return decorator
 
-@common_prepare(subject='json tests')
+@common_ctxman(subject='json tests')
 def create_json_tests(data, fp, output_path, *args, **kwargs):
     json.dump(data, fp)
 
-@common_prepare(subject='csv tests', newline='')
+@common_ctxman(subject='csv tests', newline='')
 def create_csv_tests(data, fp, output_path, *args, **kwargs):
     writer = csv.DictWriter(fp, data[0].keys())
     writer.writeheader()
@@ -50,12 +50,12 @@ def create_csv_tests(data, fp, output_path, *args, **kwargs):
         logger.debug(f'writing {row=} to {output_path!s}')
         writer.writerow(row)
 
-@common_prepare(subject='input file')
+@common_ctxman(subject='input file')
 def create_input(data, fp, output_path, *args, **kwargs):
     ''' just touches the file '''
     pass
 
-@common_prepare(subject='README')
+@common_ctxman(subject='README')
 def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adventofcode.com'):
     lines = [
         f'{aoc_url}/{year}/day/{day}',
@@ -64,7 +64,7 @@ def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adv
     for line in lines:
         fp.write(f'{line}\n\n')
 
-@common_prepare(subject='python script', template='solution_template.py')
+@common_ctxman(subject='python script', template='solution_template.py')
 def create_python_solution(data, fp, output_path, template):
     with open(template) as infp:
         script = infp.read()
