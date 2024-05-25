@@ -73,7 +73,7 @@ if __name__ == '__main__':
                     expected2=None,
                     input1_filename='input1.txt',
                     input2_filename='input2.txt',
-                    python_filename='solution.py',
+                    python_filename='main.py',
             )
     except FileExistsError as fee:
         logger.error(f'{fee}')
