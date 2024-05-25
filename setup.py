@@ -74,10 +74,18 @@ def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adv
 
 # effective signature: create_python_solution(target_path, filename, template)
 @common_ctxman_adapter(subject='python script')
-def create_python_solution(data, fp, output_path, template):
+def create_python_solution(data, fp, output_path, template, year:str, day:str, aoc_url='https://adventofcode.com'):
+    head_comment = '\n'.join([
+        f"'''",
+        f'{aoc_url}/{year}/day/{day}',
+        f'{aoc_url}/{year}/day/{day}#part2',
+        f"'''",
+        '\n\n'
+    ])
     with open(template) as infp:
-        script = infp.read()
-        fp.write(script)
+        template_script = infp.read()
+        # print(f'{template_script=!r}')
+        fp.write(head_comment+template_script)
 
 def setup(
             target_path:Path|str, 
@@ -116,4 +124,4 @@ def setup(
     create_input(target_path, input1_filename)
     create_input(target_path, input2_filename)
     create_readme(target_path, readme_filename, year, day, aoc_url)
-    create_python_solution(target_path, python_filename, template_filename)
+    create_python_solution(target_path, python_filename, template_filename, year, day, aoc_url)
