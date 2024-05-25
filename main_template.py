@@ -1,8 +1,10 @@
 def solution1(quiz_input):
     print(f'{quiz_input = !r}')
+    return None
 
 def solution2(quiz_input):
     print(f'{quiz_input = !r}')
+    return None
 
 def load_input(filename):
     with open(filename, 'r') as fp:
