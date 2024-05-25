@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def common_ctxman(subject, *prepare_args, data=None, **prepare_kwargs):
+def common_ctxman_adapter(subject, *prepare_args, data=None, **prepare_kwargs):
     '''
         performs the operations in common between all functions
             - dummy data
@@ -24,6 +24,7 @@ def common_ctxman(subject, *prepare_args, data=None, **prepare_kwargs):
     data = data or [{"input": None, "expected": None}]
     newline = prepare_kwargs.pop('newline', None)
     def decorator(fn):
+        # wrapper signature differs from fn signature
         def wrapper(target_path:Path, filename:str, *args, **kwargs):
             # build output path for fn
             output_path = target_path / filename
@@ -34,15 +35,27 @@ def common_ctxman(subject, *prepare_args, data=None, **prepare_kwargs):
                 kwargs = prepare_kwargs | kwargs
                 
                 logger.info(f'creating {subject}: {output_path!s}')
+                # fn signature injects (data, fp and out_path) before 
+                # (target_path, filename) that get absorbed by *args or **kwargs
+                # togheter with every specific arguments of every function
+                # so that the original:
+                #       create_smtng(target_path, filename, some_params)
+                # is kept when calling create_smtng but the definition becomes:
+                #       create_smtng(data, fp, output_path, *args, **kwargs)
+                # and the is called with:
+                #       create_smtng(data, fp, output_path, target_path, filename, some_params)
                 return fn(data, fp, output_path, *args, **kwargs)
         return wrapper
     return decorator
 
-@common_ctxman(subject='json tests')
+@common_ctxman_adapter(subject='json tests')
+# effective signature: create_json_tests(target_path:Path, filename:str)
 def create_json_tests(data, fp, output_path):
     json.dump(data, fp)
 
-@common_ctxman(subject='csv tests', newline='')
+@common_ctxman_adapter(subject='csv tests', newline='')
+# effective signature: create_csv_tests(target_path:Path, filename:str)
+# newline is used inside with open()
 def create_csv_tests(data, fp, output_path):
     writer = csv.DictWriter(fp, data[0].keys())
     writer.writeheader()
@@ -50,12 +63,14 @@ def create_csv_tests(data, fp, output_path):
         logger.debug(f'writing {row=} to {output_path!s}')
         writer.writerow(row)
 
-@common_ctxman(subject='input file')
+@common_ctxman_adapter(subject='input file')
+# effective signature: create_input(target_path:Path, filename:str)
 def create_input(data, fp, output_path):
     ''' just touches the file '''
     pass
 
-@common_ctxman(subject='README')
+@common_ctxman_adapter(subject='README')
+# effective signature: create_readme(target_path:Path, filename:str, year, day, aoc_url)
 def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adventofcode.com'):
     lines = [
         f'{aoc_url}/{year}/day/{day}',
@@ -64,7 +79,8 @@ def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adv
     for line in lines:
         fp.write(f'{line}\n\n')
 
-@common_ctxman(subject='python script', template='solution_template.py')
+@common_ctxman_adapter(subject='python script')
+# effective signature: create_python_solution(target_path:Path, filename:str, template)
 def create_python_solution(data, fp, output_path, template):
     with open(template) as infp:
         script = infp.read()
@@ -80,6 +96,7 @@ def setup(
             input2_filename:str,
             readme_filename:str,
             python_filename:str,
+            template_filename:str,
             aoc_url:str,
             overwrite:bool=False,
             # confirm:typing.Callable[...,bool]=lambda:input('confirm? ')=='y'
@@ -106,4 +123,4 @@ def setup(
     create_input(target_path, input1_filename)
     create_input(target_path, input2_filename)
     create_readme(target_path, readme_filename, year, day, aoc_url)
-    create_python_solution(target_path, python_filename)
+    create_python_solution(target_path, python_filename, template_filename)

@@ -59,7 +59,8 @@ if __name__ == '__main__':
                     input1_filename='input1.txt',
                     input2_filename='input2.txt',
                     readme_filename='README.md',
-                    python_filename='solution.py',
+                    python_filename='main.py',
+                    template_filename='main_template.py',
                     aoc_url='https://adventofcode.com',
                     overwrite=args.overwrite,
                     confirm=args.confirm
