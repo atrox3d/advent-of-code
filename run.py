@@ -18,11 +18,11 @@ def load_module(target_path:Path, python_filename:str) -> types.ModuleType:
 
 def run(
             target_path:Path|str, 
-            expected1,
-            expected2,
-            input1_filename:str,
-            input2_filename:str,
             python_filename:str,
+            input1_filename:str,
+            expected1,
+            input2_filename:str,
+            expected2,
     ):
     print(f'running {target_path!s}')
     if not target_path.exists():
