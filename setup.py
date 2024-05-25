@@ -5,57 +5,50 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def common_ctxman_adapter(subject, *prepare_args, data=None, **prepare_kwargs):
+def common_ctxman_adapter(subject, newline=None, data=None):
     '''
         performs the operations in common between all functions
-            - dummy data
-            - logging
-            - opening of dest file
+            - creating dummy data
+            - logging the operation
+            - opening of dest file fp
         
         the function runs inside the with context manager
         
-        parameters are intended for the decorator
-
-        any other arg or kwarg is merged into function's args and kwargs
-        
-        the function may or may not use these parameters
+        parameters are intended for the decorator to perform preparation ops
     '''
-    # prepare commond vars
     data = data or [{"input": None, "expected": None}]
-    newline = prepare_kwargs.pop('newline', None)
     def decorator(fn):
-        # wrapper signature differs from fn signature
+        '''
+        (target_path, filename) is used to create output_path and to open fp
+        fn signature injects (data, fp and out_path) before args of each function
+        then (data, fp, output_path) is used when calling fn and the remaining args 
+        for each function get absorbed by *args or **kwargs
+        so that the original:
+              create_smtng(target_path, filename, some_params)
+        is kept when calling create_smtng but only after creating output_path
+        and opening fp, so the definition becomes:
+              create_smtng(data, fp, output_path, *args, **kwargs)
+        and the is called with:
+              create_smtng(data, fp, output_path, any_other_params...)
+        '''
         def wrapper(target_path:Path, filename:str, *args, **kwargs):
-            # build output path for fn
+            # build output path for fn and open
             output_path = target_path / filename
             
             with open(str(output_path), 'w', newline=newline) as fp:
-                # merge remaining extra args, kwargs
-                args = list(prepare_args) + list(args)
-                kwargs = prepare_kwargs | kwargs
-                
                 logger.info(f'creating {subject}: {output_path!s}')
-                # fn signature injects (data, fp and out_path) before 
-                # (target_path, filename) that get absorbed by *args or **kwargs
-                # togheter with every specific arguments of every function
-                # so that the original:
-                #       create_smtng(target_path, filename, some_params)
-                # is kept when calling create_smtng but the definition becomes:
-                #       create_smtng(data, fp, output_path, *args, **kwargs)
-                # and the is called with:
-                #       create_smtng(data, fp, output_path, target_path, filename, some_params)
                 return fn(data, fp, output_path, *args, **kwargs)
         return wrapper
     return decorator
 
+# effective signature: create_json_tests(target_path, filename)
 @common_ctxman_adapter(subject='json tests')
-# effective signature: create_json_tests(target_path:Path, filename:str)
 def create_json_tests(data, fp, output_path):
     json.dump(data, fp)
 
+# effective signature: create_csv_tests(target_path, filename)
+# newline is used inside with open() for DictWriter
 @common_ctxman_adapter(subject='csv tests', newline='')
-# effective signature: create_csv_tests(target_path:Path, filename:str)
-# newline is used inside with open()
 def create_csv_tests(data, fp, output_path):
     writer = csv.DictWriter(fp, data[0].keys())
     writer.writeheader()
@@ -63,14 +56,14 @@ def create_csv_tests(data, fp, output_path):
         logger.debug(f'writing {row=} to {output_path!s}')
         writer.writerow(row)
 
+# effective signature: create_input(target_path, filename)
 @common_ctxman_adapter(subject='input file')
-# effective signature: create_input(target_path:Path, filename:str)
 def create_input(data, fp, output_path):
     ''' just touches the file '''
     pass
 
+# effective signature: create_readme(target_path, filename, year, day, aoc_url)
 @common_ctxman_adapter(subject='README')
-# effective signature: create_readme(target_path:Path, filename:str, year, day, aoc_url)
 def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adventofcode.com'):
     lines = [
         f'{aoc_url}/{year}/day/{day}',
@@ -79,8 +72,8 @@ def create_readme(data, fp, output_path, year:str, day:str, aoc_url='https://adv
     for line in lines:
         fp.write(f'{line}\n\n')
 
+# effective signature: create_python_solution(target_path, filename, template)
 @common_ctxman_adapter(subject='python script')
-# effective signature: create_python_solution(target_path:Path, filename:str, template)
 def create_python_solution(data, fp, output_path, template):
     with open(template) as infp:
         script = infp.read()
