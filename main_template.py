@@ -1,5 +1,7 @@
 from pathlib import Path
+import logging
 
+logger = logging.getLogger(__name__)
 
 def solution1(quiz_input):
     print(f'{quiz_input = !r}')

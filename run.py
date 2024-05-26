@@ -31,7 +31,7 @@ def run(
     module = load_module(target_path, python_filename)
 
     # Verify contents of the module:
-    print(dir(module))
-    print('running main')
+    # print(dir(module))
+    logger.info('running main')
     module.main(target_path, input1_filename, expected1, input2_filename, expected2)
-    print('runned main')
+    logger.info('runned main')

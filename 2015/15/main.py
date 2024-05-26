@@ -8,6 +8,8 @@ import sys, os
 import re, json
 from pathlib import Path
 
+logger = logging.getLogger(__name__)
+
 def load_ingredients(quiz_input:str) -> dict:
     import re
     pattern = r'(?P<name>\w+): capacity (?P<capacity>-?\d+), '\
@@ -63,10 +65,11 @@ def solution1(quiz_input):
     Given the ingredients in your kitchen and their properties, 
     what is the total score of the highest-scoring cookie you can make?    
     '''
-    print(f'{quiz_input = !r}')
+    logger.info(f'{quiz_input = !r}')
 
     ingredients = load_ingredients(quiz_input)
-    print(json.dumps(ingredients, indent=2))
+    for line in json.dumps(ingredients, indent=2).splitlines():
+        logger.info(line)
     
     return None
 
