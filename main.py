@@ -26,15 +26,18 @@ def parse(*args):
 
     return parser.parse_args(*args)
 
+def format_day(day) -> str:
+    return f'{day:>02}' 
+
 def get_path(base_dir:Path, year:str, day:str) -> Path:
-    day = f'{day:>02}'
+    day = format_day(day)
     target_path = base_dir / year / day
     return target_path
 
 if __name__ == '__main__':
     args = parse()
 
-    logmanager.setup_logging('DEBUG')
+    logmanager.setup_logging('DEBUG', logfile='aoc.log')
     modulelogging.set_logger_level_for_modules('INFO', logmanager, modulelogging)
     modulelogging.set_logger_level_for_modules('DEBUG', setup, run)
     logger = logmanager.get_logger(__name__, 'DEBUG')
@@ -46,6 +49,7 @@ if __name__ == '__main__':
     target_path = get_path(SCRIPT_DIR, args.year, args.day)
     logger.info(f'{target_path = }')
 
+    logmanager.setup_logging('DEBUG', logfile=target_path / f'{args.year}{format_day(args.day)}.log', force=True)
     try:
         problems = True
         logger.debug(f'{args.command = }')
