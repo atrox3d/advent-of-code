@@ -1,5 +1,2 @@
-input, input!
-null, False
-None, True
-true, 0
-false, 1
+input,expected
+,
