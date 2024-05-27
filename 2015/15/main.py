@@ -96,4 +96,7 @@ def main(
         input_path = path / input_file
         input_value = load_input(input_path)
         result = solution(input_value)
-        assert result == expected, f'{result=} != {expected}'
+        if expected is not None:
+            assert result == expected, f'{result=} != {expected}'
+        else:
+            logger.info(f'{result = }')
