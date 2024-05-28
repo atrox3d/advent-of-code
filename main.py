@@ -23,6 +23,9 @@ def parse(*args):
     run = subparsers.add_parser('run')
     run.add_argument('year')
     run.add_argument('day')
+    run.add_argument('-p', '--pythonscript')
+    run.add_argument('-i1', '--input1')
+    run.add_argument('-i2', '--input2')
 
     return parser.parse_args(*args)
 
@@ -73,11 +76,11 @@ if __name__ == '__main__':
         if args.command == 'run':
             run(
                     target_path=target_path, 
+                    python_filename=args.pythonscript or 'main.py',
+                    input1_filename=args.input1 or 'input1.txt',
                     expected1=None,
+                    input2_filename=args.input2 or 'input2.txt',
                     expected2=None,
-                    input1_filename='input1.txt',
-                    input2_filename='input2.txt',
-                    python_filename='main.py',
             )
     except FileExistsError as fee:
         logger.error(f'{fee}')
