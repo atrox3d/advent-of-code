@@ -90,6 +90,7 @@ def main(
             # solve_first:bool=False, 
             # solve_second:bool=False, 
     ):
+    logger.info('entering module.main')
     for id, (input_file, solution) in enumerate(zip(
             (input_file1, input_file2), 
             (solution1, solution2)
@@ -98,7 +99,9 @@ def main(
         input_value = load_input(input_path)
         result = solution(input_value)
         logger.info(f'solution {id}: {result = }')
-    exit()
+    logger.info('exiting module.main')
+    
+    return
     # this is testing, not solving
     # TODO: implement testing
     for input_file, expected, solution in zip(

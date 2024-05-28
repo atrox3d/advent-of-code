@@ -20,24 +20,29 @@ def run(
             target_path:Path|str, 
             python_filename:str,
             input1_filename:str,
-            expected1,
+            # expected1,
             input2_filename:str,
-            expected2,
+            # expected2,
     ):
-    print(f'running {target_path!s}')
+    logger.info(f'running {target_path!s}')
     if not target_path.exists():
         raise FileNotFoundError(f'target path not found: {target_path}')
 
+    logger.info(f'importing {target_path, python_filename}')
     module = load_module(target_path, python_filename)
 
     # Verify contents of the module:
     # print(dir(module))
-    logger.info('running main')
-    module.main(
-                    target_path, 
-                    input1_filename, 
-                    # expected1, 
-                    input2_filename, 
-                    # expected2
-                )
-    logger.info('runned main')
+    logger.info('running module.main')
+    try:
+        module.main(
+                        target_path, 
+                        input1_filename, 
+                        # expected1, 
+                        input2_filename, 
+                        # expected2
+                    )
+    except Exception as e:
+        logger.error(e)
+        raise
+    logger.info('end run module.main')

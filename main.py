@@ -38,7 +38,7 @@ def get_path(base_dir:Path, year:str, day:str) -> Path:
     return target_path
 
 if __name__ == '__main__':
-    args = parse()
+    args = parse('run 2015 15'.split())
 
     logmanager.setup_logging('DEBUG', logfile='aoc.log')
     modulelogging.set_logger_level_for_modules('INFO', logmanager, modulelogging)
@@ -74,21 +74,26 @@ if __name__ == '__main__':
             )
     
         if args.command == 'run':
+            logger.info('executing run')
             run(
                     target_path=target_path, 
                     python_filename=args.pythonscript or 'main.py',
                     input1_filename=args.input1 or 'input1.txt',
-                    expected1=None,
+                    # expected1=None,
                     input2_filename=args.input2 or 'input2.txt',
-                    expected2=None,
+                    # expected2=None,
             )
+            logger.info('executed run')
     except FileExistsError as fee:
         logger.error(f'{fee}')
     except FileNotFoundError as fnfe:
         logger.error(f'{fnfe}')
     except AssertionError as ae:
         logger.error(f'{ae}')
+    except Exception as e:
+        logger.error(f'{e}')
     else:
+        logger.info('entering try/else')
         problems = False
         logger.info(f'{args.command} on {target_path} executed succesfully')
         logger.info('quitting')
