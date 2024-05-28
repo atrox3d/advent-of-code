@@ -97,7 +97,7 @@ def main(
         input_path = path / input_file
         input_value = load_input(input_path)
         result = solution(input_value)
-        print(f'solution {id}: {result = }')
+        logger.info(f'solution {id}: {result = }')
     exit()
     # this is testing, not solving
     # TODO: implement testing
