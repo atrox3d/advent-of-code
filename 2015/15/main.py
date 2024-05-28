@@ -74,7 +74,7 @@ def solution1(quiz_input):
     return None
 
 def solution2(quiz_input):
-    print(f'{quiz_input = !r}')
+    logger.info(f'{quiz_input = !r}')
     return None
 
 def load_input(filename):
@@ -82,12 +82,25 @@ def load_input(filename):
         return fp.read()
 
 def main(
-            path:Path|str, 
+            path:Path|str,
             input_file1:str,
-            expected1,
+            # expected1,
             input_file2:str,
-            expected2,
+            # expected2,
+            # solve_first:bool=False, 
+            # solve_second:bool=False, 
     ):
+    for id, (input_file, solution) in enumerate(zip(
+            (input_file1, input_file2), 
+            (solution1, solution2)
+        ), start=1):
+        input_path = path / input_file
+        input_value = load_input(input_path)
+        result = solution(input_value)
+        print(f'solution {id}: {result = }')
+    exit()
+    # this is testing, not solving
+    # TODO: implement testing
     for input_file, expected, solution in zip(
             (input_file1, input_file2), 
             (expected1, expected2),

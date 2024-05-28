@@ -33,5 +33,11 @@ def run(
     # Verify contents of the module:
     # print(dir(module))
     logger.info('running main')
-    module.main(target_path, input1_filename, expected1, input2_filename, expected2)
+    module.main(
+                    target_path, 
+                    input1_filename, 
+                    # expected1, 
+                    input2_filename, 
+                    # expected2
+                )
     logger.info('runned main')
