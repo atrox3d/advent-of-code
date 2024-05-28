@@ -74,7 +74,7 @@ if __name__ == '__main__':
             )
     
         if args.command == 'run':
-            logger.info('executing run')
+            logger.info('executing run.run')
             run(
                     target_path=target_path, 
                     python_filename=args.pythonscript or 'main.py',
@@ -83,7 +83,7 @@ if __name__ == '__main__':
                     input2_filename=args.input2 or 'input2.txt',
                     # expected2=None,
             )
-            logger.info('executed run')
+            logger.info('executed run.run')
     except FileExistsError as fee:
         logger.error(f'{fee}')
     except FileNotFoundError as fnfe:
@@ -91,9 +91,9 @@ if __name__ == '__main__':
     except AssertionError as ae:
         logger.error(f'{ae}')
     except Exception as e:
-        logger.error(f'{e}')
+        logger.error(f'unexpected exception: {e}')
     else:
-        logger.info('entering try/else')
+        # logger.info('entering try/else')
         problems = False
         logger.info(f'{args.command} on {target_path} executed succesfully')
         logger.info('quitting')
