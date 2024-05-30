@@ -39,10 +39,13 @@ def get_path(base_dir:Path, year:str, day:str) -> Path:
 
 if __name__ == '__main__':
     args = parse('run 2015 15'.split())
-
+    # initialize logging
     logmanager.setup_logging('DEBUG', logfile='aoc.log')
+    # set logger level to info for library modules
     modulelogging.set_logger_level_for_modules('INFO', logmanager, modulelogging)
+    # set logger level to debug for this script modules
     modulelogging.set_logger_level_for_modules('DEBUG', setup, run)
+    # get this module logger
     logger = logmanager.get_logger(__name__, 'DEBUG')
     logger.info(args)
 
@@ -51,7 +54,9 @@ if __name__ == '__main__':
 
     target_path = get_path(SCRIPT_DIR, args.year, args.day)
     logger.info(f'{target_path = }')
-
+    # force reinitialization of logging with a different logfile
+    # TODO: find a better way, including the dynamically imported module
+    # TODO: maybe move dynamic import in main
     logmanager.setup_logging('DEBUG', logfile=target_path / f'{args.year}{format_day(args.day)}.log', force=True)
     try:
         problems = True
