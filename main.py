@@ -66,10 +66,6 @@ if __name__ == '__main__':
 
     target_path = get_path(SCRIPT_DIR, args.year, args.day)
     logger.info(f'{target_path = }')
-    # force reinitialization of logging with a different logfile
-    # TODO: find a better way, including the dynamically imported module
-    # TODO: maybe move dynamic import in main
-    logmanager.setup_logging('DEBUG', logfile=target_path / f'{args.year}{format_day(args.day)}.log', force=True)
     try:
         problems = True
         logger.debug(f'{args.command = }')
@@ -95,12 +91,17 @@ if __name__ == '__main__':
             python_filename = args.pythonscript or 'main.py'
             logger.info(f'importing {target_path, python_filename}')
             module = load_module(target_path, python_filename)
-
+            
+            loggers = modulelogging.get_module_loggers(module)
+            for l in loggers:
+                logmanager.add_logfile(l, target_path / f'{args.year}{format_day(args.day)}.log')
+                l.propagate = False
+            
             logger.info('executing run.run')
             run(
                     module,
                     target_path=target_path,
-                    python_filename=python_filename,
+                    # python_filename=python_filename,
                     input1_filename=args.input1 or 'input1.txt',
                     # expected1=None,
                     input2_filename=args.input2 or 'input2.txt',
