@@ -3,6 +3,9 @@ import os
 import sys
 from pathlib import Path
 
+import importlib.util
+import types
+
 from atrox3d.logger import logmanager
 from atrox3d.logger import modulelogging
 
@@ -36,6 +39,15 @@ def get_path(base_dir:Path, year:str, day:str) -> Path:
     day = format_day(day)
     target_path = base_dir / year / day
     return target_path
+
+def load_module(target_path:Path, python_filename:str) -> types.ModuleType:
+    file_path = target_path / python_filename
+    module_name = file_path.stem
+
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 if __name__ == '__main__':
     args = parse('run 2015 15'.split())
@@ -79,10 +91,16 @@ if __name__ == '__main__':
             )
     
         if args.command == 'run':
+
+            python_filename = args.pythonscript or 'main.py'
+            logger.info(f'importing {target_path, python_filename}')
+            module = load_module(target_path, python_filename)
+
             logger.info('executing run.run')
             run(
-                    target_path=target_path, 
-                    python_filename=args.pythonscript or 'main.py',
+                    module,
+                    target_path=target_path,
+                    python_filename=python_filename,
                     input1_filename=args.input1 or 'input1.txt',
                     # expected1=None,
                     input2_filename=args.input2 or 'input2.txt',
