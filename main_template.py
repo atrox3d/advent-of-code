@@ -18,11 +18,7 @@ def load_input(filename):
 def main(
             path:Path|str,
             input_file1:str,
-            # expected1,
             input_file2:str,
-            # expected2,
-            # solve_first:bool=False, 
-            # solve_second:bool=False,
             test_file:str=None,
             expected=None
     ):
@@ -32,8 +28,8 @@ def main(
         logger.info(f'testing: file {test_path}')
         logger.info(f'testing: {expected = }')
         test_value = load_input(test_path)
-        result = solution(test_value)
-        assert result == expected, f'TEST FAILED: {result=} != {expected}'
+        result = solution1(test_value)
+        assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
     else:
         for id, (input_file, solution) in enumerate(zip(
                 (input_file1, input_file2), 

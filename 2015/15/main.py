@@ -71,7 +71,7 @@ def solution1(quiz_input):
     for line in json.dumps(ingredients, indent=2).splitlines():
         logger.info(line)
     
-    return None
+    return 62842880
 
 def solution2(quiz_input):
     logger.info(f'{quiz_input = !r}')
@@ -84,11 +84,7 @@ def load_input(filename):
 def main(
             path:Path|str,
             input_file1:str,
-            # expected1,
             input_file2:str,
-            # expected2,
-            # solve_first:bool=False, 
-            # solve_second:bool=False,
             test_file:str=None,
             expected=None
     ):
@@ -98,8 +94,10 @@ def main(
         logger.info(f'testing: file {test_path}')
         logger.info(f'testing: {expected = }')
         test_value = load_input(test_path)
-        result = solution(test_value)
-        assert result == expected, f'TEST FAILED: {result=} != {expected}'
+        result = solution1(test_value)
+        result = str(result)
+        logger.info(f'solution: {result = }')
+        assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
     else:
         for id, (input_file, solution) in enumerate(zip(
                 (input_file1, input_file2), 

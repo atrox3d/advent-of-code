@@ -35,11 +35,11 @@ def parse(*args):
     run = subparsers.add_parser('test')
     run.add_argument('year')
     run.add_argument('day')
-    run.add_argument('-i1', '--input1')
-    run.add_argument('-i2', '--input2')
+    # run.add_argument('-i1', '--input1')
+    # run.add_argument('-i2', '--input2')
     run.add_argument('-p', '--pythonscript')
     run.add_argument('-t', '--testfile')
-    run.add_argument('-e', '--expected')
+    run.add_argument('-e', '--expected', required=True)
 
     return parser.parse_args(*args)
 
@@ -138,8 +138,8 @@ if __name__ == '__main__':
                 run(
                         module,
                         target_path=target_path,
-                        input1_filename=args.input1 or 'input1.txt',
-                        input2_filename=args.input2 or 'input2.txt',
+                        input1_filename=None,
+                        input2_filename=None,
                         test_filename=args.testfile or 'test.txt',
                         expected=args.expected
                 )
@@ -156,6 +156,7 @@ if __name__ == '__main__':
         logger.error(f'{ae}')
     except Exception as e:
         logger.error(f'unexpected exception: {e}')
+        logger.exception(e)
     else:
         # logger.info('entering try/else')
         problems = False
