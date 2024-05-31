@@ -145,3 +145,4 @@ if __name__ == '__main__':
     finally:
         if problems:
             logger.fatal(f'errors executing {args.command} on {target_path}')
+        logger.info('')
