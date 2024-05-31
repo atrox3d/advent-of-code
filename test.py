@@ -7,11 +7,11 @@ import types
 logger = logging.getLogger(__name__)
 
 
-def run(
+def test(
             module:types.ModuleType,
             target_path:Path|str, 
-            input1_filename:str,
-            input2_filename:str,
+            # input1_filename:str,
+            # input2_filename:str,
             test_filename:str=None,
             expected=None
     ):
@@ -22,16 +22,16 @@ def run(
 
     # Verify contents of the module:
     # print(dir(module))
-    logger.info('running module.main')
+    logger.info('running module.test')
     try:
-        module.main(
+        module.test(
                         target_path, 
-                        input1_filename, 
-                        input2_filename, 
-                        # test_filename,
-                        # expected
+                        # input1_filename, 
+                        # input2_filename, 
+                        test_filename,
+                        expected
                     )
     except Exception as e:
         logger.error(e)
         raise
-    logger.info('end run module.main')
+    logger.info('end run module.test')

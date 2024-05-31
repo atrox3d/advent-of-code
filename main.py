@@ -11,6 +11,7 @@ from atrox3d.logger import modulelogging
 
 from run import run
 from setup import setup
+from test import test
 
 def parse(*args):
     '''parse command line arguments'''
@@ -124,8 +125,8 @@ if __name__ == '__main__':
                 # TODO: add format
                 _logger.propagate = False
             
-            logger.info('executing run.run with loaded module')
             if args.command == 'run':
+                logger.info('executing run.run with loaded module')
                 run(
                         module,
                         target_path=target_path,
@@ -134,16 +135,18 @@ if __name__ == '__main__':
                         # test_filename=args.testfile or 'test.txt',
                         # expected=args.expected
                 )
+                logger.info('executed run.run')
             else:
-                run(
+                logger.info('executing test.test with loaded module')
+                test(
                         module,
                         target_path=target_path,
-                        input1_filename=None,
-                        input2_filename=None,
+                        # input1_filename=None,
+                        # input2_filename=None,
                         test_filename=args.testfile or 'test.txt',
                         expected=args.expected
                 )
-            logger.info('executed run.run')
+                logger.info('executed test.test')
             
         else:
             raise NotImplementedError(f'command {args.command}')

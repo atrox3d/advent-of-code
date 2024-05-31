@@ -85,27 +85,34 @@ def main(
             path:Path|str,
             input_file1:str,
             input_file2:str,
+            # test_file:str=None,
+            # expected=None
+    ):
+    logger.info('entering module.main')
+    for id, (input_file, solution) in enumerate(zip(
+            (input_file1, input_file2), 
+            (solution1, solution2)
+        ), start=1):
+        input_path = path / input_file
+        logger.info(f'running: file {input_path}')
+        input_value = load_input(input_path)
+        result = solution(input_value)
+        logger.info(f'solution {id}: {result = }')
+    logger.info('exiting module.main')
+
+def test(
+            path:Path|str,
+            # input_file1:str,
+            # input_file2:str,
             test_file:str=None,
             expected=None
     ):
-    logger.info('entering module.main')
-    if expected is not None:
-        test_path = path / test_file
-        logger.info(f'testing: file {test_path}')
-        logger.info(f'testing: {expected = }')
-        test_value = load_input(test_path)
-        result = solution1(test_value)
-        result = str(result)
-        logger.info(f'solution: {result = }')
-        assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
-    else:
-        for id, (input_file, solution) in enumerate(zip(
-                (input_file1, input_file2), 
-                (solution1, solution2)
-            ), start=1):
-            input_path = path / input_file
-            logger.info(f'running: file {input_path}')
-            input_value = load_input(input_path)
-            result = solution(input_value)
-            logger.info(f'solution {id}: {result = }')
-        logger.info('exiting module.main')
+    logger.info('entering module.test')
+    test_path = path / test_file
+    logger.info(f'testing: file {test_path}')
+    logger.info(f'testing: {expected = }')
+    test_value = load_input(test_path)
+    result = solution1(test_value)
+    result = str(result)
+    assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
+    logger.info('exiting module.test')
