@@ -93,6 +93,7 @@ def setup(
             day:str,
             json_filename:str,
             csv_filename:str,
+            txt_filename:str,
             input1_filename:str,
             input2_filename:str,
             readme_filename:str,
@@ -123,5 +124,6 @@ def setup(
     create_csv_tests(target_path, csv_filename)
     create_input(target_path, input1_filename)
     create_input(target_path, input2_filename)
+    create_input(target_path, txt_filename)
     create_readme(target_path, readme_filename, year, day, aoc_url)
     create_python_solution(target_path, python_filename, template_filename, year, day, aoc_url)

@@ -97,6 +97,7 @@ if __name__ == '__main__':
                     day=args.day,
                     json_filename='tests.json',
                     csv_filename='tests.csv',
+                    txt_filename='tests.csv',
                     input1_filename='input1.txt',
                     input2_filename='input2.txt',
                     readme_filename='README.md',
