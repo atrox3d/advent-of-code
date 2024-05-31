@@ -13,6 +13,8 @@ from run import run
 from setup import setup
 
 def parse(*args):
+    '''parse command line arguments'''
+
     parser = argparse.ArgumentParser()
 
     subparsers = parser.add_subparsers(dest='command', help='Commands to run', required=True)
@@ -33,24 +35,30 @@ def parse(*args):
     return parser.parse_args(*args)
 
 def format_day(day) -> str:
+    '''left zero pads day if one digit'''
     return f'{day:>02}' 
 
-def get_path(base_dir:Path, year:str, day:str) -> Path:
+def build_target_path(base_dir:Path, year:str, day:str) -> Path:
+    '''return path of aoc year/day exercise'''
     day = format_day(day)
     target_path = base_dir / year / day
     return target_path
 
 def load_module(target_path:Path, python_filename:str) -> types.ModuleType:
+    '''dynamically loads a module from path and filename'''
+
     file_path = target_path / python_filename
     module_name = file_path.stem
 
+    logger.debug(f'loading module file: {file_path}')
     spec = importlib.util.spec_from_file_location(module_name, file_path)
+    logger.debug(f'creating module fromo spec: {spec}')
     module = importlib.util.module_from_spec(spec)
+    logger.debug(f'executing module: {module}')
     spec.loader.exec_module(module)
     return module
 
 if __name__ == '__main__':
-    args = parse('run 2015 15'.split())
     # initialize logging
     logmanager.setup_logging('DEBUG', logfile='aoc.log')
     # set logger level to info for library modules
@@ -59,15 +67,20 @@ if __name__ == '__main__':
     modulelogging.set_logger_level_for_modules('DEBUG', setup, run)
     # get this module logger
     logger = logmanager.get_logger(__name__, 'DEBUG')
+
+    # args = parse('run 2015 15'.split())
+    args = parse()
     logger.info(args)
 
     CUR_DIR = Path(os.getcwd())
     SCRIPT_DIR = Path(sys.path[0])
 
-    target_path = get_path(SCRIPT_DIR, args.year, args.day)
+    target_path = build_target_path(SCRIPT_DIR, args.year, args.day)
     logger.info(f'{target_path = }')
     try:
+        # flag to check if everything ok inside try/finally
         problems = True
+
         logger.debug(f'{args.command = }')
         if args.command == 'setup':
             setup(
@@ -86,18 +99,23 @@ if __name__ == '__main__':
                     confirm=args.confirm
             )
     
-        if args.command == 'run':
+        elif args.command == 'run':
 
+            # load python solution script
             python_filename = args.pythonscript or 'main.py'
             logger.info(f'importing {target_path, python_filename}')
             module = load_module(target_path, python_filename)
             
+            # add separate logfile for imported module
             loggers = modulelogging.get_module_loggers(module)
-            for l in loggers:
-                logmanager.add_logfile(l, target_path / f'{args.year}{format_day(args.day)}.log')
-                l.propagate = False
+            logfile = target_path / f'{args.year}{format_day(args.day)}.log'
+            for _logger in loggers:
+                logmanager.add_logfile(_logger, logfile)
+                logmanager.add_stream(_logger)
+                # TODO: add format
+                _logger.propagate = False
             
-            logger.info('executing run.run')
+            logger.info('executing run.run with loaded module')
             run(
                     module,
                     target_path=target_path,
@@ -108,6 +126,9 @@ if __name__ == '__main__':
                     # expected2=None,
             )
             logger.info('executed run.run')
+        else:
+            raise NotImplementedError(f'command {args.command}')
+        
     except FileExistsError as fee:
         logger.error(f'{fee}')
     except FileNotFoundError as fnfe:
