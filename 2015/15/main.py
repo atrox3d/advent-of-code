@@ -89,6 +89,8 @@ def main(
             # expected2,
             # solve_first:bool=False, 
             # solve_second:bool=False, 
+            test_file:str=None,
+            expected=None
     ):
     logger.info('entering module.main')
     for id, (input_file, solution) in enumerate(zip(

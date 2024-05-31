@@ -22,7 +22,9 @@ def main(
             input_file2:str,
             # expected2,
             # solve_first:bool=False, 
-            # solve_second:bool=False, 
+            # solve_second:bool=False,
+            test_file:str=None,
+            expected=None
     ):
     for id, (input_file, solution) in enumerate(zip(
             (input_file1, input_file2), 
