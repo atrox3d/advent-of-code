@@ -10,11 +10,10 @@ logger = logging.getLogger(__name__)
 def run(
             module:types.ModuleType,
             target_path:Path|str, 
-            # python_filename:str,
             input1_filename:str,
-            # expected1,
             input2_filename:str,
-            # expected2,
+            test_filename:str=None,
+            expected=None
     ):
     logger.info(f'running {target_path!s}')
     if not target_path.exists():
@@ -28,9 +27,9 @@ def run(
         module.main(
                         target_path, 
                         input1_filename, 
-                        # expected1, 
                         input2_filename, 
-                        # expected2
+                        test_filename,
+                        expected
                     )
     except Exception as e:
         logger.error(e)

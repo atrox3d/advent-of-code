@@ -26,26 +26,22 @@ def main(
             test_file:str=None,
             expected=None
     ):
-    for id, (input_file, solution) in enumerate(zip(
-            (input_file1, input_file2), 
-            (solution1, solution2)
-        ), start=1):
-        input_path = path / input_file
-        input_value = load_input(input_path)
-        result = solution(input_value)
-        logger.info(f'solution {id}: {result = }')
-    exit()
-    # this is testing, not solving
-    # TODO: implement testing
-    for input_file, expected, solution in zip(
-            (input_file1, input_file2), 
-            (expected1, expected2),
-            (solution1, solution2)
-        ):
-        input_path = path / input_file
-        input_value = load_input(input_path)
-        result = solution(input_value)
-        if expected is not None:
-            assert result == expected, f'{result=} != {expected}'
-        else:
-            logger.info(f'{result = }')
+    logger.info('entering module.main')
+    if expected is not None:
+        test_path = path / test_file
+        logger.info(f'testing: file {test_path}')
+        logger.info(f'testing: {expected = }')
+        test_value = load_input(test_path)
+        result = solution(test_value)
+        assert result == expected, f'TEST FAILED: {result=} != {expected}'
+    else:
+        for id, (input_file, solution) in enumerate(zip(
+                (input_file1, input_file2), 
+                (solution1, solution2)
+            ), start=1):
+            input_path = path / input_file
+            logger.info(f'running: file {input_path}')
+            input_value = load_input(input_path)
+            result = solution(input_value)
+            logger.info(f'solution {id}: {result = }')
+        logger.info('exiting module.main')

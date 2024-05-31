@@ -32,6 +32,15 @@ def parse(*args):
     run.add_argument('-i1', '--input1')
     run.add_argument('-i2', '--input2')
 
+    run = subparsers.add_parser('test')
+    run.add_argument('year')
+    run.add_argument('day')
+    run.add_argument('-i1', '--input1')
+    run.add_argument('-i2', '--input2')
+    run.add_argument('-p', '--pythonscript')
+    run.add_argument('-t', '--testfile')
+    run.add_argument('-e', '--expected')
+
     return parser.parse_args(*args)
 
 def format_day(day) -> str:
@@ -99,7 +108,7 @@ if __name__ == '__main__':
                     confirm=args.confirm
             )
     
-        elif args.command == 'run':
+        elif args.command in ['run', 'test']:
 
             # load python solution script
             python_filename = args.pythonscript or 'main.py'
@@ -116,16 +125,26 @@ if __name__ == '__main__':
                 _logger.propagate = False
             
             logger.info('executing run.run with loaded module')
-            run(
-                    module,
-                    target_path=target_path,
-                    # python_filename=python_filename,
-                    input1_filename=args.input1 or 'input1.txt',
-                    # expected1=None,
-                    input2_filename=args.input2 or 'input2.txt',
-                    # expected2=None,
-            )
+            if args.command == 'run':
+                run(
+                        module,
+                        target_path=target_path,
+                        input1_filename=args.input1 or 'input1.txt',
+                        input2_filename=args.input2 or 'input2.txt',
+                        # test_filename=args.testfile or 'test.txt',
+                        # expected=args.expected
+                )
+            else:
+                run(
+                        module,
+                        target_path=target_path,
+                        input1_filename=args.input1 or 'input1.txt',
+                        input2_filename=args.input2 or 'input2.txt',
+                        test_filename=args.testfile or 'test.txt',
+                        expected=args.expected
+                )
             logger.info('executed run.run')
+            
         else:
             raise NotImplementedError(f'command {args.command}')
         
