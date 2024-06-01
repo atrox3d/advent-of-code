@@ -58,6 +58,8 @@ def load_module(target_path:Path, python_filename:str) -> types.ModuleType:
     file_path = target_path / python_filename
     module_name = file_path.stem
 
+    sys.path.insert(0, str(target_path))
+    
     logger.debug(f'loading module file: {file_path}')
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     logger.debug(f'creating module fromo spec: {spec}')
