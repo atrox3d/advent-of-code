@@ -8,6 +8,9 @@ import sys, os
 import re, json
 from pathlib import Path
 
+print(sys.path)
+import mixer
+
 logger = logging.getLogger(__name__)
 
 def load_ingredients(quiz_input:str) -> dict:
