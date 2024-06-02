@@ -9,21 +9,9 @@ import re, json
 from pathlib import Path
 
 print(sys.path)
-import mixer
+import ingredient as ing
 
 logger = logging.getLogger(__name__)
-
-def load_ingredients(quiz_input:str) -> dict:
-    import re
-    pattern = r'(?P<name>\w+): capacity (?P<capacity>-?\d+), '\
-            r'durability (?P<durability>-?\d+), flavor (?P<flavor>-?\d+), '\
-            r'texture (?P<texture>-?\d+), calories (?P<calories>-?\d+)'
-    ingredients = {}
-    for line in quiz_input.splitlines():
-        match = re.match(pattern, line)
-        temp = match.groupdict()
-        ingredients[temp['name']] = {k:v for k, v in temp.items() if k != 'name'}
-    return ingredients
 
 def solution1(quiz_input):
     '''
@@ -70,19 +58,28 @@ def solution1(quiz_input):
     '''
     logger.info(f'{quiz_input = !r}')
 
-    ingredients = load_ingredients(quiz_input)
+    ingredients = ing.load_ingredients(quiz_input)
     for line in json.dumps(ingredients, indent=2).splitlines():
         logger.info(line)
     
+    for mix in ing.get_mixes(10, 2):
+        print(mix)
+        for ingredient, qty in zip(ingredients.keys(), mix):
+            for name in ing.get_property_names(ingredients):
+                score = ing.get_property_score(name, qty, ingredients)
+                print(f'{ingredient}: {name}, ({qty}): {score}')
+        print()
+    
     return 62842880
 
-def solution2(quiz_input):
-    logger.info(f'{quiz_input = !r}')
-    return None
 
 def load_input(filename):
     with open(filename, 'r') as fp:
         return fp.read()
+
+def solution2(quiz_input):
+    logger.info(f'{quiz_input = !r}')
+    return None
 
 def main(
             path:Path|str,
