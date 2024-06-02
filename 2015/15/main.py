@@ -58,16 +58,19 @@ def solution1(quiz_input):
     '''
     logger.info(f'{quiz_input = !r}')
 
-    ingredients = ing.load_ingredients(quiz_input)
+    ingredients = ing.parse(quiz_input)
     for line in json.dumps(ingredients, indent=2).splitlines():
         logger.info(line)
     
     for mix in ing.get_mixes(10, 2):
         print(mix)
+        mix_score = 0
         for ingredient, qty in zip(ingredients.keys(), mix):
+            ingredient_score = 0
             for name in ing.get_property_names(ingredients):
                 score = ing.get_property_score(name, qty, ingredients)
-                print(f'{ingredient}: {name}, ({qty}): {score}')
+                ingredient_score += score * qty
+                print(f'{ingredient}: {name}, ({qty}): {score}, {ingredient_score}')
         print()
     
     return 62842880

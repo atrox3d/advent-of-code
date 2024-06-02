@@ -21,7 +21,7 @@ import itertools
     it would have instead become zero, causing the whole score to multiply to zero.
 
 '''
-def load_ingredients(quiz_input:str) -> dict:
+def parse(quiz_input:str) -> dict:
     import re
     pattern = r'(?P<name>\w+): capacity (?P<capacity>-?\d+), '\
             r'durability (?P<durability>-?\d+), flavor (?P<flavor>-?\d+), '\
