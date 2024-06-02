@@ -41,6 +41,6 @@ def get_mixes(spoons, ingredients):
 def get_property_names(ingredients:dict) -> list:
     return [name for name in list(ingredients.values())[0]]
 
-def get_property_score(property:str, qty:int, ingredients:dict) -> int:
-    score = sum([props[property] * qty  for name, props in ingredients.items()])
-    return score
+# def get_property_score(property:str, qty:int, ingredients:dict) -> int:
+    # score = sum([props[property] * qty  for name, props in ingredients.items()])
+    # return score
