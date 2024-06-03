@@ -62,18 +62,39 @@ def solution1(quiz_input):
     for line in json.dumps(ingredients, indent=2).splitlines():
         logger.info(line)
     
-    for mix in [(44, 56)]:  # test mix
-        # print(f'{mix = }')
-        mix_score = 0
-        for qty in mix:
-            # print(f'{qty = }')
-            for prop_name in ing.get_property_names(ingredients):
-                for ingredient_name in ingredients:
-                        print(f'{ingredient_name=}')
-                        for property in ingredients[ingredient_name].values():
-                            print(f'{ingredient=}')
-                            prop_value = ingredient[prop_name]
-                            print(f'{mix=}, {qty=}, {prop_name=}, {prop_value=}')
+    prop_names = ing.get_property_names(ingredients)
+    exclude = ['calories']
+    total = 1
+    for name in [name for name in prop_names if name not in exclude]:
+        subtotal = 0
+        for mix in [(44, 56)]:  # test mix
+            for qty, prop in zip(mix, ingredients.values()):
+                prop_val = int(prop[name])
+                prop_prod = qty * prop_val
+                subtotal += prop_prod
+                print(name, prop_val, qty, prop_prod)
+            print(name, subtotal)
+            if subtotal <= 0:
+                subtotal = 0
+            total *= subtotal
+        print(f'{total = }')
+    return total
+    # for mix in [(44, 56)]:  # test mix
+    #     # print(f'{mix = }')
+    #     mix_score = 0
+    #     for qty in mix:
+    #         # print(f'{qty = }')
+    #         for ingredient, properties in ingredients.items():
+
+                
+                
+            # for prop_name in ing.get_property_names(ingredients):
+            #     for ingredient_name in ingredients:
+            #             print(f'{ingredient_name=}')
+            #             for property in ingredients[ingredient_name].values():
+            #                 print(f'{ingredient=}')
+            #                 prop_value = ingredient[prop_name]
+            #                 print(f'{mix=}, {qty=}, {prop_name=}, {prop_value=}')
 
                 
 

@@ -39,6 +39,12 @@ def get_mixes(spoons, ingredients):
         yield mix
 
 def get_property_names(ingredients:dict) -> list:
+    names = []
+    for prop in ingredients.values():
+        for name in prop:
+            if name not in names:
+                names.append(name)
+    return names
     return [name for name in list(ingredients.values())[0]]
 
 # def get_property_score(property:str, qty:int, ingredients:dict) -> int:
