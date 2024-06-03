@@ -77,7 +77,7 @@ def solution1(quiz_input):
             if subtotal <= 0:
                 subtotal = 0
             total *= subtotal
-        print(f'{total = }')
+        print(f'{total = }\n')
     return total
     # for mix in [(44, 56)]:  # test mix
     #     # print(f'{mix = }')
