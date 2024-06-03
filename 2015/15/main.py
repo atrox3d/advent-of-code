@@ -79,49 +79,6 @@ def solution1(quiz_input):
             total *= subtotal
         print(f'{total = }\n')
     return total
-    # for mix in [(44, 56)]:  # test mix
-    #     # print(f'{mix = }')
-    #     mix_score = 0
-    #     for qty in mix:
-    #         # print(f'{qty = }')
-    #         for ingredient, properties in ingredients.items():
-
-                
-                
-            # for prop_name in ing.get_property_names(ingredients):
-            #     for ingredient_name in ingredients:
-            #             print(f'{ingredient_name=}')
-            #             for property in ingredients[ingredient_name].values():
-            #                 print(f'{ingredient=}')
-            #                 prop_value = ingredient[prop_name]
-            #                 print(f'{mix=}, {qty=}, {prop_name=}, {prop_value=}')
-
-                
-
-    if False:
-        # for mix in ing.get_mixes(44, 2):
-        for mix in [(44, 56)]:  # test mix
-            print(f'{mix = }')
-            mix_score = 0
-            for ingredient, qty in zip(ingredients, mix):
-                print(f'{ingredient, qty = }')
-                ingredient_score = cookie_score = 0
-                # fix computation for single ingredient
-                for prop_name in ing.get_property_names(ingredients):
-                    print(f'{prop_name = }')
-                    # score = ing.get_property_score(name, qty, ingredients)
-                    property_value = ingredients[ingredient][prop_name]
-                    print(f'{property_value = }')
-                    property_score = property_value * qty
-                    ingredient_score += property_score
-                    if ingredient_score < 0: ingredient_score = 0
-                    print(f'{ingredient}: {prop_name}, ({qty=}): {property_value=}, {ingredient_score=}')
-                    mix_score *= ingredient_score
-                print()
-            print(f'{mix_score = }')
-            print()
-    
-    return 62842880
 
 
 def load_input(filename):
