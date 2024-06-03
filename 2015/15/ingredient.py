@@ -21,7 +21,7 @@ import itertools
     it would have instead become zero, causing the whole score to multiply to zero.
 
 '''
-def parse(quiz_input:str) -> dict:
+def parse_ingredients(quiz_input:str) -> dict:
     import re
     pattern = r'(?P<name>\w+): capacity (?P<capacity>-?\d+), '\
             r'durability (?P<durability>-?\d+), flavor (?P<flavor>-?\d+), '\
@@ -38,13 +38,14 @@ def get_mixes(spoons, ingredients):
     for mix in itertools.product(range(1, spoons+1), repeat=ingredients):
         yield mix
 
-def get_property_names(ingredients:dict) -> list:
+def get_property_names(ingredients:dict, *exclude) -> list:
     names = []
     for prop in ingredients.values():
         for name in prop:
-            if name not in names:
+            if name not in names and name not in exclude:
                 names.append(name)
     return names
+    # or
     return [name for name in list(ingredients.values())[0]]
 
 # def get_property_score(property:str, qty:int, ingredients:dict) -> int:

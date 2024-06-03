@@ -58,14 +58,13 @@ def solution1(quiz_input):
     '''
     logger.info(f'{quiz_input = !r}')
 
-    ingredients = ing.parse(quiz_input)
+    ingredients = ing.parse_ingredients(quiz_input)
     for line in json.dumps(ingredients, indent=2).splitlines():
         logger.info(line)
     
-    prop_names = ing.get_property_names(ingredients)
-    exclude = ['calories']
+    # 1 is needed for product
     total = 1
-    for name in [name for name in prop_names if name not in exclude]:
+    for name in ing.get_property_names(ingredients, 'calories'):
         subtotal = 0
         for mix in [(44, 56)]:  # test mix
             for qty, prop in zip(mix, ingredients.values()):
