@@ -13,7 +13,7 @@ import ingredient as ing
 
 logger = logging.getLogger(__name__)
 
-def solution1(quiz_input):
+def solution1(quiz_input, test=False):
     '''
     --- Day 15: Science for Hungry People ---
     Today, you set out on the task of perfecting your milk-dunking cookie recipe. 
@@ -65,24 +65,28 @@ def solution1(quiz_input):
     # 1 is needed for product
     total = 1
     max = 0
+    n_spoons = 100
+    n_ingredients = 4
+    testmix = lambda x, y:[(44, 56)]
+    if test:
+        mixes = ing.get_mixes(spoons=n_spoons, ingredients=n_ingredients, func=testmix)
+    else:
+        mixes = ing.get_mixes(spoons=n_spoons, ingredients=n_ingredients)
+    
     for name in ing.get_property_names(ingredients, 'calories'):
         subtotal = 0
-        # for mix in ing.get_mixes(100, 4):
-        for mix in ing.get_mixes(100, 2, func=lambda x, y:[(44, 56)]):
-        # for mix in [(44, 56)]:  # test mix
-            for qty, prop in zip(mix, ingredients.values()):
-                prop_val = int(prop[name])
-                prop_prod = qty * prop_val
-                subtotal += prop_prod
-                # print(name, prop_val, qty, prop_prod)
-            # print(name, subtotal)
+        for mix in mixes:
+            prop_score = ing.get_prop_score(name, mix, ingredients)
+            subtotal += prop_score
             if subtotal <= 0:
                 subtotal = 0
             total *= subtotal
-            print(f'{mix, subtotal, total, max = }\n')
+            print(f'{mix=}, {prop_score=}, {subtotal=}, {total=}, {max=}\n')
+        # /for mix in mixes
         print(f'{total = }\n')
         max = total if total > max else max
         print(f'{max = }\n')
+    # /for name in ing.get_property_names(ingredients, 'calories')
     return max
 
 
@@ -125,7 +129,7 @@ def test(
     logger.info(f'testing: file {test_path}')
     logger.info(f'testing: {expected = }')
     test_value = load_input(test_path)
-    result = solution1(test_value)
+    result = solution1(test_value, test=True)
     result = str(result)
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
     logger.info('exiting module.test')

@@ -59,6 +59,14 @@ def get_property_names(ingredients:dict, *exclude) -> list:
 # def get_property_score(property:str, qty:int, ingredients:dict) -> int:
     # score = sum([props[property] * qty  for name, props in ingredients.items()])
     # return score
+def get_prop_score(name:str, mix:tuple, ingredients:dict) -> int:
+    score = 0
+    for qty, prop in zip(mix, ingredients.values()):
+        prop_val = int(prop[name])
+        prop_prod = qty * prop_val
+        score += prop_prod
+        print(f'{name=}, {prop_val=}, {qty=}, {prop_prod=}, {score=}')
+    return score
 
 if __name__ == '__main__':
     for mix in get_mixes(10, 4):
