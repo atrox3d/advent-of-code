@@ -32,11 +32,19 @@ def parse_ingredients(quiz_input:str) -> dict:
         temp = match.groupdict()
         ingredients[temp['name']] = {k:int(v) for k, v in temp.items() if k != 'name'}
     return ingredients
-
-def get_mixes(spoons, ingredients):
+    
+def get_mixes_product(spoons, ingredients, valid=lambda mix, spoons:sum(mix)==spoons):
     '''returns all possible combinations of n ingredients for a max total of spoons'''
-    for mix in itertools.product(range(1, spoons+1), repeat=ingredients):
-        yield mix
+    for mix in itertools.product(range(1, spoons), repeat=ingredients):
+        if valid(mix, spoons):
+            yield mix
+
+def get_mixes(spoons, ingredients, *args, func=get_mixes_product, **kwargs):
+    # print(spoons, ingredients)
+    # print(args)
+    # print(func)
+    # print(kwargs)
+    return func(spoons, ingredients)
 
 def get_property_names(ingredients:dict, *exclude) -> list:
     names = []
@@ -51,3 +59,7 @@ def get_property_names(ingredients:dict, *exclude) -> list:
 # def get_property_score(property:str, qty:int, ingredients:dict) -> int:
     # score = sum([props[property] * qty  for name, props in ingredients.items()])
     # return score
+
+if __name__ == '__main__':
+    for mix in get_mixes(10, 4):
+        print(mix)

@@ -64,20 +64,26 @@ def solution1(quiz_input):
     
     # 1 is needed for product
     total = 1
+    max = 0
     for name in ing.get_property_names(ingredients, 'calories'):
         subtotal = 0
-        for mix in [(44, 56)]:  # test mix
+        # for mix in ing.get_mixes(100, 4):
+        for mix in ing.get_mixes(100, 2, func=lambda x, y:[(44, 56)]):
+        # for mix in [(44, 56)]:  # test mix
             for qty, prop in zip(mix, ingredients.values()):
                 prop_val = int(prop[name])
                 prop_prod = qty * prop_val
                 subtotal += prop_prod
-                print(name, prop_val, qty, prop_prod)
-            print(name, subtotal)
+                # print(name, prop_val, qty, prop_prod)
+            # print(name, subtotal)
             if subtotal <= 0:
                 subtotal = 0
             total *= subtotal
+            print(f'{mix, subtotal, total, max = }\n')
         print(f'{total = }\n')
-    return total
+        max = total if total > max else max
+        print(f'{max = }\n')
+    return max
 
 
 def load_input(filename):
