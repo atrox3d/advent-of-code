@@ -47,20 +47,41 @@ import logging
 import re
 logger = logging.getLogger(__name__)
 
-def parse_aunts(quiz_input:str) -> dict:
+from auntsue import AuntSue
+
+def parse_aunts_to_dict(quiz_input:str) -> dict:
+    aunts = {}
+    # aunt_pattern = r'^Sue (?P<id>\d+): (?P<properties>.+)'
+    # props_pattern = r'(?P<thing>\w+): (?P<qty>\d+)'
+    for line in quiz_input.splitlines():
+        # result = re.match(aunt_pattern, line)
+        # aunt_id, props = result.groupdict().values()
+        # aunts[aunt_id] = {}
+        # for prop in props.split(', '):
+        #     thing, qty = re.match(props_pattern, prop).groupdict().values()
+        #     aunts[aunt_id].update({thing:int(qty)})
+        aunt = AuntSue.from_string(line)
+        aunts[aunt.id] = aunt
+    return aunts
+
+def parse_aunts_oop(quiz_input:str) -> dict:
     aunts = {}
     aunt_pattern = r'^Sue (?P<id>\d+): (?P<properties>.+)'
     props_pattern = r'(?P<thing>\w+): (?P<qty>\d+)'
     for line in quiz_input.splitlines():
         result = re.match(aunt_pattern, line)
         aunt_id, props = result.groupdict().values()
-        aunts[aunt_id] = {}
+        aunts[aunt_id] = AuntSue(aunt_id)
         for prop in props.split(', '):
             thing, qty = re.match(props_pattern, prop).groupdict().values()
-            aunts[aunt_id].update({thing:int(qty)})
+            setattr(aunts[aunt_id], thing, int(qty))
     return aunts
 
-def get_tape() -> dict:
+def parse_aunts(quiz_input:str) -> dict:
+    return parse_aunts_oop(quiz_input)
+
+
+def get_tape_dict() -> dict:
     return {
         'children': 3,
         'cats': 7,
@@ -74,11 +95,28 @@ def get_tape() -> dict:
         'perfumes': 1,
     }
 
+def get_tape_oop() -> AuntSue:
+    aunt = AuntSue(None)
+    for k, v in get_tape_dict().items():
+        setattr(aunt, k, v)
+    return aunt
+
+def get_tape() -> AuntSue | dict:
+    return get_tape_oop()
 
 def solution1(quiz_input):
     aunts = parse_aunts(quiz_input)
-    for auntid, things in aunts.items():
-        print(auntid, things)
+    tape = get_tape()
+
+    for auntid, aunt in aunts.items():
+        print(auntid, aunt)
+        for k, v in vars(aunt):
+            if v is not None and getattr(tape, k) == v:
+                continue
+            else:
+                break
+
+    
 
 def solution2(quiz_input):
     # print(f'{quiz_input = !r}')
