@@ -58,33 +58,20 @@ def solution1(quiz_input, test=False):
     '''
     logger.info(f'{quiz_input = !r}')
 
-    ingredients = ing.parse_ingredients(quiz_input)
-    for line in json.dumps(ingredients, indent=2).splitlines():
+    ingredients_properties = ing.parse_ingredients(quiz_input)
+    for line in json.dumps(ingredients_properties, indent=2).splitlines():
         logger.info(line)
     
-    n_spoons = 100
-    n_ingredients = 4
+    spoons = 100
+    ingredients = 4
     testmix = lambda x, y:[(44, 56)]
     testmix = lambda x, y:[(45, 55), (44, 56), (46, 54)]
     if test:
-        mixes = ing.get_mixes(spoons=n_spoons, ingredients=n_ingredients, func=testmix)
+        mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients, func=testmix)
     else:
-        mixes = ing.get_mixes(spoons=n_spoons, ingredients=n_ingredients)
-    
-    max = 0
-    for mix in mixes:
-        # 1 is needed for product
-        total = 1
-        for property_name in ing.get_property_names(ingredients, 'calories'):
-            property_score = ing.get_property_score(property_name, mix, ingredients)
-            property_score = 0 if property_score < 0 else property_score
-            total *= property_score
-            print(f'{mix=}, {property_score=}, {total=}, {max=}\n')
-        # /for property_name in ing.get_property_names(ingredients, 'calories'):
-        max = total if total > max else max
-        print(f'{total = }, {max = }\n')
-    # /for mix in mixes
-    return max # 222870
+        mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients)
+
+    return ing.get_max_score(mixes, ingredients_properties)
 
 
 def load_input(filename):
