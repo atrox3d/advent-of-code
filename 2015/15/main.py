@@ -75,7 +75,7 @@ def solution1(quiz_input, test=False):
     else:
         mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients)
 
-    return ing.get_max_score(mixes, ingredients_properties)
+    return ing.get_max_score(mixes, ingredients_properties, 'calories')
 
 
 def solution2(quiz_input, test=False):

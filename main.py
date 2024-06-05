@@ -79,8 +79,8 @@ if __name__ == '__main__':
     # get this module logger
     logger = logmanager.get_logger(__name__, 'DEBUG')
 
-    # args = parse('run 2015 15'.split())
     args = parse()
+    # args = parse('test 2015 15 1 -e 62842880'.split())
     logger.info(args)
 
     CUR_DIR = Path(os.getcwd())
