@@ -63,30 +63,27 @@ def solution1(quiz_input, test=False):
         logger.info(line)
     
     # 1 is needed for product
-    total = 1
-    max = 0
     n_spoons = 100
     n_ingredients = 4
     testmix = lambda x, y:[(44, 56)]
+    testmix = lambda x, y:[(45, 55), (44, 56), (46, 54)]
     if test:
         mixes = ing.get_mixes(spoons=n_spoons, ingredients=n_ingredients, func=testmix)
     else:
         mixes = ing.get_mixes(spoons=n_spoons, ingredients=n_ingredients)
     
-    for name in ing.get_property_names(ingredients, 'calories'):
-        subtotal = 0
-        for mix in mixes:
-            prop_score = ing.get_prop_score(name, mix, ingredients)
-            subtotal += prop_score
-            if subtotal <= 0:
-                subtotal = 0
-            total *= subtotal
-            print(f'{mix=}, {prop_score=}, {subtotal=}, {total=}, {max=}\n')
-        # /for mix in mixes
-        print(f'{total = }\n')
+    max = 0
+    for mix in mixes:
+        total = 1
+        for property_name in ing.get_property_names(ingredients, 'calories'):
+            property_score = ing.get_property_score(property_name, mix, ingredients)
+            property_score = 0 if property_score < 0 else property_score
+            total *= property_score
+            print(f'{mix=}, {property_score=}, {total=}, {max=}\n')
+        # /for property_name in ing.get_property_names(ingredients, 'calories'):
         max = total if total > max else max
-        print(f'{max = }\n')
-    # /for name in ing.get_property_names(ingredients, 'calories')
+        print(f'{total = }, {max = }\n')
+    # /for mix in mixes
     return max
 
 
