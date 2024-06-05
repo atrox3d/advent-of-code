@@ -61,20 +61,24 @@ def get_property_score(property_name:str, mix:tuple, ingredients:dict, print_val
             print(f'get_property_score: {property_name=}, {property_value=}, {ingredient_quantity=}, {property_product=}, {property_score=}')
     return property_score
 
-def get_max_score(mixes:list, ingredients:dict, *excluded):
-    max = 0
+def get_scores(mixes:list, ingredients:dict, *exclude):
     for mix in mixes:
         # 1 is needed for product
         total = 1
-        for property_name in get_property_names(ingredients, *excluded):
+        for property_name in get_property_names(ingredients, *exclude):
             property_score = get_property_score(property_name, mix, ingredients)
             property_score = 0 if property_score < 0 else property_score
             total *= property_score
-            print(f'{excluded=}, {mix=}, {property_score=}, {total=}, {max=}\n')
+            print(f'{exclude=}, {mix=}, {property_score=}, {total=}, {max=}\n')
         # /for property_name in ing.get_property_names(ingredients, 'calories'):
+        yield total
+    # /for mix in mixes
+
+def get_max_score(mixes:list, ingredients:dict, *exclude):
+    max = 0
+    for total in get_scores(mixes, ingredients, *exclude):
         max = total if total > max else max
         print(f'{total = }, {max = }\n')
-    # /for mix in mixes
     return max # 222870
 
 if __name__ == '__main__':
