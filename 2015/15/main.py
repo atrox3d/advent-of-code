@@ -110,11 +110,20 @@ def solution2(quiz_input, test=False):
         
         # simulate preceding and subsequent values
         testmix = lambda x, y:[(45, 55), (44, 56), (46, 54)]    
+        testmix = lambda x, y:[(39, 61), (40, 60), (41, 59)]    
         
         mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients, func=testmix)
     else:
         mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients)
-    return ing.get_max_score(mixes, ingredients_properties)
+    # return ing.get_max_score(mixes, ingredients_properties)
+    best_diet_cookies = []
+    for total, calories in ing.find_calories(mixes, ingredients_properties, 500):
+        # print(f'{total=}, {calories=}')
+        best_diet_cookies.append({total:calories})
+    print(best_diet_cookies)
+
+    best = max(total for result in best_diet_cookies for total in result)
+    print(f'{best=}')
 
 def load_input(filename):
     with open(filename, 'r') as fp:
