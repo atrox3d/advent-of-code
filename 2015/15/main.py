@@ -84,7 +84,7 @@ def solution1(quiz_input, test=False):
         max = total if total > max else max
         print(f'{total = }, {max = }\n')
     # /for mix in mixes
-    return max
+    return max # 222870
 
 
 def load_input(filename):
