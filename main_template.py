@@ -19,8 +19,6 @@ def main(
             path:Path|str,
             input_file1:str,
             input_file2:str,
-            # test_file:str=None,
-            # expected=None
     ):
     logger.info('entering module.main')
     for id, (input_file, solution) in enumerate(zip(
@@ -36,8 +34,7 @@ def main(
 
 def test(
             path:Path|str,
-            # input_file1:str,
-            # input_file2:str,
+            part,
             test_file:str=None,
             expected=None
     ):

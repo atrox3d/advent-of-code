@@ -12,6 +12,7 @@ def test(
             target_path:Path|str, 
             # input1_filename:str,
             # input2_filename:str,
+            part,
             test_filename:str=None,
             expected=None
     ):
@@ -25,7 +26,8 @@ def test(
     logger.info('running module.test')
     try:
         module.test(
-                        target_path, 
+                        target_path,
+                        part,
                         # input1_filename, 
                         # input2_filename, 
                         test_filename,

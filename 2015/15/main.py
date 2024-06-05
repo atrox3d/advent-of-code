@@ -78,13 +78,47 @@ def solution1(quiz_input, test=False):
     return ing.get_max_score(mixes, ingredients_properties)
 
 
+def solution2(quiz_input, test=False):
+    '''
+    --- Part Two ---
+    Your cookie recipe becomes wildly popular! Someone asks if you can make another recipe that 
+    has exactly 500 calories per cookie (so they can use it as a meal replacement). 
+    
+    Keep the rest of your award-winning process the same 
+            (100 teaspoons, same ingredients, same scoring system).
+
+    For example, given the ingredients above, if you had instead selected 
+            40 teaspoons of butterscotch and 60 teaspoons of cinnamon (which still adds to 100), 
+    the total calorie count would be 
+            40*8 + 60*3 = 500. The total score would go down, though: only 57600000, 
+    the best you can do in such trying circumstances.
+
+    Given the ingredients in your kitchen and their properties, 
+    what is the total score of the highest-scoring cookie you can make with a calorie total of 500?    
+    '''
+    logger.info(f'{quiz_input = !r}')
+
+    ingredients_properties = ing.parse_ingredients(quiz_input)
+    for line in json.dumps(ingredients_properties, indent=2).splitlines():
+        logger.info(line)
+    
+    spoons = 100
+    ingredients = 4
+    if test:
+        # values of the aoc example test
+        # testmix = lambda x, y:[(44, 56)]                      
+        
+        # simulate preceding and subsequent values
+        testmix = lambda x, y:[(45, 55), (44, 56), (46, 54)]    
+        
+        mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients, func=testmix)
+    else:
+        mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients)
+    return ing.get_max_score(mixes, ingredients_properties)
+
 def load_input(filename):
     with open(filename, 'r') as fp:
         return fp.read()
-
-def solution2(quiz_input):
-    logger.info(f'{quiz_input = !r}')
-    return None
 
 def main(
             path:Path|str,
@@ -105,6 +139,7 @@ def main(
 
 def test(
             path:Path|str,
+            part,
             test_file:str=None,
             expected=None
     ):
@@ -113,7 +148,8 @@ def test(
     logger.info(f'testing: file {test_path}')
     logger.info(f'testing: {expected = }')
     test_value = load_input(test_path)
-    result = solution1(test_value, test=True)
+    solution = globals()[f'solution{part}']
+    result = solution(test_value, test=True)
     result = str(result)
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
     logger.info('exiting module.test')

@@ -33,12 +33,13 @@ def parse(*args):
     run.add_argument('-i1', '--input1')
     run.add_argument('-i2', '--input2')
 
-    run = subparsers.add_parser('test')
-    run.add_argument('year')
-    run.add_argument('day')
-    run.add_argument('-p', '--pythonscript')
-    run.add_argument('-t', '--testfile')
-    run.add_argument('-e', '--expected', required=True)
+    test = subparsers.add_parser('test')
+    test.add_argument('year')
+    test.add_argument('day')
+    test.add_argument('part')
+    test.add_argument('-p', '--pythonscript')
+    test.add_argument('-t', '--testfile')
+    test.add_argument('-e', '--expected', required=True)
 
     return parser.parse_args(*args)
 
@@ -140,6 +141,7 @@ if __name__ == '__main__':
                 test(
                         module,
                         target_path=target_path,
+                        part=args.part,
                         test_filename=args.testfile or 'test.txt',
                         expected=args.expected
                 )
