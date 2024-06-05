@@ -56,3 +56,6 @@ def test(
     result = str(result)
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
     logger.info('exiting module.test')
+
+if __name__ == '__main__':
+    print('please run root main.py')

@@ -8,7 +8,7 @@ import sys, os
 import re, json
 from pathlib import Path
 
-print(sys.path)
+# print(sys.path)
 import ingredient as ing
 
 logger = logging.getLogger(__name__)
@@ -171,3 +171,6 @@ def test(
     result = str(result)
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
     logger.info('exiting module.test')
+
+if __name__ == '__main__':
+    print('please run root main.py')
