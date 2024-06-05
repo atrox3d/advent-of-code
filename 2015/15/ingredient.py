@@ -40,10 +40,6 @@ def get_mixes_product(spoons, ingredients, valid=lambda mix, spoons:sum(mix)==sp
             yield mix
 
 def get_mixes(spoons, ingredients, *args, func=get_mixes_product, **kwargs):
-    # print(spoons, ingredients)
-    # print(args)
-    # print(func)
-    # print(kwargs)
     return func(spoons, ingredients)
 
 def get_property_names(ingredients:dict, *exclude) -> list:
@@ -53,20 +49,16 @@ def get_property_names(ingredients:dict, *exclude) -> list:
             if name not in names and name not in exclude:
                 names.append(name)
     return names
-    # or
-    return [name for name in list(ingredients.values())[0]]
 
-# def get_property_score(property:str, qty:int, ingredients:dict) -> int:
-    # score = sum([props[property] * qty  for name, props in ingredients.items()])
-    # return score
-def get_property_score(property_name:str, mix:tuple, ingredients:dict) -> int:
+def get_property_score(property_name:str, mix:tuple, ingredients:dict, print_values=False) -> int:
     '''sum of product of quantity and property value of each ingredient'''
     property_score = 0
     for ingredient_quantity, properties in zip(mix, ingredients.values()):
         property_value = int(properties[property_name])
         property_product = ingredient_quantity * property_value
         property_score += property_product
-        print(f'get_property_score: {property_name=}, {property_value=}, {ingredient_quantity=}, {property_product=}, {property_score=}')
+        if print_values:
+            print(f'get_property_score: {property_name=}, {property_value=}, {ingredient_quantity=}, {property_product=}, {property_score=}')
     return property_score
 
 if __name__ == '__main__':

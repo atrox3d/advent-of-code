@@ -62,7 +62,6 @@ def solution1(quiz_input, test=False):
     for line in json.dumps(ingredients, indent=2).splitlines():
         logger.info(line)
     
-    # 1 is needed for product
     n_spoons = 100
     n_ingredients = 4
     testmix = lambda x, y:[(44, 56)]
@@ -74,6 +73,7 @@ def solution1(quiz_input, test=False):
     
     max = 0
     for mix in mixes:
+        # 1 is needed for product
         total = 1
         for property_name in ing.get_property_names(ingredients, 'calories'):
             property_score = ing.get_property_score(property_name, mix, ingredients)
@@ -99,8 +99,6 @@ def main(
             path:Path|str,
             input_file1:str,
             input_file2:str,
-            # test_file:str=None,
-            # expected=None
     ):
     logger.info('entering module.main')
     for id, (input_file, solution) in enumerate(zip(
@@ -116,8 +114,6 @@ def main(
 
 def test(
             path:Path|str,
-            # input_file1:str,
-            # input_file2:str,
             test_file:str=None,
             expected=None
     ):
