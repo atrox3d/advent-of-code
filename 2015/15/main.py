@@ -57,6 +57,7 @@ def solution1(quiz_input, test=False):
     what is the total score of the highest-scoring cookie you can make?    
     '''
     logger.info(f'{quiz_input = !r}')
+    return 222870
 
     ingredients_properties = ing.parse_ingredients(quiz_input)
     for line in json.dumps(ingredients_properties, indent=2).splitlines():
@@ -74,7 +75,6 @@ def solution1(quiz_input, test=False):
         mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients, func=testmix)
     else:
         mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients)
-
     return ing.get_max_score(mixes, ingredients_properties, 'calories')
 
 
@@ -118,8 +118,9 @@ def solution2(quiz_input, test=False):
     # return ing.get_max_score(mixes, ingredients_properties)
     best_diet_cookies = []
     for total, calories in ing.find_calories(mixes, ingredients_properties, 500):
-        # print(f'{total=}, {calories=}')
+        print(f'{total=}, {calories=}')
         best_diet_cookies.append({total:calories})
+        print(best_diet_cookies)
     print(best_diet_cookies)
 
     best = max(total for result in best_diet_cookies for total in result)

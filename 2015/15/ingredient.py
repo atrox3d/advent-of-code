@@ -64,6 +64,7 @@ def get_property_score(property_name:str, mix:tuple, ingredients:dict, print_val
 def find_calories(mixes:list, ingredients:dict, target):
     for mix in mixes:
         calories = get_property_score('calories', mix, ingredients)
+        # print(mix, calories)
         if calories == target:
             # 1 is needed for product
             total = 1
@@ -71,12 +72,11 @@ def find_calories(mixes:list, ingredients:dict, target):
                 property_score = get_property_score(property_name, mix, ingredients)
                 property_score = 0 if property_score < 0 else property_score
                 total *= property_score
-                print(f'{mix=}, {property_score=}, {total=}, {max=}\n')
+                # print(f'{mix=}, {property_score=}, {total=}, {max=}\n')
             # /for property_name in ing.get_property_names(ingredients, 'calories'):
-            yield total, calories
+            if total > 0:
+                yield total, calories
     # /for mix in mixes
-
-
 
 def get_scores(mixes:list, ingredients:dict, *exclude):
     for mix in mixes:
