@@ -32,6 +32,7 @@ def main(
         logger.info(f'solution {id}: {result = }')
     logger.info('exiting module.main')
 
+class SolutionNotFoundError(Exception): pass
 def test(
             path:Path|str,
             part,
@@ -40,10 +41,18 @@ def test(
     ):
     logger.info('entering module.test')
     test_path = path / test_file
+
     logger.info(f'testing: file {test_path}')
     logger.info(f'testing: {expected = }')
+    
     test_value = load_input(test_path)
-    result = solution1(test_value)
+    try:
+        solution_name = f'solution{part}'
+        solution = globals()[solution_name]
+    except KeyError as ke:
+        raise SolutionNotFoundError(f'function {solution_name} not found')
+    
+    result = solution(test_value, test=True)
     result = str(result)
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
     logger.info('exiting module.test')
