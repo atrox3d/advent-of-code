@@ -64,9 +64,13 @@ def solution1(quiz_input, test=False):
     
     spoons = 100
     ingredients = 4
-    testmix = lambda x, y:[(44, 56)]
-    testmix = lambda x, y:[(45, 55), (44, 56), (46, 54)]
     if test:
+        # values of the aoc example test
+        # testmix = lambda x, y:[(44, 56)]                      
+        
+        # simulate preceding and subsequent values
+        testmix = lambda x, y:[(45, 55), (44, 56), (46, 54)]    
+        
         mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients, func=testmix)
     else:
         mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients)
