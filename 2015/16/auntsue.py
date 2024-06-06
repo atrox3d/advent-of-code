@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, asdict
 import re
 
 @dataclass
@@ -29,4 +29,22 @@ class AuntSue:
                 thing, qty = re.match(props_pattern, prop).groupdict().values()
                 setattr(aunt, thing, int(qty))
 
+    def __eq__(self, value: object) -> bool:
+        for name, this, other in zip(asdict(self), asdict(self).values(), asdict(value).values()):
+            # print(name, this, other)
+            if name == 'id':
+                continue
+            if this != other and this is not None:
+                print(self.id, f'{name}: {this} != {other}')
+                break
+        else:
+            return True
+        return False
+
+
+
+if __name__ == '__main__':
+    a1 = AuntSue(1, cats=2)
+    a2 = AuntSue(2, cats=2)
+    print(a1==a2)
 

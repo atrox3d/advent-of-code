@@ -109,13 +109,9 @@ def solution1(quiz_input):
     tape = get_tape()
 
     for auntid, aunt in aunts.items():
-        print(auntid, aunt)
-        for k, v in vars(aunt):
-            if v is not None and getattr(tape, k) == v:
-                continue
-            else:
-                break
-
+        # print(auntid, aunt)
+        
+        print(auntid, aunt == tape, '<---------- AUNT SUE!!!!' if aunt==tape else '')
     
 
 def solution2(quiz_input):
