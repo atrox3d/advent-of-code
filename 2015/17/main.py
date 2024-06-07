@@ -11,15 +11,22 @@ logger = logging.getLogger(__name__)
 
 def solution1(quiz_input):
     print(f'{quiz_input = !r}')
-    return None
+
+    values = load_array(quiz_input)
+    print(values)
 
 def solution2(quiz_input):
     print(f'{quiz_input = !r}')
-    return None
+
+    values = load_array(quiz_input)
+    print(values)
 
 def load_input(filename):
     with open(filename, 'r') as fp:
         return fp.read()
+
+def load_array(quiz_input:str) ->list[int]:
+    return [int(line) for line in quiz_input.splitlines()]
 
 def main(
             path:Path|str,
