@@ -35,12 +35,56 @@ class AuntSue:
             if name == 'id':
                 continue
             if this != other and this is not None:
-                print(self.id, f'{name}: {this} != {other}')
+                # print(self.id, f'{name}: {this} != {other}')
                 break
         else:
             return True
         return False
 
+class AuntSue2(AuntSue):
+    '''
+    the cats and trees readings indicates that there are greater than that many 
+    
+    the pomeranians and goldfish readings indicate that there are fewer than that many 
+    '''
+    def __eq__(self, value: object) -> bool:
+
+        #   loop through each attribute 
+        for name, this, tape in zip(asdict(self), asdict(self).values(), asdict(value).values()):
+            
+            if name == 'id':            # ignore id
+                continue
+
+
+            if this is None:            # everything else can be None
+                continue
+
+            # the cats and trees readings indicates that there are greater than that many 
+            if name in ['cats', 'trees']:
+                if this >= tape:
+                    # print(f'{self.id}: cats, trees >= tape')
+                    continue
+                else:
+                    break
+
+            # the pomeranians and goldfish readings indicate that there are fewer than that many 
+            if name in ['pomeranians', 'goldfish']:
+                if this <= tape:
+                    # print(f'{self.id}: pomeridians, goldfish <= tape')
+                    continue
+                else:
+                    break
+            else:
+                if this != tape:        # if not it must match
+                    break
+
+        else:
+            print(self.id, f'{self}')   # found
+            return True
+        
+        # print(self.id, f'{self}')     # not found
+        return False
+    
 
 
 if __name__ == '__main__':

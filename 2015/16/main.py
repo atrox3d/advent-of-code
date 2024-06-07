@@ -39,6 +39,22 @@ perfumes: 1
 You make a list of the things you can remember about each Aunt Sue. Things missing from your list aren't zero - you simply don't remember the value.
 
 What is the number of the Sue that got you the gift?
+
+
+--- Part Two ---
+As you're about to send the thank you note, something in the MFCSAM's instructions 
+catches your eye. 
+Apparently, it has an outdated retroencabulator, and so the output from the machine 
+isn't exact values - some of them indicate ranges.
+
+In particular, 
+    the cats and trees readings indicates that there are greater than that many 
+    (due to the unpredictable nuclear decay of cat dander and tree pollen), 
+    while 
+    the pomeranians and goldfish readings indicate that there are fewer than that many 
+    (due to the modial interaction of magnetoreluctance).
+
+What is the number of the real Aunt Sue?
 '''
 
 
@@ -47,7 +63,7 @@ import logging
 import re
 logger = logging.getLogger(__name__)
 
-from auntsue import AuntSue
+from auntsue import AuntSue, AuntSue2
 
 def parse_aunts_to_dict(quiz_input:str) -> dict:
     aunts = {}
@@ -64,21 +80,22 @@ def parse_aunts_to_dict(quiz_input:str) -> dict:
         aunts[aunt.id] = aunt
     return aunts
 
-def parse_aunts_oop(quiz_input:str) -> dict:
+def parse_aunts_oop(quiz_input:str, aunt_class) -> dict:
     aunts = {}
     aunt_pattern = r'^Sue (?P<id>\d+): (?P<properties>.+)'
     props_pattern = r'(?P<thing>\w+): (?P<qty>\d+)'
     for line in quiz_input.splitlines():
         result = re.match(aunt_pattern, line)
         aunt_id, props = result.groupdict().values()
-        aunts[aunt_id] = AuntSue(aunt_id)
+        aunt_id = int(aunt_id)
+        aunts[aunt_id] = aunt_class(aunt_id)
         for prop in props.split(', '):
             thing, qty = re.match(props_pattern, prop).groupdict().values()
             setattr(aunts[aunt_id], thing, int(qty))
     return aunts
 
-def parse_aunts(quiz_input:str) -> dict:
-    return parse_aunts_oop(quiz_input)
+def parse_aunts(quiz_input:str, aunt_class) -> dict:
+    return parse_aunts_oop(quiz_input, aunt_class)
 
 
 def get_tape_dict() -> dict:
@@ -105,18 +122,29 @@ def get_tape() -> AuntSue | dict:
     return get_tape_oop()
 
 def solution1(quiz_input):
-    aunts = parse_aunts(quiz_input)
+    aunts = parse_aunts(quiz_input, AuntSue)
     tape = get_tape()
 
     for auntid, aunt in aunts.items():
         # print(auntid, aunt)
         
-        print(auntid, aunt == tape, '<---------- AUNT SUE!!!!' if aunt==tape else '')
+        if aunt==tape:
+            print(auntid, aunt == tape, '<---------- AUNT SUE!!!!')
+            return aunt.id
     
 
 def solution2(quiz_input):
-    # print(f'{quiz_input = !r}')
-    return None
+    # return None
+    aunts = parse_aunts(quiz_input, AuntSue2)
+    tape = get_tape()
+
+    for auntid, aunt in aunts.items():
+        # if auntid > 250:
+            # break
+        # print(auntid, aunt)
+        if aunt==tape:
+            print(auntid, aunt == tape, '<---------- AUNT SUE!!!!')
+            return aunt.id
 
 def load_input(filename):
     with open(filename, 'r') as fp:
@@ -137,6 +165,7 @@ def main(
         input_value = load_input(input_path)
         result = solution(input_value)
         logger.info(f'solution {id}: {result = }')
+        print()
     logger.info('exiting module.main')
 
 class SolutionNotFoundError(Exception): pass
