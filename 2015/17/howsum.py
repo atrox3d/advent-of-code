@@ -22,12 +22,12 @@ def howsum(targetsum: int, numbers: list, memo=None) -> list:
     '''
     memo = {} if memo is None else memo # init memo dict
     try:
-        return memo[targetsum]          # doubt 🤨
+        return memo[targetsum]          # try to return cached result
     except Exception as e: pass
 
     if targetsum == 0: return []        # job is complete
 
-    if targetsum < 0: return None       # failes
+    if targetsum < 0: return None       # failed
     
     for num in numbers:
         ret = howsum(targetsum-num, numbers, memo)
@@ -45,18 +45,21 @@ def howsum(targetsum: int, numbers: list, memo=None) -> list:
 if __name__ == '__main__':
 
     data = (
-        (7, [2, 3]),
-        (7, [5, 3, 4, 7]),
-        (7, [2, 4]),
-        (8, [2, 3, 5]),
-        (300, [7, 14]),
+        (25, [20, 15, 10, 5, 5]),
+        # (7, [2, 3]),
+        # (7, [5, 3, 4, 7]),
+        # (7, [2, 4]),
+        # (8, [2, 3, 5]),
+        # (300, [7, 14]),
     )
 
     for targetsum, numbers in data:
         outer_memo = {}
+        print(f'INPUT | {targetsum = }')
+        print(f'INPUT | {numbers = }')
         result = howsum(targetsum, numbers, outer_memo)
-        print(f'{targetsum = }')
-        print(f'{numbers = }')
+
         print(f'{result = }')
         print(f'{outer_memo = }')
         assert result is None or sum(result) == targetsum
+        print()
