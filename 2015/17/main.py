@@ -26,11 +26,29 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+example = 25, [20, 15, 10, 5, 5]
+
+def eggnog(total:int, containers:list[int], portions=None) -> list[int]:
+    print(total, containers, portions)
+    if total < 0:
+        return None
+    
+    if total == 0:
+        return []
+    
+    portions = portions or []
+    result =  eggnog(total - containers[0], containers[1:], portions)
+    if result:
+        portions.extend(result)
+    return portions
+
 def solution1(quiz_input):
     print(f'{quiz_input = !r}')
 
     values = load_array(quiz_input)
-    print(values)
+    result = eggnog(*example)
+    print(result)
+
 
 def solution2(quiz_input):
     print(f'{quiz_input = !r}')
@@ -60,6 +78,8 @@ def main(
         input_value = load_input(input_path)
         result = solution(input_value)
         logger.info(f'solution {id}: {result = }')
+        print()
+        print()
     logger.info('exiting module.main')
 
 class SolutionNotFoundError(Exception): pass
