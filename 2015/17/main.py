@@ -24,31 +24,19 @@ can exactly fit all 150 liters of eggnog?
 from pathlib import Path
 import logging
 
+import eggnog
+
 logger = logging.getLogger(__name__)
 
 example = 25, [20, 15, 10, 5, 5]
-
-def eggnog(total:int, containers:list[int], portions=None) -> list[int]:
-    print(total, containers, portions)
-
-    if total < 0: return None
-    
-    if total == 0: return []
-    
-    for idx, num in enumerate(containers):
-        remainder = total - num
-        delta = containers[0:idx] + containers[idx+1:]
-        result = eggnog(remainder, delta)
-        if result:
-            return [*result, num]
     
     
 def solution1(quiz_input):
     print(f'{quiz_input = !r}')
 
     values = load_array(quiz_input)
-    result = eggnog(*example)
-    print(result)
+    result = eggnog.subset_sum(150, values)
+    return len(result)
 
 
 def solution2(quiz_input):
