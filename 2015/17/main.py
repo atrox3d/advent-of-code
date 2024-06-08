@@ -30,18 +30,19 @@ example = 25, [20, 15, 10, 5, 5]
 
 def eggnog(total:int, containers:list[int], portions=None) -> list[int]:
     print(total, containers, portions)
-    if total < 0:
-        return None
-    
-    if total == 0:
-        return []
-    
-    portions = portions or []
-    result =  eggnog(total - containers[0], containers[1:], portions)
-    if result:
-        portions.extend(result)
-    return portions
 
+    if total < 0: return None
+    
+    if total == 0: return []
+    
+    for idx, num in enumerate(containers):
+        remainder = total - num
+        delta = containers[0:idx] + containers[idx+1:]
+        result = eggnog(remainder, delta)
+        if result:
+            return [*result, num]
+    
+    
 def solution1(quiz_input):
     print(f'{quiz_input = !r}')
 

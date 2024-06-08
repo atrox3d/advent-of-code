@@ -31,6 +31,7 @@ def bestsum(targetsum: int, numbers: list, memo=None) -> list:
     for num in numbers:
         remainder = targetsum - num
         result = bestsum(remainder, numbers, memo)
+        # if targetsum wasn not < 0
         if result is not None:
             combo = [*result, num]
             if shortest is None or len(combo) < len(shortest):
