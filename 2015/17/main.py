@@ -18,6 +18,16 @@ If you need to store 25 liters, there are four ways to do it:
 Filling all containers entirely, how many different combinations of containers 
 can exactly fit all 150 liters of eggnog?
 
+--- Part Two ---
+While playing with all the containers in the kitchen, another load of eggnog arrives! 
+The shipping and receiving department is requesting as many containers as you can spare.
+
+Find the minimum number of containers that can exactly fit all 150 liters of eggnog. 
+How many different ways can you fill that number of containers and still hold exactly 150 litres?
+
+In the example above, the minimum number of containers was two. 
+There were three ways to use that many containers, 
+and so the answer there would be 3.
 '''
 
 
@@ -36,6 +46,7 @@ def solution1(quiz_input):
 
     values = load_array(quiz_input)
     result = eggnog.subset_sum(150, values)
+    print(len(result))
     return len(result)
 
 
@@ -44,6 +55,12 @@ def solution2(quiz_input):
 
     values = load_array(quiz_input)
     print(values)
+    result = eggnog.subset_sum(150, values)
+    # print(result)
+    minimum = min(map(len, result))
+    count = len([x for x in map(len, result) if x == minimum])
+    print(count)
+    return count
 
 def load_input(filename):
     with open(filename, 'r') as fp:
