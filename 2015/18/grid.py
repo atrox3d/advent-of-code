@@ -15,17 +15,6 @@ def load_from_file(path:str, gridfn=get_from_string) -> list[str]:
         grid_data = fp.read()
     return gridfn(grid_data)
 
-# def get_value(grid:list[str], r:int, c:int) -> str:
-#     try:
-#         return grid[r][c]
-#     except IndexError as ie:
-#         grid_width = get_width(grid)
-#         grid_heigth = get_heigth(grid)
-#         if r < 0 or r >= grid_heigth:
-#             raise GridRowException(f'row {r} not valid for grid *{grid_heigth}x{grid_width}')
-#         if c < 0 or c >= grid_width:
-#             raise GridColException(f'col {c} not valid for grid {grid_heigth}x*{grid_width}')
-
 def get_value(grid:list[str], r:int, c:int) -> str:
     row = get_row(grid, r)
     return get_col(row, c)
