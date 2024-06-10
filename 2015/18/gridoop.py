@@ -98,6 +98,10 @@ class Grid:
                 # print(f'wrong coords {coords}')
                 pass
         return values
+    
+    def state(self, r, c) -> int:
+        values = [self.value(r, c), *self.neighbors(r, c)]
+        return sum(1 if value==self.ON else 0 for value in values)
 
 if __name__ == '__main__':
     from pathlib import Path
@@ -105,4 +109,5 @@ if __name__ == '__main__':
     path = Path(__file__).parent / 'test.txt'
     grid = Grid(path, LineStrategy())
     grid.print()
-    print(grid.neighbors(2, 2))
+    print(grid.neighbors(5, 2))
+    print(grid.state(5, 2))
