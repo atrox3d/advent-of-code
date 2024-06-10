@@ -25,13 +25,13 @@ class CellStrategy(GridStrategy):
 
 class GridCoordError(Exception): pass
 
-def checked(fn):
-    def wrapper(*args, **kwargs):
-        try:
-            return fn(*args, **kwargs)
-        except IndexError as ie:
-            raise GridCoordError(f'invalid grid coordinates')
-    return wrapper
+# def checked(fn):
+#     def wrapper(*args, **kwargs):
+#         try:
+#             return fn(*args, **kwargs)
+#         except IndexError as ie:
+#             raise GridCoordError(f'invalid grid coordinates')
+#     return wrapper
 
 class Grid:
     ON = '#'
@@ -55,22 +55,54 @@ class Grid:
     def heigth(self) -> int:
         return len(self.grid)
 
-    @checked
+    def check(self, row=None, col=None):
+        if row is not None and (row < 0 or row >= self.heigth()):
+            raise GridCoordError(f'invalid row {row}')
+        if col is not None and (col < 0 or col >= self.width()):
+            raise GridCoordError(f'invalid col {col}')
+
+    # @checked
     def row(self, n:int) -> list:
+        self.check(row=n)
         return self.grid[n]
 
-    @checked
+    # @checked
     def col(self, n:int) -> list:
+        self.check(col=n)
         return [row[n] for row in self.grid]
     
-    @checked
+    # @checked
     def value(self, r, c) -> str:
+        self.check(row=r, col=c)
         return self.grid[r][c]
     
+    def print(self) -> None:
+        for row in range(self.heigth()):
+            for col in range(self.width()):
+                print(self.value(row, col), end='')
+            print()
+    
+    def neighbors(self, r, c) -> list[str]:
+        upper_offests = [(-1, -1), (-1, 0), (-1, 1)]
+        middle_offests = [(0, -1), (0, 1)]
+        lower_offests = [(1, -1), (1, 0), (1, 1)]
+        offsets = upper_offests + middle_offests + lower_offests
+
+        values = []
+        for offset in offsets:
+            try:
+                coords = tuple(map(sum, zip((r,c), offset)))
+                value = self.value(*coords)
+                values.append(value)
+            except GridCoordError:
+                # print(f'wrong coords {coords}')
+                pass
+        return values
 
 if __name__ == '__main__':
     from pathlib import Path
 
     path = Path(__file__).parent / 'test.txt'
     grid = Grid(path, LineStrategy())
-    print(grid.value(5, 3))
+    grid.print()
+    print(grid.neighbors(2, 2))
