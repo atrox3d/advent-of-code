@@ -23,7 +23,19 @@ class CellStrategy(GridStrategy):
             grid.append(row)
         return grid
 
+class GridCoordError(Exception): pass
+
+def checked(fn):
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+        except IndexError as ie:
+            raise GridCoordError(f'invalid grid coordinates')
+    return wrapper
+
 class Grid:
+    ON = '#'
+    OFF = '.'
 
     def __init__(self, path:str, strategy:GridStrategy) -> None:
         self.path = path
@@ -34,13 +46,31 @@ class Grid:
     def load(self, strategy=None) -> None:
         with open(self.path) as fp:
             grid_data = fp.read()
-
         strategy = strategy or self.strategy
         self.grid = strategy.parse_grid(grid_data)
+    
+    def width(self) -> int:
+        return len(self.grid[0])
+
+    def heigth(self) -> int:
+        return len(self.grid)
+
+    @checked
+    def row(self, n:int) -> list:
+        return self.grid[n]
+
+    @checked
+    def col(self, n:int) -> list:
+        return [row[n] for row in self.grid]
+    
+    @checked
+    def value(self, r, c) -> str:
+        return self.grid[r][c]
+    
 
 if __name__ == '__main__':
     from pathlib import Path
 
     path = Path(__file__).parent / 'test.txt'
     grid = Grid(path, LineStrategy())
-    print(grid.grid)
+    print(grid.value(5, 3))
