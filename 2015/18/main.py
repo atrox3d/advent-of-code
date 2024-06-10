@@ -99,12 +99,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from grid import get_grid
+import grid
 
 def solution1(quiz_input, test=False):
     # print(f'{quiz_input = !r}')
-    grid = get_grid(quiz_input)
-    for line in grid:
+    lightgrid = grid.get_from_string(quiz_input)
+    for line in lightgrid:
         print(line)
 
 
