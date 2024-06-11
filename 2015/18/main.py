@@ -223,10 +223,10 @@ def solution2(quiz_input, test=False):
     grid.fix(*bottom_left)
     grid.fix(*bottom_right)
 
-    grid.print(state=True, end='')
-    for stepno in range(5):
+    # grid.print(state=True, end='')
+    for stepno in range(100):
         logger.info(f'{stepno+1 = }')
-        grid = step(grid, printgrid=True, end='')
+        grid = step(grid, printgrid=False, end='')
 
     result = sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
     logger.info(f'returning sum: {result}')
