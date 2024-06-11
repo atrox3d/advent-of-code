@@ -139,7 +139,7 @@ the number of neighbors that are on:
 
 def solution1(quiz_input, test=False):
     grid = Grid(quiz_input, CellStrategy())
-    for _ in range(4):
+    for _ in range(100):
         grid = step(grid)
         # print()
     return sum(1 for row, col, light in grid.foreach() if light == Grid.ON )
