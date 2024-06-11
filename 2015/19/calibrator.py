@@ -38,6 +38,18 @@ def calibrate(medicine, replacements):
                             molecules.add(molecule)
     return molecules
 
+def parse_rules(textinput:str) -> tuple[list, str]:
+    from string import ascii_letters
+    rules = []
+    for line in textinput.splitlines():
+        if '=>' in line:
+              search, replace = line.split(' => ')
+              rules.append({search:replace})
+        elif len(line) and line[0] in ascii_letters:
+            molecules = line
+            
+    return rules, molecules
+
 if __name__ == '__main__':
     replacements = [
         {'H': 'HO'},
@@ -57,3 +69,9 @@ if __name__ == '__main__':
 
     print(calibrate('H20', replacements))
 
+    from pathlib import Path
+    with open(Path(__file__).parent / 'input1.txt') as fp:
+        rules, molecules = parse_rules(fp.read())
+    print(rules)
+    assert len(rules) == 43, 'not 43'
+    print(molecules)
