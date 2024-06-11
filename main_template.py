@@ -25,11 +25,14 @@ def main(
             (input_file1, input_file2), 
             (solution1, solution2)
         ), start=1):
+
         input_path = path / input_file
         logger.info(f'running: file {input_path}')
         input_value = load_input(input_path)
+
         result = solution(input_value)
         logger.info(f'solution {id}: {result = }')
+
     logger.info('exiting module.main')
 
 class SolutionNotFoundError(Exception): pass
@@ -40,21 +43,27 @@ def test(
             expected=None
     ):
     logger.info('entering module.test')
+    logger.info(f'{locals() = }')
     test_path = path / test_file
 
     logger.info(f'testing: file {test_path}')
     logger.info(f'testing: {expected = }')
     
+    logger.info(f'testing: loading {test_path}')
     test_value = load_input(test_path)
     try:
+        logger.info(f'testing: getting solution function')
         solution_name = f'solution{part}'
         solution = globals()[solution_name]
     except KeyError as ke:
         raise SolutionNotFoundError(f'function {solution_name} not found')
     
+    logger.info(f'testing: running {solution}')
     result = solution(test_value, test=True)
     result = str(result)
+    logger.info(f'testing: evaluating {result=}')
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
+    logger.info(f'SUCCESS')
     logger.info('exiting module.test')
 
 if __name__ == '__main__':
