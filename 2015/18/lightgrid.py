@@ -20,5 +20,8 @@ class LightGrid(Grid):
         else:
             value = self.get(row, col)
             raise GridValueError(f'invalid value {value} at {row, col}')
+    
+    def copy(self) -> 'LightGrid':
+        return super().copy()
 
 

@@ -99,9 +99,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from lightgrid import Grid, LineStrategy, CellStrategy
+from lightgrid import LightGrid, LineStrategy, CellStrategy
 
-def step(grid:Grid,  printgrid=False) -> 'Grid':
+def step(grid:LightGrid,  printgrid=False) -> 'LightGrid':
     '''
 The state a light should have next is based on its current state (on or off) plus 
 the number of neighbors that are on:
@@ -124,13 +124,13 @@ the number of neighbors that are on:
         # print(row, col, value)
         state = grid.state(row, col)
 
-        if value == Grid.ON:
+        if value == LightGrid.ON:
             if not 2 <= state <= 3:
-                copy.set(row, col, Grid.OFF)
+                copy.toggle(row, col)
 
-        if value == Grid.OFF:
+        if value == LightGrid.OFF:
             if state == 3:
-                copy.set(row, col, Grid.ON)
+                copy.toggle(row, col)
     if printgrid:
         print()
         copy.print(state=True, end=' ')
@@ -138,11 +138,13 @@ the number of neighbors that are on:
     return copy
 
 def solution1(quiz_input, test=False):
-    grid = Grid(quiz_input, CellStrategy())
+    grid = LightGrid(quiz_input, CellStrategy())
     for _ in range(100):
         grid = step(grid)
         # print()
-    return sum(1 for row, col, light in grid.foreach() if light == Grid.ON )
+    return sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
+
+
 def solution2(quiz_input, test=False):
     # print(f'{quiz_input = !r}')
     return None
