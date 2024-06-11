@@ -99,7 +99,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from gridoop import Grid, LineStrategy, CellStrategy
+from lightgrid import Grid, LineStrategy, CellStrategy
 
 def step(grid:Grid,  printgrid=False) -> 'Grid':
     '''
