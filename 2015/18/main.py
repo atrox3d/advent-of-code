@@ -200,9 +200,11 @@ the number of neighbors that are on:
     logger.info('returning copy')
     return copy
 
+STEPS = 100
+
 def solution1(quiz_input, test=False):
     grid = LightGrid(quiz_input, CellStrategy())
-    for stepno in range(100):
+    for stepno in range(STEPS):
         logger.info(f'{stepno = }')
         grid = step(grid, printgrid=False)
 
@@ -218,16 +220,28 @@ def solution2(quiz_input, test=False):
     bottom_left = grid.heigth() -1, 0
     bottom_right = grid.heigth() -1, grid.width() -1
 
-    grid.fix(*top_left)
-    grid.fix(*top_right)
-    grid.fix(*bottom_left)
-    grid.fix(*bottom_right)
+    grid.fix(*top_left, LightGrid.ON)
+    grid.fix(*top_right, LightGrid.ON)
+    grid.fix(*bottom_left, LightGrid.ON)
+    grid.fix(*bottom_right, LightGrid.ON)
+
+    assert grid.is_fixed(*top_left), f'{top_left} is not fixed'
+    assert grid.is_fixed(*top_right), f'{top_right} is not fixed'
+    assert grid.is_fixed(*bottom_left), f'{bottom_left} is not fixed'
+    assert grid.is_fixed(*bottom_right), f'{bottom_right} is not fixed'
 
     # grid.print(state=True, end='')
-    for stepno in range(100):
-        logger.info(f'{stepno+1 = }')
+    for stepno in range(STEPS):
+        logger.info(f'--- STEP {stepno+1} ---')
         grid = step(grid, printgrid=False, end='')
 
+
+    assert grid.is_fixed(*top_left), f'{top_left} is not fixed'
+    assert grid.is_fixed(*top_right), f'{top_right} is not fixed'
+    assert grid.is_fixed(*bottom_left), f'{bottom_left} is not fixed'
+    assert grid.is_fixed(*bottom_right), f'{bottom_right} is not fixed'
+
+    # grid.print(state=True, end='')
     result = sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
     logger.info(f'returning sum: {result}')
     return result

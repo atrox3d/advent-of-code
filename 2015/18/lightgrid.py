@@ -43,6 +43,8 @@ class LightGrid(Grid):
     def fix(self, row:int, col:int, state:str=None):
         if state is None:
             state = self.get(row, col)
+        else:
+            self.set(row, col, state)
         self.fixed[(row, col)] = state
     
     def is_fixed(self, row:int, col:int) -> bool:
