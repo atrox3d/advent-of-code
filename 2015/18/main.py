@@ -90,6 +90,66 @@ After 4 steps, this example has four lights on.
 In your grid of 100x100 lights, given your initial configuration, 
 how many lights are on after 100 steps?
 
+--- Part Two ---
+You flip the instructions over; Santa goes on to point out that this is all 
+just an implementation of Conway's Game of Life. 
+At least, it was, until you notice that something's wrong with the grid of 
+lights you bought: four lights, one in each corner, 
+are stuck on and can't be turned off. 
+The example above will actually run like this:
+
+Initial state:
+##.#.#
+...##.
+#....#
+..#...
+#.#..#
+####.#
+
+After 1 step:
+#.##.#
+####.#
+...##.
+......
+#...#.
+#.####
+
+After 2 steps:
+#..#.#
+#....#
+.#.##.
+...##.
+.#..##
+##.###
+
+After 3 steps:
+#...##
+####.#
+..##.#
+......
+##....
+####.#
+
+After 4 steps:
+#.####
+#....#
+...#..
+.##...
+#.....
+#.#..#
+
+After 5 steps:
+##.###
+.##..#
+.##...
+.##...
+#.#...
+##...#
+After 5 steps, this example now has 17 lights on.
+
+In your grid of 100x100 lights, given your initial configuration, 
+but with the four corners always in the on state, 
+how many lights are on after 100 steps?
 
 '''
 
@@ -144,7 +204,7 @@ def solution1(quiz_input, test=False):
     grid = LightGrid(quiz_input, CellStrategy())
     for stepno in range(100):
         logger.info(f'{stepno = }')
-        grid = step(grid)
+        grid = step(grid, printgrid=False)
 
     result = sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
     logger.info(f'returning sum: {result}')
@@ -152,8 +212,14 @@ def solution1(quiz_input, test=False):
 
 
 def solution2(quiz_input, test=False):
-    # print(f'{quiz_input = !r}')
-    return None
+    grid = LightGrid(quiz_input, CellStrategy())
+    for stepno in range(6):
+        logger.info(f'{stepno = }')
+        grid = step(grid, printgrid=True)
+
+    result = sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
+    logger.info(f'returning sum: {result}')
+    return result
 
 def load_input(filename):
     with open(filename, 'r') as fp:

@@ -136,13 +136,14 @@ if __name__ == '__main__':
                         input2_filename=args.input2 or 'input2.txt',
                 )
                 logger.info('executed run.run')
-            else:
+
+            elif args.command == 'test':
                 logger.info('executing test.test with loaded module')
                 test(
                         module,
                         target_path=target_path,
                         part=args.part,
-                        test_filename=args.testfile or 'test.txt',
+                        test_filename=args.testfile or f'test{args.part}.txt',
                         expected=args.expected
                 )
                 logger.info('executed test.test')
