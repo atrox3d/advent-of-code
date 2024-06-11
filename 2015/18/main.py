@@ -101,7 +101,7 @@ logger = logging.getLogger(__name__)
 
 from gridoop import Grid, LineStrategy, CellStrategy
 
-def step(grid:Grid) -> 'Grid':
+def step(grid:Grid,  printgrid=False) -> 'Grid':
     '''
 The state a light should have next is based on its current state (on or off) plus 
 the number of neighbors that are on:
@@ -116,7 +116,9 @@ the number of neighbors that are on:
         they all consider the same current state before moving to the next.
 
     '''
-    grid.print(state=True, end=' ')
+    if printgrid:
+        grid.print(state=True, end=' ')
+
     copy = grid.copy()
     for row, col, value in grid.foreach():
         # print(row, col, value)
@@ -129,8 +131,9 @@ the number of neighbors that are on:
         if value == Grid.OFF:
             if state == 3:
                 copy.set(row, col, Grid.ON)
-    print()
-    copy.print(state=True, end=' ')
+    if printgrid:
+        print()
+        copy.print(state=True, end=' ')
     
     return copy
 
@@ -138,7 +141,7 @@ def solution1(quiz_input, test=False):
     grid = Grid(quiz_input, CellStrategy())
     for _ in range(4):
         grid = step(grid)
-        print()
+        # print()
     return sum(1 for row, col, light in grid.foreach() if light == Grid.ON )
 def solution2(quiz_input, test=False):
     # print(f'{quiz_input = !r}')
@@ -196,6 +199,7 @@ def test(
     result = str(result)
     logger.info(f'testing: evaluating {result=}')
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
+    logger.info(f'SUCCESS')
     logger.info('exiting module.test')
 
 if __name__ == '__main__':
