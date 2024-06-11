@@ -119,9 +119,11 @@ the number of neighbors that are on:
     if printgrid:
         grid.print(state=True, end=' ')
 
+    logger.info('copying grid')
     copy = grid.copy()
+
+    logger.info('updating copy')
     for row, col, value in grid.foreach():
-        # print(row, col, value)
         state = grid.state(row, col)
 
         if value == LightGrid.ON:
@@ -135,14 +137,18 @@ the number of neighbors that are on:
         print()
         copy.print(state=True, end=' ')
     
+    logger.info('returning copy')
     return copy
 
 def solution1(quiz_input, test=False):
     grid = LightGrid(quiz_input, CellStrategy())
-    for _ in range(100):
+    for stepno in range(100):
+        logger.info(f'{stepno = }')
         grid = step(grid)
-        # print()
-    return sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
+
+    result = sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
+    logger.info(f'returning sum: {result}')
+    return result
 
 
 def solution2(quiz_input, test=False):
