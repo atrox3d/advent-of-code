@@ -24,7 +24,8 @@ class CellStrategy(GridStrategy):
             grid.append(row)
         return grid
 
-class GridCoordError(Exception): pass
+class GridCoordError(IndexError): pass
+class GridValueError(ValueError): pass
 
 class Grid:
     ON = '#'
@@ -63,14 +64,20 @@ class Grid:
         return [row[n] for row in self.grid]
     
     # @checked
-    def value(self, r, c) -> str:
+    def get(self, r, c) -> str:
         self.check(row=r, col=c)
         return self.grid[r][c]
+
+    def set(self, r, c, value) -> str:
+        self.check(row=r, col=c)
+        if value not in (self.ON, self.OFF):
+            raise GridValueError(f'invalid value {value}, must be one of {self.ON, self.OFF}')
+        self.grid[r][c] = value
     
     def print(self, state=False, end='') -> None:
         for row in range(self.heigth()):
             for col in range(self.width()):
-                print(self.value(row, col), end=end)
+                print(self.get(row, col), end=end)
             if state:
                 print(' ', end=end)
                 for col in range(self.width()):
@@ -87,7 +94,7 @@ class Grid:
         for offset in offsets:
             try:
                 coords = tuple(map(sum, zip((r,c), offset)))
-                value = self.value(*coords)
+                value = self.get(*coords)
                 values.append(value)
             except GridCoordError:
                 # print(f'wrong coords {coords}')
@@ -95,25 +102,34 @@ class Grid:
         return values
     
     def state(self, r, c) -> int:
-        values = [self.value(r, c), *self.neighbors(r, c)]
+        # values = [self.get(r, c), *self.neighbors(r, c)]
+        values = self.neighbors(r, c)
         return sum(1 if value==self.ON else 0 for value in values)
     
-    def get(self, copy=False) -> list:
+    def grid(self, copy=False) -> list:
         if copy:
             return deepcopy(self.grid)
         else:
             return self.grid
     
-    def update(self, grid:list, copy=False):
+    def update(self, grid:'Grid', copy=False):
         if copy:
-            self.grid = deepcopy(grid)
+            self.grid = deepcopy(grid.grid)
         else:
-            self.grid = grid
+            self.grid = grid.grid
+    
+    def copy(self) -> 'Grid':
+        return deepcopy(self)
     
     def load(self, path:str, strategy:GridStrategy):
         with open(path) as fp:
             grid_data = fp.read()
         self.grid = strategy.parse_grid(grid_data)
+    
+    def foreach(self):
+        for row in range(self.heigth()):
+            for col in range(self.width()):
+                yield row, col, self.get(row, col)
 
 
 if __name__ == '__main__':

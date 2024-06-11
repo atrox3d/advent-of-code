@@ -101,14 +101,45 @@ logger = logging.getLogger(__name__)
 
 from gridoop import Grid, LineStrategy, CellStrategy
 
-def step(grid:Grid):
+def step(grid:Grid) -> 'Grid':
+    '''
+The state a light should have next is based on its current state (on or off) plus 
+the number of neighbors that are on:
+
+    - A light which is on stays on when 2 or 3 neighbors are on, 
+        and turns off otherwise.
+
+    - A light which is off turns on if exactly 3 neighbors are on, 
+        and stays off otherwise.
+
+    - All of the lights update simultaneously; 
+        they all consider the same current state before moving to the next.
+
+    '''
     grid.print(state=True, end=' ')
+    copy = grid.copy()
+    for row, col, value in grid.foreach():
+        # print(row, col, value)
+        state = grid.state(row, col)
+
+        if value == Grid.ON:
+            if not 2 <= state <= 3:
+                copy.set(row, col, Grid.OFF)
+
+        if value == Grid.OFF:
+            if state == 3:
+                copy.set(row, col, Grid.ON)
+    print()
+    copy.print(state=True, end=' ')
+    
+    return copy
 
 def solution1(quiz_input, test=False):
-    grid = Grid(quiz_input, LineStrategy())
-    step(grid)
-    print()
-
+    grid = Grid(quiz_input, CellStrategy())
+    for _ in range(4):
+        grid = step(grid)
+        print()
+    return sum(1 for row, col, light in grid.foreach() if light == Grid.ON )
 def solution2(quiz_input, test=False):
     # print(f'{quiz_input = !r}')
     return None
