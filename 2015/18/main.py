@@ -180,7 +180,7 @@ the number of neighbors that are on:
         grid.print(state=True, end=' ')
 
     logger.info('copying grid')
-    copy = grid.copy()
+    copy: LightGrid = grid.copy()
 
     logger.info('updating copy')
     for row, col, value in grid.foreach():
