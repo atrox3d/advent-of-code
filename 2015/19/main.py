@@ -57,12 +57,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from calibrator import calibrate, parse_rules
 def solution1(quiz_input):
-    print(f'{quiz_input = !r}')
-    return None
+    rules, start = parse_rules(quiz_input)
+    # print(rules)
+    # print(start)
+    molecules = calibrate(start, rules)
+    print(len(molecules))
 
 def solution2(quiz_input):
-    print(f'{quiz_input = !r}')
+    # print(f'{quiz_input = !r}')
     return None
 
 def load_input(filename):
