@@ -161,7 +161,7 @@ logger = logging.getLogger(__name__)
 
 from lightgrid import LightGrid, LineStrategy, CellStrategy
 
-def step(grid:LightGrid,  printgrid=False) -> 'LightGrid':
+def step(grid:LightGrid,  printgrid=False, end='') -> 'LightGrid':
     '''
 The state a light should have next is based on its current state (on or off) plus 
 the number of neighbors that are on:
@@ -176,8 +176,8 @@ the number of neighbors that are on:
         they all consider the same current state before moving to the next.
 
     '''
-    if printgrid:
-        grid.print(state=True, end=' ')
+    # if printgrid:
+        # grid.print(state=True, end=end)
 
     logger.info('copying grid')
     copy: LightGrid = grid.copy()
@@ -195,7 +195,7 @@ the number of neighbors that are on:
                 copy.toggle(row, col)
     if printgrid:
         print()
-        copy.print(state=True, end=' ')
+        copy.print(state=True, end=end)
     
     logger.info('returning copy')
     return copy
@@ -213,9 +213,20 @@ def solution1(quiz_input, test=False):
 
 def solution2(quiz_input, test=False):
     grid = LightGrid(quiz_input, CellStrategy())
-    for stepno in range(6):
-        logger.info(f'{stepno = }')
-        grid = step(grid, printgrid=True)
+    top_left = 0, 0
+    top_right = 0, grid.width() -1
+    bottom_left = grid.heigth() -1, 0
+    bottom_right = grid.heigth() -1, grid.width() -1
+
+    grid.fix(*top_left)
+    grid.fix(*top_right)
+    grid.fix(*bottom_left)
+    grid.fix(*bottom_right)
+
+    grid.print(state=True, end='')
+    for stepno in range(5):
+        logger.info(f'{stepno+1 = }')
+        grid = step(grid, printgrid=True, end='')
 
     result = sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
     logger.info(f'returning sum: {result}')
