@@ -101,9 +101,13 @@ logger = logging.getLogger(__name__)
 
 from gridoop import Grid, LineStrategy, CellStrategy
 
+def step(grid:Grid):
+    grid.print(state=True, end=' ')
+
 def solution1(quiz_input, test=False):
     grid = Grid(quiz_input, LineStrategy())
-    grid.print()
+    step(grid)
+    print()
 
 def solution2(quiz_input, test=False):
     # print(f'{quiz_input = !r}')

@@ -67,10 +67,14 @@ class Grid:
         self.check(row=r, col=c)
         return self.grid[r][c]
     
-    def print(self) -> None:
+    def print(self, state=False, end='') -> None:
         for row in range(self.heigth()):
             for col in range(self.width()):
-                print(self.value(row, col), end='')
+                print(self.value(row, col), end=end)
+            if state:
+                print(' ', end=end)
+                for col in range(self.width()):
+                    print(self.state(row, col), end=end)
             print()
     
     def neighbors(self, r, c) -> list[str]:
@@ -125,6 +129,6 @@ if __name__ == '__main__':
     with open(path) as fp:
         grid = Grid(fp.read(), LineStrategy())
 
-    grid.print()
+    grid.print(state=True, end=' ')
     print(grid.neighbors(5, 2))
     print(grid.state(5, 2))
