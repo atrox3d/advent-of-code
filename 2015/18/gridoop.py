@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from copy import deepcopy
 
 class GridStrategy(ABC):
 
@@ -25,30 +26,20 @@ class CellStrategy(GridStrategy):
 
 class GridCoordError(Exception): pass
 
-# def checked(fn):
-#     def wrapper(*args, **kwargs):
-#         try:
-#             return fn(*args, **kwargs)
-#         except IndexError as ie:
-#             raise GridCoordError(f'invalid grid coordinates')
-#     return wrapper
-
 class Grid:
     ON = '#'
     OFF = '.'
 
-    def __init__(self, path:str, strategy:GridStrategy) -> None:
-        self.path = path
-        self.grid = []
+    def __init__(self, grid_data:str, strategy:GridStrategy) -> None:
         self.strategy = strategy
-        self.load()
-
-    def load(self, strategy=None) -> None:
-        with open(self.path) as fp:
-            grid_data = fp.read()
-        strategy = strategy or self.strategy
         self.grid = strategy.parse_grid(grid_data)
     
+    @classmethod
+    def from_file(cls, path:str, strategy:GridStrategy):
+        with open(path) as fp:
+            grid_data = fp.read()
+        return cls(grid_data, strategy)
+
     def width(self) -> int:
         return len(self.grid[0])
 
@@ -102,12 +93,38 @@ class Grid:
     def state(self, r, c) -> int:
         values = [self.value(r, c), *self.neighbors(r, c)]
         return sum(1 if value==self.ON else 0 for value in values)
+    
+    def get(self, copy=False) -> list:
+        if copy:
+            return deepcopy(self.grid)
+        else:
+            return self.grid
+    
+    def update(self, grid:list, copy=False):
+        if copy:
+            self.grid = deepcopy(grid)
+        else:
+            self.grid = grid
+    
+    def load(self, path:str, strategy:GridStrategy):
+        with open(path) as fp:
+            grid_data = fp.read()
+        self.grid = strategy.parse_grid(grid_data)
+
 
 if __name__ == '__main__':
     from pathlib import Path
 
     path = Path(__file__).parent / 'test.txt'
-    grid = Grid(path, LineStrategy())
+    grid = Grid.from_file(path, LineStrategy())
+
+    grid.print()
+    print(grid.neighbors(5, 2))
+    print(grid.state(5, 2))
+
+    with open(path) as fp:
+        grid = Grid(fp.read(), LineStrategy())
+
     grid.print()
     print(grid.neighbors(5, 2))
     print(grid.state(5, 2))

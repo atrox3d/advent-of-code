@@ -99,14 +99,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-import grid
+from gridoop import Grid, LineStrategy, CellStrategy
 
 def solution1(quiz_input, test=False):
-    # print(f'{quiz_input = !r}')
-    lightgrid = grid.get_from_string(quiz_input)
-    for line in lightgrid:
-        print(line)
-
+    grid = Grid(quiz_input, LineStrategy())
+    grid.print()
 
 def solution2(quiz_input, test=False):
     # print(f'{quiz_input = !r}')
