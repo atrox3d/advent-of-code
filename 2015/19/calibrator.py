@@ -25,33 +25,27 @@ The machine replaces without regard for the surrounding characters.
 For example, given the string H2O, the transition H => OO would result in OO2O.
 
 '''
+from rules import parse_rules
+import re
 
-def calibrate(medicine:str, replacements:list[dict[str, str]]):
-    molecules = set()
-    # change advancement
-    for i, char in enumerate(medicine):
-            pre = medicine[:i]
-            post = medicine[i+1:]
-            for replacement in replacements:
-                for search, replace in replacement.items():
-                    char = medicine[i:i+len(search)]
-                    if char == search:
-                        molecule = pre + replace + post
-                        print(i, char, search, replace, molecule)
-                        molecules.add(molecule)
-    return molecules
+def indexall(find:str, where:str) -> list[int]:
+    return [m.start() for m in re.finditer(find, where)]
 
-def parse_rules(textinput:str) -> tuple[list, str]:
-    from string import ascii_letters
-    rules = []
-    for line in textinput.splitlines():
-        if '=>' in line:
-              search, replace = line.split(' => ')
-              rules.append({search:replace})
-        elif len(line) and line[0] in ascii_letters:
-            molecules = line
-            
-    return rules, molecules
+def multireplace(find:str, replace:str, where:str) -> list[str]:
+    replaced = []
+    for index in indexall(find, where):
+        pre = where[:index]
+        post = where[index:]
+        new = post.replace(find, replace, 1)
+        replaced.append(pre+new)
+    return replaced
+
+
+def calibrate(sequence:str, replacements:list[dict[str, str]]) -> set[dict]:
+    for replacement in replacements:
+        for search, replace in replacement.items():
+            count = sequence.count(search)
+            print(sequence, search, count)
 
 if __name__ == '__main__':
     replacements = [
@@ -63,7 +57,18 @@ if __name__ == '__main__':
     santas = 'HOHOHO'
     medicine = 'HOH'
 
+    for target in (medicine, santas):
+        done = set()
+        for rep in replacements:
+            for find, replace in rep.items():
+                repls = multireplace(find, replace, target)
+                print(find, repls)
+                done.update(repls)
+        print(done, len(done))
+    
+    exit()
     print(calibrate(medicine, replacements))
+    exit()
     print(calibrate(santas, replacements))
 
     replacements = [
@@ -72,9 +77,3 @@ if __name__ == '__main__':
 
     print(calibrate('H20', replacements))
 
-    from pathlib import Path
-    with open(Path(__file__).parent / 'input1.txt') as fp:
-        rules, molecules = parse_rules(fp.read())
-    print(rules)
-    assert len(rules) == 43, 'not 43'
-    print(molecules)
