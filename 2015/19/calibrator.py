@@ -25,7 +25,6 @@ The machine replaces without regard for the surrounding characters.
 For example, given the string H2O, the transition H => OO would result in OO2O.
 
 '''
-from rules import parse_rules
 import re
 
 def indexall(find:str, where:str) -> list[int]:
@@ -42,10 +41,12 @@ def multireplace(find:str, replace:str, where:str) -> list[str]:
 
 
 def calibrate(sequence:str, replacements:list[dict[str, str]]) -> set[dict]:
+    molecules = set()
     for replacement in replacements:
         for search, replace in replacement.items():
-            count = sequence.count(search)
-            print(sequence, search, count)
+            replaced = multireplace(search, replace, sequence)
+            molecules.update(replaced)
+    return molecules
 
 if __name__ == '__main__':
     replacements = [
@@ -57,23 +58,15 @@ if __name__ == '__main__':
     santas = 'HOHOHO'
     medicine = 'HOH'
 
-    for target in (medicine, santas):
-        done = set()
-        for rep in replacements:
-            for find, replace in rep.items():
-                repls = multireplace(find, replace, target)
-                print(find, repls)
-                done.update(repls)
-        print(done, len(done))
+    # for target in (medicine, santas):
+    #     done = set()
+    #     for rep in replacements:
+    #         for find, replace in rep.items():
+    #             repls = multireplace(find, replace, target)
+    #             print(find, repls)
+    #             done.update(repls)
+    #     print(done, len(done))
     
-    exit()
-    print(calibrate(medicine, replacements))
-    exit()
     print(calibrate(santas, replacements))
-
-    replacements = [
-        {'H': 'OO'},
-    ]
-
-    print(calibrate('H20', replacements))
-
+    print(calibrate(medicine, replacements))
+    

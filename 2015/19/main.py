@@ -57,11 +57,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from calibrator import calibrate, parse_rules
+from calibrator import calibrate
+from rules import parse_rules, parse_molecule
 def solution1(quiz_input):
-    rules, start = parse_rules(quiz_input)
-    # print(rules)
-    # print(start)
+    rules = parse_rules(quiz_input)
+    start = parse_molecule(quiz_input)
     molecules = calibrate(start, rules)
     return len(molecules)
 
