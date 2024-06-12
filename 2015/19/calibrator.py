@@ -26,16 +26,19 @@ For example, given the string H2O, the transition H => OO would result in OO2O.
 
 '''
 
-def calibrate(medicine, replacements):
+def calibrate(medicine:str, replacements:list[dict[str, str]]):
     molecules = set()
+    # change advancement
     for i, char in enumerate(medicine):
             pre = medicine[:i]
             post = medicine[i+1:]
             for replacement in replacements:
                 for search, replace in replacement.items():
+                    char = medicine[i:i+len(search)]
                     if char == search:
-                            molecule = pre + replace + post
-                            molecules.add(molecule)
+                        molecule = pre + replace + post
+                        print(i, char, search, replace, molecule)
+                        molecules.add(molecule)
     return molecules
 
 def parse_rules(textinput:str) -> tuple[list, str]:

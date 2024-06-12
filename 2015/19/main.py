@@ -63,7 +63,7 @@ def solution1(quiz_input):
     # print(rules)
     # print(start)
     molecules = calibrate(start, rules)
-    print(len(molecules))
+    return len(molecules)
 
 def solution2(quiz_input):
     # print(f'{quiz_input = !r}')
