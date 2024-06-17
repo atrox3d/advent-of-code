@@ -32,6 +32,7 @@ def main(
 
         result = solution(input_value)
         logger.info(f'solution {id}: {result = }')
+        print('\n')
 
     logger.info('exiting module.main')
 
