@@ -1,6 +1,10 @@
 from string import ascii_letters
 
-def parse_rules(textinput:str) -> tuple[list, str]:
+def parse_rules(textinput:str) -> list[dict]:
+    ''' parse the content of input and returns a list of dictionaries
+    
+        every dict contains the letters and relative replacement
+    '''
     rules = []
     for line in textinput.splitlines():
         if '=>' in line:
@@ -9,6 +13,7 @@ def parse_rules(textinput:str) -> tuple[list, str]:
     return rules
 
 def parse_molecule(textinput:str) -> str:
+    ''' parse the content of input and returns the molecule '''
     for line in textinput.splitlines():
         if '=>' in line:
             pass

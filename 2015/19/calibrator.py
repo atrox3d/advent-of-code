@@ -28,19 +28,26 @@ For example, given the string H2O, the transition H => OO would result in OO2O.
 import re
 
 def indexall(find:str, where:str) -> list[int]:
+    ''' returns a list of index of every match as opposed to str.index '''
+
     return [m.start() for m in re.finditer(find, where)]
 
 def multireplace(find:str, replace:str, where:str) -> list[str]:
+    ''' replace every occurence of find in str with replace '''
+    
     replaced = []
     for index in indexall(find, where):
         pre = where[:index]
+        # treat each occurency as a new string
         post = where[index:]
+        # reassemble original string and adds to the list
         new = post.replace(find, replace, 1)
         replaced.append(pre+new)
     return replaced
 
 
-def calibrate(sequence:str, replacements:list[dict[str, str]]) -> set[dict]:
+def calibrate(sequence:str, replacements:list[dict[str, str]]) -> set[str]:
+    ''' process all occurrencies and add each result without duplicates '''
     molecules = set()
     for replacement in replacements:
         for search, replace in replacement.items():

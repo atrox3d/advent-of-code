@@ -49,16 +49,43 @@ the medicine molecule for which you need to calibrate the machine.
 How many distinct molecules can be created after all the different ways you can do one 
 replacement on the medicine molecule?
 
-'''
+--- Part Two ---
+Now that the machine is calibrated, you're ready to begin molecule fabrication.
 
+Molecule fabrication always begins with just a single electron, e, 
+and applying replacements one at a time, just like the ones during calibration.
+
+For example, suppose you have the following replacements:
+
+e => H
+e => O
+H => HO
+H => OH
+O => HH
+
+If you'd like to make HOH, you start with e, and then make the following replacements:
+
+e => O to get O
+O => HH to get HH
+H => OH (on the second H) to get HOH
+
+So, you could make HOH after 3 steps. Santa's favorite molecule, HOHOHO, 
+can be made in 6 steps.
+
+How long will it take to make the medicine? 
+Given the available replacements and the medicine molecule in your puzzle input, 
+what is the fewest number of steps to go from e to the medicine molecule?
+
+'''
 
 from pathlib import Path
 import logging
 
-logger = logging.getLogger(__name__)
-
 from calibrator import calibrate
 from rules import parse_rules, parse_molecule
+
+logger = logging.getLogger(__name__)
+
 def solution1(quiz_input):
     rules = parse_rules(quiz_input)
     start = parse_molecule(quiz_input)
@@ -90,10 +117,12 @@ def main(
 
         result = solution(input_value)
         logger.info(f'solution {id}: {result = }')
+        print('\n')
 
     logger.info('exiting module.main')
 
 class SolutionNotFoundError(Exception): pass
+
 def test(
             path:Path|str,
             part,
@@ -109,6 +138,7 @@ def test(
     
     logger.info(f'testing: loading {test_path}')
     test_value = load_input(test_path)
+
     try:
         logger.info(f'testing: getting solution function')
         solution_name = f'solution{part}'
@@ -119,8 +149,10 @@ def test(
     logger.info(f'testing: running {solution}')
     result = solution(test_value, test=True)
     result = str(result)
+
     logger.info(f'testing: evaluating {result=}')
     assert result == expected, f'TEST FAILED: {result=!r} != {expected!r}'
+    
     logger.info(f'SUCCESS')
     logger.info('exiting module.test')
 
