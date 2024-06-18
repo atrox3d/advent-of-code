@@ -18,40 +18,62 @@ can be made in 6 steps.
 
 '''
 from calibrator import indexall, multireplace, calibrate
-replacements = [
-    {'e': 'H'},
-    {'e': 'O'},
-    {'H': 'HO'},
-    {'H': 'OH'},
-    {'O': 'HH'},
-]
 
-from rules import parse_molecule, parse_rules
-from pathlib import Path
-with open(Path(__file__).parent / 'input1.txt') as fp:
-    data = fp.read()
-rules = parse_rules(data)
-molecule = parse_molecule(data)
+def build_steps(molecule:str, replacements:list[dict], stop='e') -> tuple[int, list[str]]:
+    
+    def dict_value_len(a):
+        v, *_ = a.values()
+        return len(v)
 
-santa = 'HOHOHO'
-target = 'HOH'
-start = 'e'
-product: str = santa[:]
-# e => O to get O
-# O => HH to get HH
-# H => OH (on the second H) to get HOH
-def xxx(a):
-    v, *_ = a.values()
-    return len(v)
+    product = molecule
+    print(f'{product = }')
+    
+    replacements = sorted(replacements, key=dict_value_len, reverse=True)
+    steps = []
+    count = 0
+    done = False
+    while not done:
+        for rep in replacements:
+            for replace, find in rep.items():
+                while product.find(find) != -1:
+                    count += 1
+                    product = product.replace(find, replace, 1)
+                    print(f'{find} -> {replace} = {product}')
+                    steps.append(product)
+                    if replace == stop:
+                        done = True
+    return count, steps
 
-# print(sorted(rules, key=xxx, reverse=True))
-replacements = sorted(replacements, key=xxx, reverse=True)
-steps = []
-print(product)
-for rep in replacements:
-    for replace, find in rep.items():
-        while product.find(find) != -1:
-            product = product.replace(find, replace, 1)
-            print(find, replace, product)
-            steps.append(product)
-print(len(steps))
+if __name__ == '__main__':
+
+    replacements = [
+        {'e': 'H'},
+        {'e': 'O'},
+        {'H': 'HO'},
+        {'H': 'OH'},
+        {'O': 'HH'},
+    ]
+
+    from rules import parse_molecule, parse_rules
+    from pathlib import Path
+    with open(Path(__file__).parent / 'input1.txt') as fp:
+        data = fp.read()
+    rules = parse_rules(data)
+    molecule = parse_molecule(data)
+
+    santa = 'HOHOHO'
+    target = 'HOH'
+    start = 'e'
+    # e => O to get O
+    # O => HH to get HH
+    # H => OH (on the second H) to get HOH
+
+
+    count,steps = build_steps(target, replacements)
+    print(count)
+
+    count, steps = build_steps(santa, replacements)
+    print(count)
+
+    count, steps = build_steps(molecule, rules)
+    print(count)
