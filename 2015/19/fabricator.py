@@ -17,8 +17,6 @@ So, you could make HOH after 3 steps. Santa's favorite molecule, HOHOHO,
 can be made in 6 steps.
 
 '''
-from calibrator import indexall, multireplace, calibrate
-
 def build_steps(molecule:str, replacements:list[dict], stop='e') -> tuple[int, list[str]]:
     
     def dict_value_len(a):
@@ -54,13 +52,6 @@ if __name__ == '__main__':
         {'O': 'HH'},
     ]
 
-    from rules import parse_molecule, parse_rules
-    from pathlib import Path
-    with open(Path(__file__).parent / 'input1.txt') as fp:
-        data = fp.read()
-    rules = parse_rules(data)
-    molecule = parse_molecule(data)
-
     santa = 'HOHOHO'
     target = 'HOH'
     start = 'e'
@@ -68,12 +59,8 @@ if __name__ == '__main__':
     # O => HH to get HH
     # H => OH (on the second H) to get HOH
 
-
     count,steps = build_steps(target, replacements)
     print(count)
 
     count, steps = build_steps(santa, replacements)
-    print(count)
-
-    count, steps = build_steps(molecule, rules)
     print(count)
