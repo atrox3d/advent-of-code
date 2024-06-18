@@ -48,6 +48,7 @@ def multireplace(find:str, replace:str, where:str) -> list[str]:
 
 def calibrate(sequence:str, replacements:list[dict[str, str]]) -> set[str]:
     ''' process all occurrencies and add each result without duplicates '''
+    
     molecules = set()
     for replacement in replacements:
         for search, replace in replacement.items():
