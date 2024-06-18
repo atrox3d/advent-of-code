@@ -82,6 +82,7 @@ from pathlib import Path
 import logging
 
 from calibrator import calibrate
+from fabricator import build_steps
 from rules import parse_rules, parse_molecule
 
 logger = logging.getLogger(__name__)
@@ -93,8 +94,10 @@ def solution1(quiz_input):
     return len(molecules)
 
 def solution2(quiz_input):
-    # print(f'{quiz_input = !r}')
-    return None
+    rules = parse_rules(quiz_input)
+    molecule = parse_molecule(quiz_input)
+    count, steps = build_steps(molecule, rules) 
+    return count
 
 def load_input(filename):
     with open(filename, 'r') as fp:
