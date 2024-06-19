@@ -42,17 +42,19 @@ The fourth house gets 70 presents, because it is visited by Elves
 1, 2, and 4, for a total of 10 + 20 + 40 = 70 presents.
 
 What is the lowest house number of the house to get at least as
- many presents as the number in your puzzle input?
+many presents as the number in your puzzle input?
 
 Your puzzle input is 33100000.
 
 '''
-
-
 from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
+
+def load_input(filename):
+    with open(filename, 'r') as fp:
+        return fp.read()
 
 def solution1(quiz_input):
     print(f'{quiz_input = !r}')
@@ -61,10 +63,6 @@ def solution1(quiz_input):
 def solution2(quiz_input):
     print(f'{quiz_input = !r}')
     return None
-
-def load_input(filename):
-    with open(filename, 'r') as fp:
-        return fp.read()
 
 def main(
             path:Path|str,
