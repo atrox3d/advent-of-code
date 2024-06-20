@@ -45,15 +45,34 @@ def get_elves_for_house(house:int) -> Generator[int, None, None]:
 def compute_presents(house:int, presents_per_elf=10):
     return sum(get_elves_for_house(house)) * presents_per_elf
 
+def find_house_for_total_presents(total:int) -> int:
+    done = False
+    curr_house = 1
+    while not done:
+        presents = compute_presents(curr_house)
+        if presents == total:
+            print(f'found {curr_house = }, {presents = }, {total = }')
+            done = True
+        else:
+            print(f'not found {curr_house = }, {presents = }, {total = }')
+            curr_house += 1
+    return curr_house
 
-for house in range(1, 9+1):
-    print(house, compute_presents(house), list(get_elves_for_house(house)))
-exit()
-results = [None, 10, 30, 40, 70, 60, 120, 80, 150, 130]
-for house in range(1, 10):
-    presents = compute_presents(house)
-    try:
-        assert presents == results[house]
-        print(f'SUCCESS | house {house}: {presents} == {results[house]}')
-    except AssertionError as ae:
-        print(f'FAIL    | house {house}: {presents} != {results[house]}')
+def test_logic():
+    results = [None, 10, 30, 40, 70, 60, 120, 80, 150, 130]
+    logic_ok = True
+    for house in range(1, 9+1):
+        presents = compute_presents(house)
+        try:
+            assert presents == results[house]
+            print(f'SUCCESS | house {house}: {presents} == {results[house]}')
+        except AssertionError as ae:
+            print(f'FAIL    | house {house}: {presents} != {results[house]}')
+            logic_ok = False
+    return logic_ok
+
+if test_logic():
+    # not found curr_house = 613491, presents = 8832000, total = 33100000
+    # too slow
+    # house_number = find_house_for_total_presents(33100000) 
+    pass
