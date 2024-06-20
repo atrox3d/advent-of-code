@@ -46,6 +46,9 @@ def compute_presents(house:int, presents_per_elf=10):
     return sum(get_elves_for_house(house)) * presents_per_elf
 
 def find_house_for_total_presents(total:int) -> int:
+    '''
+    too slow for higher values
+    '''
     done = False
     curr_house = 1
     while not done:
