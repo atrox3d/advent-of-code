@@ -68,26 +68,6 @@ def find_house_for_total_presents(total:int) -> int:
             curr_house += 1
     return curr_house
 
-def recurse_presents(house:int, elf:int=None) -> int:
-    '''
-    The fourth house gets 70 presents, because it is visited by Elves 
-    1, 2, and 4, for a total of 10 + 20 + 40 = 70 presents.
-
-    What is the lowest house number of the house to get at least as many 
-    presents as the number in your puzzle input? # 33100000
-   '''
-    #  start from the highest elf
-    if elf is None:
-        elf = house
-    print(f'presents:start: {house = }, {elf = }')
-    
-    if elf == 1: return 1
-    
-    if house < 1: raise ValueError(f'{house = } cannot be lowert than 1')
-    
-    previous_elf = elf - 1
-    # TODO: complete recursive call
-
 def presents_per_house(house:int) -> int:
     '''
     What is the lowest house number of the house to get at least as many 
@@ -101,6 +81,10 @@ def presents_per_house(house:int) -> int:
     return total
 
 assert test_base_logic(compute_presents=presents_per_house), f'failed logich check'
+assert test_base_logic(compute_presents=compute_presents), f'failed logich check'
 # not found curr_house = 613491, presents = 8832000, total = 33100000
 # too slow
 # house_number = find_house_for_total_presents(33100000) 
+# for house in range(30):
+    # print(house, list(get_elves_for_house(house)))
+find_house_for_total_presents(33100000/10)
