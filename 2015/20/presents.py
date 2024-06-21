@@ -23,7 +23,12 @@ from typing import Generator, Callable
 def get_presents_per_house(house:int) -> int:
     return sum(filter(lambda elf: house%elf==0, range(1, house+1))) * 10
 
-def find_house_for_total_presents(total:int, compute_presents:Callable[[int], int]) -> int:
+def find_house_for_total_presents(
+        total:int, 
+        compute_presents:Callable[[int], int],
+        first_house=1,
+        offset=100
+        ) -> int:
     '''
     loop over every house until the total presents match (?) total
 
@@ -34,15 +39,38 @@ def find_house_for_total_presents(total:int, compute_presents:Callable[[int], in
     presents as the number in your puzzle input? # 33100000
     '''
     done = False
-    curr_house = 1
+    curr_house = first_house
+    len_total = len(str(total))
     while not done:
         presents = compute_presents(curr_house)
+        # not likely
         if presents == total:
-            print(f'found {curr_house = }, {presents = }, {total = }')
+            print(f'FOUND {first_house:}->{curr_house:_}, {presents:_} <= {total:_} ')
             done = True
-        else:
-            print(f'not found {curr_house = }, {presents = }, {total = }')
+            # always
+        elif presents <= total:
+            # not enough
+            if len(str(presents)) == len(str(total)):
+                # same order, filter out too low/too high
+                print(f'NOT FOUND {first_house:<10_}->{curr_house:>10_}, {presents:>12_} <= {total:<12_} ' 
+                    f'{len(str(presents)):2} - {len(str(total)):2}')
+                # print('.', end='', flush=True)
             curr_house += 1
+        else:
+            #
+            # need to catch the lower greater than
+            #
+            # - same len is same order, filter out values too high
+            #
+            if len(str(presents)) == len_total:
+                # - try to stay in a range/offset ti guess the lower greater than
+                if (presents - total) <= offset:
+                    print(f'    FOUND {first_house:<10_}->{curr_house:>10_}, '
+                          f'{presents:<12_} >= {total:<12_} -- {offset=}')
+                    done = True
+                else:
+                    # greater than but different order (len)
+                    raise ValueError(f'{presents} > {total}')
     return curr_house
 
 ########################################################################
@@ -78,3 +106,26 @@ assert \
         results=[None, 10, 30, 40, 70, 60, 120, 80, 150, 130],
         compute_presents=get_presents_per_house
         ), f'failed logic check'
+
+def main(total:int, start:int, end:int, offset:int) -> int | list[int]:
+    houses = []
+    for limiter in range(start, end+1):
+        first_house = total // limiter
+        try:
+            print(f'find: {total=} / {first_house=} / {limiter=} / {offset=}')
+            house = find_house_for_total_presents(
+                                    total=total, 
+                                    compute_presents=get_presents_per_house,
+                                    first_house=first_house,
+                                    offset=offset
+                                )
+            houses.append(house)
+            print(f'{house = }')
+        except ValueError:
+            print()
+            print(f'FAILED with {limiter=}, {first_house=} {offset=}')
+            print()
+    return sorted(houses)
+
+total=33_100_000
+offset = 1000_000
