@@ -22,6 +22,7 @@ from typing import Generator, Callable
 
 
 def elves_per_house(house:int) -> list:
+    ''' returns all the elves that will visit a house '''
     return [elf for elf in filter(lambda elf: house % elf == 0, range(1, house+1))]
 
 def presents_per_house(
@@ -29,12 +30,15 @@ def presents_per_house(
                     compute_elves:Callable[[int], list[int]], 
                     presents_per_elf=10
     ) -> int:
+    ''' just the math logic as API '''
     return sum(compute_elves(house)) * presents_per_elf
 
 ########################################################################
 
 def get_presents_per_house(house:int) -> int:
     '''
+    find the elves and computes the presents
+    
     What is the lowest house number of the house to get at least as many 
     presents as the number in your puzzle input? # 33100000
     '''
