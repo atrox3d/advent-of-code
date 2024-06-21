@@ -20,7 +20,9 @@ presents as the number in your puzzle input? # 33100000
 '''
 from typing import Generator, Callable
 
-
+########################################################################
+# using filter
+########################################################################
 def elves_per_house(house:int) -> list:
     ''' returns all the elves that will visit a house '''
     return [elf for elf in filter(lambda elf: house % elf == 0, range(1, house+1))]
@@ -34,7 +36,8 @@ def presents_per_house(
     return sum(compute_elves(house)) * presents_per_elf
 
 ########################################################################
-
+# just for loop with mod
+########################################################################
 def get_presents_per_house(house:int) -> int:
     '''
     find the elves and computes the presents
@@ -50,7 +53,8 @@ def get_presents_per_house(house:int) -> int:
     return total
 
 ########################################################################
-
+# use generator with sum
+########################################################################
 def get_elves_for_house(house:int) -> Generator[int, None, None]:
     ''' generates all elves that will visit a house '''
     return (elf for elf in range(1, house+1) if house % elf == 0)
@@ -58,30 +62,6 @@ def get_elves_for_house(house:int) -> Generator[int, None, None]:
 def compute_presents(house:int, presents_per_elf=10):
     ''' returns the total present for this house '''
     return sum(get_elves_for_house(house)) * presents_per_elf
-
-########################################################################
-
-def test_base_logic(
-        start_house:int, 
-        end_house:int, 
-        results:list, 
-        compute_presents:callable,
-        *args,
-        **kwargs
-    ):
-    ''' tests the base functions against the examples '''
-    logic_ok = True
-    for house in range(start_house, end_house+1):
-        presents = compute_presents(house, *args, **kwargs)
-        try:
-            assert presents == results[house]
-            print(f'SUCCESS | house {house}: {presents} == {results[house]}')
-        except AssertionError as ae:
-            print(f'FAIL    | house {house}: {presents} != {results[house]}')
-            logic_ok = False
-    return logic_ok
-
-#########################################################################
 
 def find_house_for_total_presents(total:int) -> int:
     '''
@@ -102,6 +82,29 @@ def find_house_for_total_presents(total:int) -> int:
             curr_house += 1
     return curr_house
 
+########################################################################
+# test functions againsta example values
+########################################################################
+def test_base_logic(
+        start_house:int, 
+        end_house:int, 
+        results:list, 
+        compute_presents:callable,
+        *args,
+        **kwargs
+    ):
+    ''' tests the base functions against the examples '''
+    logic_ok = True
+    for house in range(start_house, end_house+1):
+        presents = compute_presents(house, *args, **kwargs)
+        try:
+            assert presents == results[house]
+            print(f'SUCCESS | house {house}: {presents} == {results[house]}')
+        except AssertionError as ae:
+            print(f'FAIL    | house {house}: {presents} != {results[house]}')
+            logic_ok = False
+    return logic_ok
+
 
 start_house = 1
 end_house = 9
@@ -115,3 +118,5 @@ assert \
 assert \
     test_base_logic(*base_params, compute_presents), \
     f'failed logich check'
+
+#########################################################################
