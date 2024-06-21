@@ -63,21 +63,18 @@ def test_base_logic(
         presents = compute_presents(house)
         try:
             assert presents == results[house]
-            print(f'SUCCESS | house {house}: {presents} == {results[house]}')
+            if print_success:
+                print(f'SUCCESS | house {house}: {presents} == {results[house]}')
         except AssertionError as ae:
-            print(f'FAIL    | house {house}: {presents} != {results[house]}')
             logic_ok = False
+            if print_failure:
+                print(f'FAIL    | house {house}: {presents} != {results[house]}')
     return logic_ok
-
-
-start_house = 1
-end_house = 9
-results = [None, 10, 30, 40, 70, 60, 120, 80, 150, 130]
 
 assert \
     test_base_logic(
-        start_house,
-        end_house,
-        results,
-        get_presents_per_house
+        start_house=1,
+        end_house=9,
+        results=[None, 10, 30, 40, 70, 60, 120, 80, 150, 130],
+        compute_presents=get_presents_per_house
         ), f'failed logic check'
