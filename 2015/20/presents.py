@@ -20,53 +20,16 @@ presents as the number in your puzzle input? # 33100000
 '''
 from typing import Generator, Callable
 
-########################################################################
-# using filter
-########################################################################
-def elves_per_house(house:int) -> list:
-    ''' returns all the elves that will visit a house '''
-    return [elf for elf in filter(lambda elf: house % elf == 0, range(1, house+1))]
-
-def presents_per_house(
-                    house:int, 
-                    compute_elves:Callable[[int], list[int]], 
-                    presents_per_elf=10
-    ) -> int:
-    ''' just the math logic as API '''
-    return sum(compute_elves(house)) * presents_per_elf
-
-########################################################################
-# just for loop with mod
-########################################################################
 def get_presents_per_house(house:int) -> int:
-    '''
-    find the elves and computes the presents
-    
-    What is the lowest house number of the house to get at least as many 
-    presents as the number in your puzzle input? # 33100000
-    '''
-    total = 0
-    for elf in range(house, 0, -1):
-        if house % elf == 0:
-            total += elf * 10
-    # print(f'total presents for {house = } : {total}')
-    return total
+    return sum(filter(lambda elf: house%elf==0, range(1, house+1))) * 10
 
-########################################################################
-# use generator with sum
-########################################################################
-def get_elves_for_house(house:int) -> Generator[int, None, None]:
-    ''' generates all elves that will visit a house '''
-    return (elf for elf in range(1, house+1) if house % elf == 0)
-
-def compute_presents(house:int, presents_per_elf=10):
-    ''' returns the total present for this house '''
-    return sum(get_elves_for_house(house)) * presents_per_elf
-
-def find_house_for_total_presents(total:int) -> int:
+def find_house_for_total_presents(total:int, compute_presents:Callable[[int], int]) -> int:
     '''
+    loop over every house until the total presents match (?) total
+
     TOO SLOW for higher values
-    # not found curr_house = 613491, presents = 8832000, total = 33100000
+
+    not found curr_house = 613491, presents = 8832000, total = 33100000
     What is the lowest house number of the house to get at least as many 
     presents as the number in your puzzle input? # 33100000
     '''
@@ -90,13 +53,14 @@ def test_base_logic(
         end_house:int, 
         results:list, 
         compute_presents:callable,
-        *args,
-        **kwargs
+        print_success=True,
+        print_failure=True,
     ):
     ''' tests the base functions against the examples '''
+
     logic_ok = True
     for house in range(start_house, end_house+1):
-        presents = compute_presents(house, *args, **kwargs)
+        presents = compute_presents(house)
         try:
             assert presents == results[house]
             print(f'SUCCESS | house {house}: {presents} == {results[house]}')
@@ -109,14 +73,11 @@ def test_base_logic(
 start_house = 1
 end_house = 9
 results = [None, 10, 30, 40, 70, 60, 120, 80, 150, 130]
-base_params = start_house, end_house, results
 
 assert \
-    test_base_logic(*base_params, get_presents_per_house), \
-    f'failed logich check'
-
-assert \
-    test_base_logic(*base_params, compute_presents), \
-    f'failed logich check'
-
-#########################################################################
+    test_base_logic(
+        start_house,
+        end_house,
+        results,
+        get_presents_per_house
+        ), f'failed logic check'
