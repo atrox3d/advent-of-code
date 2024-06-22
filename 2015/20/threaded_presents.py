@@ -102,4 +102,4 @@ if __name__ == '__main__':
     # result = brute_force(total)
     # print(result)
     # run_threads(presents_thread, total, results, condition=lambda:len(results)>0)
-    no_join(presents_thread, 1_000_000, total, done, status)
+    no_join(presents_thread, 900_000, total, done, status)
