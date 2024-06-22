@@ -129,3 +129,33 @@ def main(total:int, start:int, end:int, offset:int) -> int | list[int]:
 
 total=33_100_000
 offset = 1000_000
+
+import time
+
+def timed(f):
+    def wrapper(*args, **kw):
+        try:
+            ts = time.time()
+            result = f(*args, **kw)
+            return result
+        finally:
+            te = time.time()
+            print('func:%r args:[%r, %r] took: %2.4f sec' % 
+                (f.__name__, args, kw, te-ts))
+    return wrapper
+
+@timed
+def brute_force(total:int) -> int:
+    house = 1
+    presents = 0
+    try:
+        while presents < total:
+            presents = get_presents_per_house(house)
+            house += 1
+        return house -1
+    except KeyboardInterrupt:
+        print(f'INTERRUPTED | {house=}, {presents=}, {total=}')
+        exit()
+
+result = brute_force(total)
+print(result)
