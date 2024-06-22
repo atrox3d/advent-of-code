@@ -140,8 +140,7 @@ def timed(f):
             return result
         finally:
             te = time.time()
-            print('func:%r args:[%r, %r] took: %2.4f sec' % 
-                (f.__name__, args, kw, te-ts))
+            print(f'function:{f.__name__} args:[{args}, {kw}] took: {te-ts} sec')
     return wrapper
 
 @timed
