@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-def get_house(target:int, max_houses:int) -> tuple[int, int]:
-    ''' returns the first house with presents >= target '''
-
-    presents = [0] * max_houses             # create arrays of 0
-    for house in range(1, max_houses+1):    # loop over every house, ignore 0
-        elf = house                         # start with next elf
-        while elf < max_houses:             
-            presents[elf] += 10 * house     # update presents in multiple house
-            elf += house                    # got through all multiple houses
-=======
 def get_house(
                 target:int, 
                 max_houses:int, 
@@ -28,7 +17,6 @@ def get_house(
             if max_houses_per_elve is not None:
                 if count >= max_houses_per_elve:
                     break
->>>>>>> 8735e02 (solved 2015/20/2)
         if presents[house] >= target:
             return house, presents[house]
 
