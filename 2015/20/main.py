@@ -70,7 +70,11 @@ def solution1(quiz_input):
 
 def solution2(quiz_input):
     print(f'{quiz_input = !r}')
-    return None
+    max_houses = 1_000_000
+    target = int(quiz_input)
+    house, presents = gifts.get_house(target, max_houses, 11, 50)
+    print(house, presents)
+    return house
 
 def main(
             path:Path|str,
