@@ -57,21 +57,14 @@ class Shop:
         items_dict = self._parse(data)
         self._items = [item for category, items in items_dict.items() for item in items]
 
-    def items(self):
-        return [item for item in self._items]
+    def items(self, sortby:str=None, reverse=False):
+        return self._sortby([item for item in self._items], sortby, reverse)
 
     @staticmethod
-    def _sortby(data:list[ShopItem], category:bool=None, name:bool=None, cost:bool=None, 
-                damage:bool=None, armor:bool=None, qty:bool=None, reverse=False
+    def _sortby(data:list[ShopItem], fields:str=None, reverse=False
         ) -> list[ShopItem]:
-        keys = {k:v for k, v in locals().items() if v is True and k not in 'data reverse'.split()}
-        # print(f'{keys=}', end='\n\n')
-        return sorted(data[:], key=lambda x:[getattr(x, k) for k in keys], reverse=reverse)
-
-    @staticmethod
-    def _sortfor(data:list[ShopItem], fields:str, reverse=False
-        ) -> list[ShopItem]:
-        # keys = {k:v for k, v in locals().items() if v is True and k not in 'data reverse'.split()}
+        if fields is None:
+            return data
         keys = fields.split()
         print(f'{keys=}', end='\n\n')
         return sorted(data[:], key=lambda x:[getattr(x, k) for k in keys], reverse=reverse)
@@ -81,24 +74,20 @@ class Shop:
             raise TypeError(f'unknown class {klass.__name__}')
         return [item for item in self._items if isinstance(item, klass)]
 
-    def weapons(self):
-        return self._get_category(Weapon)
+    def weapons(self, sortby:str=None, reverse=False):
+        return self._sortby(self._get_category(Weapon), sortby, reverse)
 
-    def armors(self):
-        return self._get_category(Armor)
+    def armors(self, sortby:str=None, reverse=False):
+        return self._sortby(self._get_category(Armor), sortby, reverse)
 
-    def rings(self):
-        return self._get_category(Ring)
+    def rings(self, sortby:str=None, reverse=False):
+        return self._sortby(self._get_category(Ring), sortby, reverse)
 
 if __name__ == '__main__':
     shop = Shop('shop.txt')
-    print(shop.items(), end='\n\n')
-    print(shop.weapons(), end='\n\n')
-    print(shop.armors(), end='\n\n')
-    print(shop.rings(), end='\n\n\n\n')
-
-    [print(item) for item in 
-     shop._sortby(shop.items(), category=True, cost=True, reverse=False)]
-
-    [print(item) for item in 
-     shop._sortfor(shop.items(), 'cost damage category', reverse=True)]
+    [print(item) for item in shop.weapons(sortby='cost damage')]
+    [print(item) for item in shop.armors(sortby='cost armor')]
+    [print(item) for item in shop.rings(sortby='name armor damage')]
+    [print(item) for item in shop.items(sortby='name armor damage')]
+    # [print(item) for item in 
+    #  shop._sortby(shop.items(), None, reverse=True)]
