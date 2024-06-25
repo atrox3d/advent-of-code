@@ -67,6 +67,14 @@ class Shop:
         keys = {k:v for k, v in locals().items() if v is True and k not in 'data reverse'.split()}
         # print(f'{keys=}', end='\n\n')
         return sorted(data[:], key=lambda x:[getattr(x, k) for k in keys], reverse=reverse)
+
+    @staticmethod
+    def _sortfor(data:list[ShopItem], fields:str, reverse=False
+        ) -> list[ShopItem]:
+        # keys = {k:v for k, v in locals().items() if v is True and k not in 'data reverse'.split()}
+        keys = fields.split()
+        print(f'{keys=}', end='\n\n')
+        return sorted(data[:], key=lambda x:[getattr(x, k) for k in keys], reverse=reverse)
     
     def _get_category(self, klass) -> list[ShopItem]:
         if not issubclass(klass, ShopItem):
@@ -91,3 +99,6 @@ if __name__ == '__main__':
 
     [print(item) for item in 
      shop._sortby(shop.items(), category=True, cost=True, reverse=False)]
+
+    [print(item) for item in 
+     shop._sortfor(shop.items(), 'cost damage category', reverse=True)]
