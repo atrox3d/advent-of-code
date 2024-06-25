@@ -12,19 +12,23 @@ class Shop:
     def __init__(self, filename:str='shop.txt', path:Path=Path(__file__).parent) -> list[str]:
         self.filename = filename
         self.path = path
-        # self._data = None
-        # self._items_dict = None
         self._items = None
         self.load()
 
     @staticmethod
     def _load(filename:str, path:Path=Path(__file__).parent) -> list[str]:
+        ''' load shop lines from file '''
+
         with open(str(path / filename )) as fp:
             data = fp.read().splitlines()
         return data
 
     @staticmethod
     def _parse(data:list[str]) -> dict:
+        ''' parse shop lines into dict '''
+
+        # TODO: bypass dict
+
         items = {}
         klass = ShopItem
         for line in data:
@@ -53,16 +57,22 @@ class Shop:
         return items
 
     def load(self) -> list[ShopItem]:
+        ''' load shop items from file into list '''
+
         data = self._load(self.filename, self.path)
         items_dict = self._parse(data)
         self._items = [item for category, items in items_dict.items() for item in items]
 
     def items(self, sortby:str=None, reverse=False):
+        ''' returns a sorted list of all items'''
+
         return self._sortby([item for item in self._items], sortby, reverse)
 
     @staticmethod
     def _sortby(data:list[ShopItem], fields:str=None, reverse=False
         ) -> list[ShopItem]:
+        ''' return a sorted list based on ShopItem attributes '''
+
         if fields is None:
             return data
         keys = fields.split()
@@ -70,6 +80,8 @@ class Shop:
         return sorted(data[:], key=lambda x:[getattr(x, k) for k in keys], reverse=reverse)
     
     def _get_category(self, klass) -> list[ShopItem]:
+        ''' returns list of items filtered by type '''
+        
         if not issubclass(klass, ShopItem):
             raise TypeError(f'unknown class {klass.__name__}')
         return [item for item in self._items if isinstance(item, klass)]
