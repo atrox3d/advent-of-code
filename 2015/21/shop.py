@@ -9,7 +9,7 @@ from shop_item import (
 
 class Shop:
 
-    def __init__(self, filename:str, path:Path=Path(__file__).parent) -> list[str]:
+    def __init__(self, filename:str='shop.txt', path:Path=Path(__file__).parent) -> list[str]:
         self.filename = filename
         self.path = path
         # self._data = None
@@ -84,7 +84,7 @@ class Shop:
         return self._sortby(self._get_category(Ring), sortby, reverse)
 
 if __name__ == '__main__':
-    shop = Shop('shop.txt')
+    shop = Shop()
     [print(item) for item in shop.weapons(sortby='cost damage')]
     [print(item) for item in shop.armors(sortby='cost armor')]
     [print(item) for item in shop.rings(sortby='name armor damage')]
