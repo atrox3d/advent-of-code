@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from build import Build
+
 @dataclass
 class Character:
     hitpoints:int
@@ -23,6 +25,10 @@ class Character:
                     char.armor = armor
         
         return char
+    
+    def equip(self, build:Build) -> None:
+        self.damage = build.total_damage
+        self.armor = build.total_armor
 
 
 if __name__ == '__main__':
