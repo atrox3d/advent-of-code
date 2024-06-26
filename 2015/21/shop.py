@@ -5,6 +5,7 @@ from shop_item import (
     Weapon,
     Ring,
     Armor,
+    no_weapon, no_armor, no_ring
 )
 
 class Shop:
@@ -66,7 +67,7 @@ class Shop:
     def items(self, sortby:str=None, reverse=False):
         ''' returns a sorted list of all items'''
 
-        return self._sortby([item for item in self._items], sortby, reverse)
+        return self._sortby([item for item in self._items + [no_armor, no_ring]], sortby, reverse)
 
     @staticmethod
     def _sortby(data:list[ShopItem], fields:str=None, reverse=False
@@ -76,23 +77,23 @@ class Shop:
         if fields is None:
             return data
         keys = fields.split()
-        print(f'{keys=}', end='\n\n')
+        # print(f'{keys=}', end='\n\n')
         return sorted(data[:], key=lambda x:[getattr(x, k) for k in keys], reverse=reverse)
     
     def _get_category(self, klass) -> list[ShopItem]:
         ''' returns list of items filtered by type '''
-        
+
         if not issubclass(klass, ShopItem):
             raise TypeError(f'unknown class {klass.__name__}')
-        return [item for item in self._items if isinstance(item, klass)]
+        return [item for item in self.items() if isinstance(item, klass)]
 
-    def weapons(self, sortby:str=None, reverse=False):
+    def weapons(self, sortby:str='cost', reverse=False):
         return self._sortby(self._get_category(Weapon), sortby, reverse)
 
-    def armors(self, sortby:str=None, reverse=False):
+    def armors(self, sortby:str='cost', reverse=False):
         return self._sortby(self._get_category(Armor), sortby, reverse)
 
-    def rings(self, sortby:str=None, reverse=False):
+    def rings(self, sortby:str='cost', reverse=False):
         return self._sortby(self._get_category(Ring), sortby, reverse)
 
 if __name__ == '__main__':
@@ -100,6 +101,6 @@ if __name__ == '__main__':
     [print(item) for item in shop.weapons(sortby='cost damage')]
     [print(item) for item in shop.armors(sortby='cost armor')]
     [print(item) for item in shop.rings(sortby='name armor damage')]
-    [print(item) for item in shop.items(sortby='name armor damage')]
+    [print(item) for item in shop.items(sortby='category name armor damage')]
     # [print(item) for item in 
     #  shop._sortby(shop.items(), None, reverse=True)]
