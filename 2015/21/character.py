@@ -5,16 +5,17 @@ from build import Build
 
 @dataclass
 class Character:
-    hitpoints:int
-    damage:int
-    armor:int
+    name: str
+    hitpoints: int
+    damage: int
+    armor: int
 
     @classmethod
-    def from_file(cls, filename:str='input1.txt', path:Path=Path(__file__).parent) -> 'Character':
+    def from_file(cls, name, filename:str='input1.txt', path:Path=Path(__file__).parent) -> 'Character':
         with open(path / filename) as fp:
             lines = fp.read()
 
-        char = cls(0, 0, 0)
+        char = cls(name, 0, 0, 0)
         for line in lines.splitlines():
             match line.split():
                 case 'Hit', 'Points:', hitpoints:
@@ -32,5 +33,5 @@ class Character:
 
 
 if __name__ == '__main__':
-    char = Character.from_file()
+    char = Character.from_file('boss')
     print(char)

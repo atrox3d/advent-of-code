@@ -20,12 +20,13 @@ def get_builds(shop:Shop) -> Generator[Build, None, None]:
         if lring is not rring:
             build = Build(weapon, armor, lring, rring)
             yield build
-    
+
+
 
 if __name__ == '__main__':
     shop = Shop()
-    boss = Character.from_file()
-    player = Character(100, 0, 0)
+    boss = Character.from_file('boss')
+    player = Character('player', 100, 0, 0)
     
     print(f'{boss = }')
     print(f'{player = }')
