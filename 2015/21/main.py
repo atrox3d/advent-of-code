@@ -7,11 +7,27 @@ https://adventofcode.com/2015/day/21#part2
 from pathlib import Path
 import logging
 
+from shop import Shop
+from game import get_builds, fight
+from character import Character
+
 logger = logging.getLogger(__name__)
 
 def solution1(quiz_input):
-    print(f'{quiz_input = !r}')
-    return None
+    shop = Shop()
+    
+    winning_builds_costs = []
+    for build in get_builds(shop):
+        boss = Character.from_file('boss')
+        player = Character('player', 100, 0, 0)
+        player.equip(build)
+        winner = fight(player, boss)
+        if winner is player:
+            # print(f'{winner = }\n{build.total_cost = }')
+            winning_builds_costs.append(build.total_cost)
+    lower = min(winning_builds_costs)
+    print(f'{lower = }')
+    # return lower
 
 def solution2(quiz_input):
     print(f'{quiz_input = !r}')

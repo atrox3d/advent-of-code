@@ -52,3 +52,8 @@ You have 100 hit points. The boss's actual stats are in your puzzle input. What 
 
 https://adventofcode.com/2015/day/21#part2
 
+--- Part Two ---
+Turns out the shopkeeper is working with the boss, and can persuade you to buy whatever items he wants. The other rules still apply, and he still only has one of each item.
+
+What is the most amount of gold you can spend and still lose the fight?
+
