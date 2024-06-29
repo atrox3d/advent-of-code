@@ -27,11 +27,24 @@ def solution1(quiz_input):
             winning_builds_costs.append(build.total_cost)
     lower = min(winning_builds_costs)
     print(f'{lower = }')
-    # return lower
+    return lower
 
 def solution2(quiz_input):
-    print(f'{quiz_input = !r}')
-    return None
+    shop = Shop()
+    
+    winning_builds_costs = []
+    for build in get_builds(shop):
+        boss = Character.from_file('boss')
+        player = Character('player', 100, 0, 0)
+        player.equip(build)
+        winner = fight(player, boss)
+        if winner is boss:
+            # print(f'{winner = }\n{build.total_cost = }')
+            winning_builds_costs.append(build.total_cost)
+    most = max(winning_builds_costs)
+    print(f'{most = }')
+    return most
+
 
 def load_input(filename):
     with open(filename, 'r') as fp:
