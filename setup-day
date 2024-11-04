@@ -1,39 +1,39 @@
 #!/bin/bash
 
 [ ${#} -ge 2 ] || {
-    echo "FATAL | syntax ${0} year day"
+    echo "FATAL | syntax ${0} year day"         # example syntax setup-day 2015 01
     exit 1
 }
 
-AOC_DIR="$(dirname $(readlink -f $0))"
+AOC_DIR="$(dirname $(readlink -f $0))"          # set AOC_DIR to current dir
 echo "AOC_DIR     : ${AOC_DIR}"
 
-TEMPLATE_DIR="${AOC_DIR}/template"
+TEMPLATE_DIR="${AOC_DIR}/template"              # set TEMPLATE_DIR to aoc/template
 echo "TEMPLATE_DIR: ${TEMPLATE_DIR}"
 
-YEAR=${1}
-DAY=${2}
-ZP_DAY=$(printf %02d $DAY)
+YEAR=${1}                                       # get year from params
+DAY=${2}                                        # get day from param
+ZP_DAY=$(printf %02d $DAY)                      # zero padded day
 
 echo "YEAR        : ${YEAR}"
 echo "DAY         : ${DAY}"
 echo "DAY         : ${ZP_DAY}"
 
-DEST_DIR="${AOC_DIR}/${YEAR}/${ZP_DAY}"
+DEST_DIR="${AOC_DIR}/${YEAR}/${ZP_DAY}"         # set DEST_DIR to aoc/year/day
 echo "DEST_DIR    : ${DEST_DIR}"
 
-[ -d "${DEST_DIR}" ] && {
+[ -d "${DEST_DIR}" ] && {                       # check for already existing dest dir
     echo "FATAL | DEST_DIR already exist!"
     exit 2
 }
 
-echo "copying ${TEMPLATE_DIR} to ${DEST_DIR}"
+echo "copying ${TEMPLATE_DIR} to ${DEST_DIR}"   # copy template do dest
 cp -r "${TEMPLATE_DIR}" "${DEST_DIR}"
 
-README="${DEST_DIR}/README.md"
-SOLUTION="${DEST_DIR}/solution.py"
+README="${DEST_DIR}/README.md"                  # set readme
+SOLUTION="${DEST_DIR}/solution.py"              # set solution python file
 
-for FILE in "${README}" "${SOLUTION}"
+for FILE in "${README}" "${SOLUTION}"           # update year and day placeholdersd in README
 do
     echo "updating ${FILE}"
     sed -i "s/YEAR/${YEAR}/" "${FILE}"
