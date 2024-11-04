@@ -1,9 +1,6 @@
 from pathlib import Path
 
-def solution(input_path:str=None):
-    if input_path is None:
-        input_path = Path(__file__).with_suffix('.txt')
-    
+def solution(input_path):
     with open(input_path) as fp:
         input_text = fp.read()
     
