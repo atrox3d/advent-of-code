@@ -1,0 +1,1 @@
+-e git+https://github.com/atrox3d/atrox3d-project.git@6302e970a5eca7c1fc8dc22ffea08c2891a4cd32#egg=atrox3d
