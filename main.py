@@ -33,6 +33,8 @@ def main():
 
         if args.command == 'setup':
             commands.setup(
+                        args.year,
+                        args.day,
                         conf.template_path,
                         solution_path, 
                         solution_file, 
