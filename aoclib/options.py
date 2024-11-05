@@ -11,11 +11,6 @@ def parse_args():
     parser.add_argument('part', nargs='?', default=None,
                         type=int, choices=[1, 2])
 
-    # path = parser.add_mutually_exclusive_group(required=True)
-    # path.add_argument('--path')
-    # path.add_argument('--package')
-    # parser.add_argument('--part')
-
     options = parser.parse_args()
     options.day = f'{options.day:02d}'
     return options

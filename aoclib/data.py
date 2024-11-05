@@ -1,14 +1,13 @@
 from pathlib import Path
 import types
 
-def get_inputpath(
-        module:types.ModuleType,
-        inputpath:str=None,
+def get_inputfile(
+        year:str,
+        day:str,
+        part:str,
         suffix='txt'
 ) -> str:
-    if inputpath is None:
-        inputpath = Path(module.__file__).with_suffix(f'.{suffix}')
-    return str(inputpath)
+    return f'{year}/{day}/input{part}.{suffix}'
 
 def get_solutionpath(year:str, day:str) -> str:
     solution_path = f'{year}/{day}'
