@@ -36,3 +36,4 @@ def setup(
     copy(src_file, readme, YEAR=year, DAY=day)
 
     print(f'setting up {inputpath}')
+    Path(inputpath).touch()
