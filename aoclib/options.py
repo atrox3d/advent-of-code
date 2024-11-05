@@ -8,7 +8,8 @@ def parse_args():
                         choices=['run', 'test', 'setup'])
     parser.add_argument('year', type=int)
     parser.add_argument('day', type=int)
-    parser.add_argument('part', nargs='?', default=None)
+    parser.add_argument('part', nargs='?', default=None,
+                        type=int, choices=[1, 2])
 
     # path = parser.add_mutually_exclusive_group(required=True)
     # path.add_argument('--path')
