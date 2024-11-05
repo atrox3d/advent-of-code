@@ -1,5 +1,3 @@
-from pathlib import Path
-
 def solution(input_path):
     with open(input_path) as fp:
         input_text = fp.read()
@@ -9,3 +7,7 @@ def solution(input_path):
 
     print(f'{up, down = }')
     print(f'{up - down = }')
+    return up - down
+
+def test_solution():
+    pass
