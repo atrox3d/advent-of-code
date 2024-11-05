@@ -1,7 +1,8 @@
 from pathlib import Path
 import sys
-            
-def solution(quiz_input):
+import pytest
+
+def solve(quiz_input):
     r, c = 0, 0
     start = r, c
     path = set()
@@ -19,25 +20,20 @@ def solution(quiz_input):
         path.add(tile)
     return len(path)
 
-if sys.argv[1:]:
-    param = sys.argv[1]
-    if param.lower() == 'test':
-        tests = {
-            '>': 2,
-            '^>v<': 4,
-            '^v^v^v^v^v': 2,
-        }
-        for test, expected in tests.items():
-            print(f'testing {test=}: {expected=}')
-            result = solution(test)
-            try:
-                assert expected == result, f'{expected=} != {result=}'
-                print('PASS')
-            except AssertionError as ae:
-                print(repr(ae))
-            finally:
-                print()
-else:
-    with open(Path(__file__).with_suffix('.txt')) as fp:
-        quiz_input = fp.read()
-        print(solution(quiz_input))
+def solution(input_path):
+    with open(input_path) as fp:
+        input_text = fp.read()
+
+    return solve(input_text)
+
+@pytest.mark.parametrize(
+        'test, expected', [
+            ('>', 2),
+            ('^>v<', 4),
+            ('^v^v^v^v^v', 2),
+        ]
+)
+def test_solution_2015_03_1(test, expected):
+    result = solve(test)
+    assert result == expected
+
