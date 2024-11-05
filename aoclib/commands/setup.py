@@ -11,6 +11,7 @@ def copy(src, dest, **subst):
 def setup(
         year:str,
         day:str,
+        part:str,
         template_path:str, 
         solution_path:str, 
         solution_file:str, 
@@ -26,7 +27,8 @@ def setup(
     if dest_file.exists():
         raise FileExistsError(f'file {solution_file} already exists')
     src_file = Path(template_path) / 'solution.py'
-    copy(src_file, dest_file)
+    copy(src_file, dest_file, 
+        test_solution=f'test_solution_{year}_{day}_{part}')
 
     readme = Path(solution_path) / 'README.md'
     print(f'setting up {readme}')

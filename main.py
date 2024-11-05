@@ -35,6 +35,7 @@ def main():
             commands.setup(
                         args.year,
                         args.day,
+                        part,
                         conf.template_path,
                         solution_path, 
                         solution_file, 
