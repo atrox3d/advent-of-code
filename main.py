@@ -46,7 +46,7 @@ def main():
             solution = module.solution
 
             if args.command == 'run':
-                commands.run(solution, input_file)
+                commands.run(module, input_file)
             elif args.command == 'test':
                 commands.test(solution_file)
         else:
