@@ -12,5 +12,5 @@ def solution(input_path:str):
             print(pos + 1)
             return pos
 
-def test_solution():
+def test_solution_2015_01_2():
     pass

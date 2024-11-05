@@ -9,5 +9,5 @@ def solution(input_path):
     print(f'{up - down = }')
     return up - down
 
-def test_solution():
+def test_solution_2015_01_1():
     pass

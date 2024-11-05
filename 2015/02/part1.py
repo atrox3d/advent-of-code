@@ -36,7 +36,7 @@ def solution(input_path:str):
     ('2x3x4', (52, 6, 58)), 
     ('1x1x10', (42, 1, 43))]
 )
-def test_paper(box_str, expected):
+def test_solution_2015_02_1(box_str, expected):
     box = parse_box(box_str)
     int_box = convert_box(box)
     partials = get_paper_and_slack(*int_box)

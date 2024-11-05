@@ -25,28 +25,6 @@ def compute_ribbon(partials):
     return total
 
 
-def deleteme():
-    if sys.argv[1:]:
-        param = sys.argv[1]
-        if param.lower() == 'test':
-            tests = {
-                '2x3x4':(10, 24, 34), 
-                '1x1x10':(4, 10, 14)
-            }
-            for test, expected in tests.items():
-                print(f'testing {test=}: {expected=}')
-                result = test_ribbon(test)
-                try:
-                    assert expected == result, f'{expected=} != {result=}'
-                except AssertionError as ae:
-                    print(repr(ae))
-        elif param.count('x') == 2:
-            compute_ribbon(param)
-        else:
-            raise ValueError(f'wrong parameter format {param}')
-    else:
-        pass
-
 def solution(input_path:str):
     with open(input_path) as fp:
         lines = [line.rstrip() for line in fp.readlines()]
@@ -63,7 +41,7 @@ def solution(input_path:str):
         ('1x1x10', (4, 10, 14))
     ]
 )
-def test_solution(box_str, expected):
+def test_solution_2015_02_2(box_str, expected):
     box = parse_box(box_str)
     int_box = convert_box(box)
     partials = get_ribbon_and_slack(*int_box)
