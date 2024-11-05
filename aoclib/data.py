@@ -10,8 +10,12 @@ def get_inputpath(
         inputpath = Path(module.__file__).with_suffix(f'.{suffix}')
     return str(inputpath)
 
-def get_solutionpath(year:str, day:str, part:str) -> str:
-    solution_path = f'{year}/{day}/part{part}.py'
+def get_solutionpath(year:str, day:str) -> str:
+    solution_path = f'{year}/{day}'
+    return solution_path
+
+def get_solutionfile(year:str, day:str, part:str) -> str:
+    solution_path = f'{get_solutionpath(year, day)}/part{part}.py'
     return solution_path
 
 def get_solutionpackage(year:str, day:str, part:str) -> str:
