@@ -1,7 +1,9 @@
 from pathlib import Path
 import sys
+
+import pytest
             
-def solution(quiz_input):
+def solve(quiz_input):
     """
     Santa needs help mining some AdventCoins (very similar to bitcoins) 
     to use as gifts for all the economically forward-thinking 
@@ -38,34 +40,19 @@ def solution(quiz_input):
             return number
         number += 1
 
-if sys.argv[1:]:
-    param = sys.argv[1]
-    if param.lower() == 'test':
-        tests = [
-            {
-                'input': 'abcdef', 
-                'expected': 609043,
-                'meta': ['abcdef609043', '000001dbbfa...'],
-            },
-            {
-                'input': 'pqrstuv', 
-                'expected': 1048970,
-                'meta': ['pqrstuv1048970', '000006136ef...'],
-            },
-        ]
-        for test in tests:
-            _input = test['input']
-            expected = test['expected']
-            print(f'testing {_input}: {expected=}')
-            result = solution(test['input'])
-            try:
-                assert expected == result, f'{expected=} != {result=}'
-                print('PASS')
-            except AssertionError as ae:
-                print(repr(ae))
-            finally:
-                print()
-else:
-    with open(Path(__file__).with_suffix('.txt')) as fp:
-        quiz_input = fp.read().rstrip()
-        print(solution(quiz_input))
+
+def solution(input_path):
+    with open(input_path) as fp:
+        input_text = fp.read()
+
+    return solve(input_text)
+
+# @pytest.mark.parametrize(
+#         'test, expected', [
+#             ('abcdef', 609043), 
+#             ('pqrstuv', 1048970)
+#         ]
+# )
+# def test_solution_2015_03_1(test, expected):
+#     result = solve(test)
+#     assert result == expected

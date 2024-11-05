@@ -31,31 +31,6 @@ def solve(quiz_input):
 
     return len(path)
 
-def deleteme():
-    if sys.argv[1:]:
-        param = sys.argv[1]
-        if param.lower() == 'test':
-            tests = {
-                '^v': 3,
-                '^>v<': 3,
-                '^v^v^v^v^v': 11,
-            }
-            for test, expected in tests.items():
-                print(f'testing {test=}: {expected=}')
-                result = solution(test)
-                try:
-                    assert expected == result, f'{expected=} != {result=}'
-                    print('PASS')
-                except AssertionError as ae:
-                    print(repr(ae))
-                finally:
-                    print()
-    else:
-        with open(Path(__file__).with_suffix('.txt')) as fp:
-            quiz_input = fp.read()
-            print(solution(quiz_input))
-
-
 def solution(input_path):
     with open(input_path) as fp:
         input_text = fp.read()
