@@ -29,8 +29,10 @@ def solution(input_path:str):
         papers = [get_total_paper(l, w, h) for l, w, h in int_boxes]
         total = sum(papers)
         print(total)
+        return total
 
-@pytest.mark.parametrize('box_str, expected', [
+@pytest.mark.parametrize(
+    'box_str, expected', [
     ('2x3x4', (52, 6, 58)), 
     ('1x1x10', (42, 1, 43))]
 )
