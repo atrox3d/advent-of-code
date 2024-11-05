@@ -5,6 +5,7 @@ from aoclib import modules
 from aoclib import data
 from aoclib import options
 from aoclib import commands
+from aoclib import config
 
 ############## DELETE ###########################################
 def deleteme_when_youre_done():
@@ -22,6 +23,8 @@ def main():
     args = options.parse_args()
 
     parts = [args.part] if args.part else [1, 2]
+    conf = config.Config.from_json()
+    print(conf)
     for part in parts:
 
         solution_path = data.get_solutionpath(args.year, args.day)
@@ -29,7 +32,12 @@ def main():
         input_file = data.get_inputfile(args.year, args.day, part)
 
         if args.command == 'setup':
-            commands.setup(solution_path, solution_file, input_file)
+            commands.setup(
+                        conf.template_path,
+                        solution_path, 
+                        solution_file, 
+                        input_file
+            )
         elif args.command in ['run', 'test']:
             # solution_package = data.get_solutionpackage(args.year, args.day, part)
             module = modules.load_module_from_path(solution_file)
