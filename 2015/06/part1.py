@@ -11,7 +11,6 @@ def solve(quiz_input:str, strategy):
     print(result)
     return result
 
-
 def solution(input_path):
     with open(input_path) as fp:
         input_text = fp.readlines()
