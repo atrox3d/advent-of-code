@@ -1,9 +1,4 @@
-import sys
-from pathlib import Path
 import pytest
-
-here = Path(__file__).parent
-sys.path.insert(0, str(here))
 
 import common
 

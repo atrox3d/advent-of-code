@@ -1,12 +1,7 @@
-import sys
-from pathlib import Path
-
 import pytest
 
-here = Path(__file__).parent
-sys.path.insert(0, str(here))
-
 import common
+
 
 def solve(quiz_input:str, strategy):
     grid = [[0 for c in range(1000)] for r in range(1000)]

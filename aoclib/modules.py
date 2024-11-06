@@ -13,11 +13,13 @@ def load_module_from_path(
     '''dynamically loads a module from path and filename'''
 
     file_path = Path(target_path)
+    print(f'{file_path = }')
     if not file_path.exists():
         raise FileNotFoundError(file_path)
     module_name = file_path.stem
+    print(f'{module_name = }')
 
-    # sys.path.insert(0, str(target_path))
+    sys.path.insert(0, str(file_path.parent))
 
     # logger.debug(f'loading module file: {file_path}')
     spec = importlib.util.spec_from_file_location(module_name, file_path)
