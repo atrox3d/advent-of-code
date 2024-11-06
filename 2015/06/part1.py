@@ -1,6 +1,10 @@
 import pytest
 
-import common
+# fix for vscode pytest
+try:
+    import common
+except:
+    from . import common
 
 def solve(quiz_input:str, strategy):
     grid = [[0 for c in range(1000)] for r in range(1000)]

@@ -1,6 +1,10 @@
 import pytest
 
-import common
+# fix for vscode pytest
+try:
+    import common
+except:
+    from . import common
 
 
 def solve(quiz_input:str, strategy):
