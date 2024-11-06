@@ -2,6 +2,8 @@ import logging
 import sys, os
 import re
 
+import pytest
+
 
 logger = logging.getLogger(__name__)
             
@@ -90,3 +92,31 @@ def solution(input_path):
         input_text = fp.readlines()
     
     print(solve(input_text, is_nice1))
+
+
+@pytest.mark.parametrize(
+        'word, isnice', [
+            ('ugknbfddgicrmopn', True),
+            ('aaa', True),
+            ('jchzalrnumimnmhp', False),
+            ('haegwjzuvuyypxyu', False),
+            ('dvszwmarrgswjxmb', False),
+        ]
+)
+def test_solution_2015_05_1(word, isnice):
+    '''
+    ugknbfddgicrmopn is nice because it has at least three 
+    vowels (u...i...o...), a double letter (...dd...), 
+    and none of the disallowed substrings.
+
+    aaa is nice because it has at least three vowels and a 
+    double letter, even though the letters used by different rules 
+    overlap.
+
+    jchzalrnumimnmhp is naughty because it has no double letter.
+
+    haegwjzuvuyypxyu is naughty because it contains the string xy.
+
+    dvszwmarrgswjxmb is naughty because it contains only one vowel.
+    '''
+    assert is_nice1(word) == isnice
