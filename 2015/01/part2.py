@@ -1,4 +1,6 @@
 def solution(input_path:str):
+    '''called from aoc/main.py'''
+
     with open(input_path) as fp:
         input_text = fp.read()
 

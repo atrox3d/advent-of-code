@@ -26,6 +26,8 @@ def compute_ribbon(partials):
 
 
 def solution(input_path:str):
+    '''called from aoc/main.py'''
+
     with open(input_path) as fp:
         lines = [line.rstrip() for line in fp.readlines()]
         boxes = [parse_box(line) for line in lines]

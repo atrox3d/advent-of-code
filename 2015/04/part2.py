@@ -42,6 +42,8 @@ def solve(quiz_input):
 
 
 def solution(input_path):
+    '''called from aoc/main.py'''
+
     with open(input_path) as fp:
         input_text = fp.read()
 

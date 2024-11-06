@@ -16,6 +16,8 @@ def solve(quiz_input:str, strategy):
     return result
 
 def solution(input_path):
+    '''called from aoc/main.py'''
+
     with open(input_path) as fp:
         input_text = fp.readlines()
     
