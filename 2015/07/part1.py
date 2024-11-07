@@ -86,6 +86,7 @@ def solve(quiz_input):
     value = wiring.get_wire_value('a', wires)
     value = wiring.get_wire_value('a', wires)
     print(value)
+    return value
 
     wires = wiring.build_wires(quiz_input)
     wires['b'] = value
