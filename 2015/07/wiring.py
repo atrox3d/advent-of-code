@@ -14,6 +14,7 @@ def build_wires(quiz_input: list[str]) -> dict:
     '''
     wires = {}
     for line in quiz_input:
+        print(f'LINE | {line}')
         gate, wid = regexprocess.split_lr(line)
         if wires.get(wid, False):
             raise ValueError(f'multiple values for wire {wid}')
