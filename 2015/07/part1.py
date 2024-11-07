@@ -62,105 +62,34 @@ import sys, os
 import re, json
 from pathlib import Path
 
+try:
+    import wiring
+except:
+    from . import wiring
+
 # sys.path.append(os.getcwd())
 # from aoclib import main
-
-try:
-    import regexprocess
-except:
-    from . import regexprocess
 
 logger = logging.getLogger(__name__)
 
 
-def build_wires(quiz_input: list[str]) -> dict:
-    '''
-    builds a dictionary with key = portname and value = expression tuple
-    '''
-    wires = {}
-    for line in quiz_input:
-        gate, wid = regexprocess.split_lr(line)
-        if wires.get(wid, False):
-            raise ValueError(f'multiple values for wire {wid}')
-        wires[wid] = regexprocess.parse_gate(gate)
-    return wires
-
-def wire2str(wire: dict[str, tuple]) -> str:
-    '''
-    prints the human format: p = a op b
-    '''
-    wid, gate = wire
-    match gate:
-        case lvalue, None, None:
-            return f'{wid} = {lvalue}'
-        case op, None, rvalue:
-            return f'{wid} = {op} {rvalue}'
-        case lvalue, op, rvalue:
-            return f'{wid} = {lvalue} {op} {rvalue}'
-        case _:
-            raise ValueError(gate)
-
-def get_wire_value(wid:str, wires: dict[str, tuple], stack=[]) -> int:
-    stack_len = len(stack)
-    # indent = '' * indent_level
-    stack_pos = f'stack: [{stack_len}] '
-    stack.append(stack_len)
-
-    if isinstance(wid, int):
-        logger.debug(f'{stack_pos}{wid = } is int, returning')
-        return wid
-    
-    gate = wires[wid]
-    if isinstance(gate, int):
-        logger.debug(f'{stack_pos}{wid=} {gate = } is int, returning')
-        return gate
-    
-    match gate:
-        case lvalue, None, None:
-            logger.debug(f'{stack_pos}match: {wid} = {lvalue}')
-            value = get_wire_value(lvalue, wires)
-        
-        case op, None, rvalue,:
-            logger.debug(f'{stack_pos}match: {wid} = {op} {rvalue}')
-            match op:
-                case 'NOT':
-                    value = ~get_wire_value(rvalue, wires)
-        
-        case lvalue, op, rvalue:
-            logger.debug(f'{stack_pos}match: {wid} = {lvalue} {op} {rvalue}')
-            match op:
-                case 'AND':
-                    value = get_wire_value(lvalue, wires) & get_wire_value(rvalue, wires)
-                case 'OR':
-                    value = get_wire_value(lvalue, wires) | get_wire_value(rvalue, wires)
-                case 'LSHIFT':
-                    value = get_wire_value(lvalue, wires) << get_wire_value(rvalue, wires)
-                case 'RSHIFT':
-                    value = get_wire_value(lvalue, wires) >> get_wire_value(rvalue, wires)
-        case _:
-            raise ValueError(f'{stack_pos}{gate}')
-    
-    if isinstance(value, int):
-        logger.debug(f'{stack_pos}updating wires[{wid}] = {value}')
-        wires[wid] = value
-    return value
 
 def solve(quiz_input):
     '''
     '''
     pass_test = { 'd': 72, 'e': 507, 'f': 492, 'g': 114, 'h': 65412, 'i': 65079, 'x': 123, 'y': 456    }
     zero = {k:0 for k in pass_test}
-    wires = build_wires(quiz_input)
+    wires = wiring.build_wires(quiz_input)
     for wire in wires.items():
-        print(wire2str(wire))
+        print(wiring.wire2str(wire))
     
-    value = get_wire_value('a', wires)
-    value = get_wire_value('a', wires)
+    value = wiring.get_wire_value('a', wires)
+    value = wiring.get_wire_value('a', wires)
     print(value)
 
-    wires = build_wires(quiz_input)
+    wires = wiring.build_wires(quiz_input)
     wires['b'] = value
-    value = get_wire_value('a', wires)
+    value = wiring.get_wire_value('a', wires)
     print(value)
 
 def solution(input_path):
@@ -180,4 +109,4 @@ if __name__ == '__main__':
             ),
         logging.StreamHandler()
     ]
-    main.main(solution, level='DEBUG', handlers=handlers)
+    # main.main(solution, level='DEBUG', handlers=handlers)
