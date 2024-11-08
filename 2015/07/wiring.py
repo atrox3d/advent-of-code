@@ -1,4 +1,5 @@
 import logging
+import ctypes
 
 try:
     import regexprocess
@@ -14,56 +15,61 @@ def build_wires(quiz_input: list[str]) -> dict:
     '''
     wires = {}
     for line in quiz_input:
-        print(f'LINE | {line}')
-        gate, wid = regexprocess.split_lr(line)
-        if wires.get(wid, False):
-            raise ValueError(f'multiple values for wire {wid}')
-        wires[wid] = regexprocess.parse_gate(gate)
+        print(f'BUILDWIRES | {line = }')
+        gate, port = regexprocess.split_lr(line)
+        print(f'BUILDWIRES | {gate = }, {port = }')
+        if wires.get(port, False):
+            raise ValueError(f'multiple values for wire {port}')
+        wires[port] = regexprocess.parse_gate(gate)
     return wires
 
-def wire2str(wire: dict[str, tuple]) -> str:
+def wire2str(wire: tuple[str, tuple]) -> str:
     '''
     prints the human format: p = a op b
     '''
-    wid, gate = wire
+    port, gate = wire
     match gate:
         case lvalue, None, None:
-            return f'{wid} = {lvalue}'
+            return f'{port} = {lvalue}'
         case op, None, rvalue:
-            return f'{wid} = {op} {rvalue}'
+            return f'{port} = {op} {rvalue}'
         case lvalue, op, rvalue:
-            return f'{wid} = {lvalue} {op} {rvalue}'
+            return f'{port} = {lvalue} {op} {rvalue}'
         case _:
             raise ValueError(gate)
 
-def get_wire_value(wid:str, wires: dict[str, tuple], stack=[]) -> int:
-    stack_len = len(stack)
+def get_wire_value(port:str, wires: dict[str, tuple], call_stack:list=None) -> int:
+    if call_stack is None: call_stack = []
+    stack_len = len(call_stack)
     # indent = '' * indent_level
-    stack_pos = f'stack: [{stack_len}] '
-    stack.append(stack_len)
+    call_stack_pos = f'stack: [{stack_len}] '
+    call_stack.append(stack_len)
 
-    if isinstance(wid, int):
-        logger.debug(f'{stack_pos}{wid = } is int, returning')
-        return wid
+    if isinstance(port, int):
+        # nothing to solve, es. 123
+        logger.debug(f'{call_stack_pos}{port = } is int, returning')
+        return port
     
-    gate = wires[wid]
+    gate = wires[port]
     if isinstance(gate, int):
-        logger.debug(f'{stack_pos}{wid=} {gate = } is int, returning')
+        # nothing to solve, es. x -> 123
+        logger.debug(f'{call_stack_pos}{port=} {gate = } is int, returning')
         return gate
     
     match gate:
         case lvalue, None, None:
-            logger.debug(f'{stack_pos}match: {wid} = {lvalue}')
+            logger.debug(f'{call_stack_pos}match: {port} = {lvalue}')
             value = get_wire_value(lvalue, wires)
         
         case op, None, rvalue,:
-            logger.debug(f'{stack_pos}match: {wid} = {op} {rvalue}')
+            logger.debug(f'{call_stack_pos}match: {port} = {op} {rvalue}')
             match op:
                 case 'NOT':
-                    value = ~get_wire_value(rvalue, wires)
+                    value = get_wire_value(rvalue, wires)
+                    value = ctypes.c_uint16(~value).value
         
         case lvalue, op, rvalue:
-            logger.debug(f'{stack_pos}match: {wid} = {lvalue} {op} {rvalue}')
+            logger.debug(f'{call_stack_pos}match: {port} = {lvalue} {op} {rvalue}')
             match op:
                 case 'AND':
                     value = get_wire_value(lvalue, wires) & get_wire_value(rvalue, wires)
@@ -74,9 +80,9 @@ def get_wire_value(wid:str, wires: dict[str, tuple], stack=[]) -> int:
                 case 'RSHIFT':
                     value = get_wire_value(lvalue, wires) >> get_wire_value(rvalue, wires)
         case _:
-            raise ValueError(f'{stack_pos}{gate}')
+            raise ValueError(f'{call_stack_pos}{gate}')
     
     if isinstance(value, int):
-        logger.debug(f'{stack_pos}updating wires[{wid}] = {value}')
-        wires[wid] = value
+        logger.debug(f'{call_stack_pos}updating wires[{port}] = {value}')
+        wires[port] = value
     return value

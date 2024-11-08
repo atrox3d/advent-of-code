@@ -28,12 +28,6 @@ def split_lr(line: str) -> tuple[tuple]:
     found = re.match(REGEX_LR, line)
     return found.groups()
 
-def test_split_lr(circuit, gate_ports):
-    for i, line in enumerate(circuit):
-        print(split_lr(line))
-        assert split_lr(line) == gate_ports[i]
-
-
 def parse_gate(expr: str) -> tuple:
     '''
     returns a tuple containing possible lvalue, operator and rvalue
@@ -45,9 +39,3 @@ def parse_gate(expr: str) -> tuple:
               else item
               for item in found.groups()]
     return groups
-
-def test_parse_gate(circuit, gates):
-    for i, line in enumerate(circuit):
-        gate, port = split_lr(line)
-        print(parse_gate(gate))
-        assert parse_gate(gate) == gates[i]
