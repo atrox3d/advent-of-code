@@ -29,8 +29,8 @@ def solve(quiz_input):
     total_mem = compute.get_total_mem(quiz_input)
     print(f'{total_mem = }')
 
-    total_encoded = compute.get_total_encoded(quiz_input)
-    print(f'{total_encoded = }')
+    # total_encoded = compute.get_total_encoded(quiz_input)
+    # print(f'{total_encoded = }')
 
     # return total_chars - total_mem, total_encoded - total_chars
     return total_chars - total_mem
