@@ -2,7 +2,9 @@ import json
 
 
 def get_total_chars(quiz_input:str) -> int:
-    return sum(len(s) for s in quiz_input)
+    for s in quiz_input.split():
+        print(s, len(s))
+    return sum(len(s) for s in quiz_input.split())
 
 def get_total_mem(quiz_input:str) -> int:
     return sum(len(eval(s)) for s in quiz_input)
