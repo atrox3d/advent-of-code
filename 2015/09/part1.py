@@ -8,30 +8,41 @@ import re, json
 from pathlib import Path
 from collections import defaultdict
 
-sys.path.append(os.getcwd())
-from aoclib import main
+# sys.path.append(os.getcwd())
+# from aoclib import main
 
 REGEX = r'^(\w+) to (\w+) = (\d+)$'
 logger = logging.getLogger(__name__)
 
-def parse_distances(quiz_input):
-    return [(start, end, int(distance)) 
-            for start, end, distance in [re.match(REGEX, line).groups() 
-            for line in quiz_input]]
+def parse_distances(quiz_input:str) -> tuple[str, str, int]:
+    lines = [line for line in quiz_input.splitlines() if line]
+    # print(lines)
+    groups = [re.match(REGEX, line).groups() for line in lines]
+    # print(groups)
+    result = [(start, end, int(distance)) for start, end, distance in groups]
+    # print(result)
+    return result
+    # return [(start, end, int(distance)) 
+            # for start, end, distance in [re.match(REGEX, line).groups() 
+            # for line in quiz_input if line]]
 
-def build_map(distances):
+def build_map(distances:tuple[str,str,int]) -> dict[str, int]:
     maap = defaultdict(dict)
     for start, end, distance in distances:
         maap[start].update({end:distance})
         maap[end].update({start:distance})
-    return dict(maap)
 
-def get_city_list(distances):
+    outmap = dict(maap)
+    # print(outmap)
+    return outmap
+
+def get_city_list(distances:tuple[str,str,int]) -> set:
     # use a set to eliminate duplicates
     cities = {city for record in distances for city in record[:2]}
+    # print(cities)
     return cities
 
-def rpermute(cities):
+def rpermute(cities:set):
     if len(cities) == 1:
         return [cities]
     
@@ -40,9 +51,10 @@ def rpermute(cities):
         for perm in rpermute([c for c in cities if c!=city]):
             ret = [city,  *perm]
             perms.append(ret)
+    # print(perms)
     return perms
 
-def get_routes(perms, maap):
+def get_routes(perms:list, maap:dict):
     routes = {}
     for perm in perms:
         logger.debug(f'{perm = }')
@@ -50,10 +62,11 @@ def get_routes(perms, maap):
         for start, end in zip(perm, perm[1:]):
             total += maap[start][end]
         routes[tuple(perm)] = total
+    # print(routes)
     return routes
 
 
-def solution(quiz_input):
+def solve(quiz_input):
     '''
     --- Day 9: All in a Single Night ---
     Every year, Santa manages to deliver all of his presents 
@@ -98,7 +111,24 @@ def solution(quiz_input):
     routes = get_routes(permutations, maap)
     logger.debug(f'{routes = }')
 
-    return min(routes.values()), max(routes.values()) 
+    result = min(routes.values()), max(routes.values()) 
+    print(result)
+    return result
+
+
+def solution(input_path):
+    '''called from aoc/main.py'''
+
+    print(f'open {input_path}')
+    with open(input_path) as fp:
+        input_text = fp.read()
+    
+    print(f'call solve <input_text>')
+    result = solve(input_text)
+    print(f'{result = }')
+    print(f'end solution')
+
+
 
 if __name__ == '__main__':
     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
