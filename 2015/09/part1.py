@@ -12,51 +12,11 @@ from collections import defaultdict
 # from aoclib import main
 
 try:
-    import parsing
+    import functions
 except:
-    from . import parsing
+    from . import functions
 
 logger = logging.getLogger(__name__)
-
-def build_map(distances:tuple[str,str,int]) -> dict[str, int]:
-    maap = defaultdict(dict)
-    for start, end, distance in distances:
-        maap[start].update({end:distance})
-        maap[end].update({start:distance})
-
-    outmap = dict(maap)
-    # print(outmap)
-    return outmap
-
-def get_city_list(distances:tuple[str,str,int]) -> set:
-    # use a set to eliminate duplicates
-    cities = {city for record in distances for city in record[:2]}
-    # print(cities)
-    return cities
-
-def rpermute(cities:set):
-    if len(cities) == 1:
-        return [cities]
-    
-    perms = []
-    for city in cities:
-        for perm in rpermute([c for c in cities if c!=city]):
-            ret = [city,  *perm]
-            perms.append(ret)
-    # print(perms)
-    return perms
-
-def get_routes(perms:list, maap:dict):
-    routes = {}
-    for perm in perms:
-        logger.debug(f'{perm = }')
-        total = 0
-        for start, end in zip(perm, perm[1:]):
-            total += maap[start][end]
-        routes[tuple(perm)] = total
-    # print(routes)
-    return routes
-
 
 def solve(quiz_input):
     '''
@@ -88,19 +48,19 @@ def solve(quiz_input):
 
     What is the distance of the shortest route? 141
     '''
-    distances = parsing.parse_distances(quiz_input)
+    distances = functions.parse_distances(quiz_input)
     logger.debug(f'{distances = }\n')
 
-    maap = build_map(distances)
+    maap = functions.build_map(distances)
     logger.debug(f'{maap = }\n')
     
-    cities = get_city_list(distances)
+    cities = functions.get_city_list(distances)
     logger.debug(f'{cities = }\n')
 
-    permutations = rpermute(cities)
+    permutations = functions.rpermute(cities)
     logger.debug(f'{permutations = }\n')
     
-    routes = get_routes(permutations, maap)
+    routes = functions.get_routes(permutations, maap)
     logger.debug(f'{routes = }')
 
     result = min(routes.values()), max(routes.values()) 
