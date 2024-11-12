@@ -11,20 +11,12 @@ from collections import defaultdict
 # sys.path.append(os.getcwd())
 # from aoclib import main
 
-REGEX = r'^(\w+) to (\w+) = (\d+)$'
-logger = logging.getLogger(__name__)
+try:
+    import parsing
+except:
+    from . import parsing
 
-def parse_distances(quiz_input:str) -> tuple[str, str, int]:
-    lines = [line for line in quiz_input.splitlines() if line]
-    # print(lines)
-    groups = [re.match(REGEX, line).groups() for line in lines]
-    # print(groups)
-    result = [(start, end, int(distance)) for start, end, distance in groups]
-    # print(result)
-    return result
-    # return [(start, end, int(distance)) 
-            # for start, end, distance in [re.match(REGEX, line).groups() 
-            # for line in quiz_input if line]]
+logger = logging.getLogger(__name__)
 
 def build_map(distances:tuple[str,str,int]) -> dict[str, int]:
     maap = defaultdict(dict)
@@ -96,7 +88,7 @@ def solve(quiz_input):
 
     What is the distance of the shortest route? 141
     '''
-    distances = parse_distances(quiz_input)
+    distances = parsing.parse_distances(quiz_input)
     logger.debug(f'{distances = }\n')
 
     maap = build_map(distances)
@@ -130,10 +122,10 @@ def solution(input_path):
 
 
 
-if __name__ == '__main__':
-    LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
-    handlers = [
-        logging.FileHandler(LOGFILE, mode='w'),
-        logging.StreamHandler()
-    ]
-    main.main(solution, level='INFO', handlers=handlers)
+# if __name__ == '__main__':
+#     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
+#     handlers = [
+#         logging.FileHandler(LOGFILE, mode='w'),
+#         logging.StreamHandler()
+#     ]
+#     main.main(solution, level='INFO', handlers=handlers)
