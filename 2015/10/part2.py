@@ -10,6 +10,11 @@ from pathlib import Path
 # sys.path.append(os.getcwd())
 # from aoclib import main
 
+try:
+    import functions
+except:
+    from . import functions
+
 logger = logging.getLogger(__name__)
 
 def solve(quiz_input):
@@ -40,26 +45,8 @@ def solve(quiz_input):
     '''
     print(f'{quiz_input = }')
 
-    def look_and_say(string: str, reps: int) -> int:
-        for _ in range(reps):
-            prev_char = ''
-            count = 0
-            result = ''
-            for char in string:
-                if char != prev_char:
-                    if prev_char != '':
-                        result += f'{count}{prev_char}'
-                        count = 0
-                count += 1
-                prev_char = char
-            result += f'{count}{char}'
-            string = result
-            print(f'{_}: {len(result)}')
-
-        return len(result)
-
     # return [look_and_say(quiz_input, reps) for reps in (40, 50)]
-    return look_and_say(quiz_input, 40)
+    return functions.look_and_say(quiz_input, 40)
 
 def solution(input_path):
     '''called from aoc/main.py'''
