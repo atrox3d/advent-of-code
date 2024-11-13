@@ -7,12 +7,12 @@ import sys, os
 import re, json
 from pathlib import Path
 
-sys.path.append(os.getcwd())
-from aoclib import main
+# sys.path.append(os.getcwd())
+# from aoclib import main
 
 logger = logging.getLogger(__name__)
 
-def solution(quiz_input):
+def solve(quiz_input):
     '''
     --- Day 10: Elves Look, Elves Say ---
     Today, the Elves are playing a game called look-and-say. 
@@ -58,13 +58,26 @@ def solution(quiz_input):
 
         return len(result)
 
-    return [look_and_say(quiz_input, reps) for reps in (40, 50)]
+    # return [look_and_say(quiz_input, reps) for reps in (40, 50)]
+    return look_and_say(quiz_input, 40)
+
+def solution(input_path):
+    '''called from aoc/main.py'''
+
+    print(f'open {input_path}')
+    with open(input_path) as fp:
+        input_text = fp.read()
+    
+    print(f'call solve <input_text>')
+    result = solve(input_text)
+    print(f'{result = }')
+    print(f'end solution')
 
 
-if __name__ == '__main__':
-    LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
-    handlers = [
-        logging.FileHandler(LOGFILE, mode='w'),
-        logging.StreamHandler()
-    ]
-    main.main(solution, input_param='1113222113', level='DEBUG', handlers=handlers)
+# if __name__ == '__main__':
+#     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
+#     handlers = [
+#         logging.FileHandler(LOGFILE, mode='w'),
+#         logging.StreamHandler()
+#     ]
+#     main.main(solution, input_param='1113222113', level='DEBUG', handlers=handlers)   
