@@ -90,3 +90,22 @@ def test_shortest_distance(routes):
 def test_longest_distance(routes):
     assert max(routes.values()) == 982
 
+def test_example1(test_input):
+    distances = functions.parse_distances(test_input)
+    maap = functions.build_map(distances)
+    cities = functions.get_city_list(distances)
+    permutations = functions.rpermute(cities)
+    routes = functions.get_routes(permutations, maap)
+    result = min(routes.values())
+    assert result == 605
+
+def test_example2(test_input):
+    distances = functions.parse_distances(test_input)
+    maap = functions.build_map(distances)
+    cities = functions.get_city_list(distances)
+    permutations = functions.rpermute(cities)
+    routes = functions.get_routes(permutations, maap)
+    result = max(routes.values())
+    assert result == 982
+
+
