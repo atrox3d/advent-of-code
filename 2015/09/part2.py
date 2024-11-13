@@ -63,7 +63,7 @@ def solve(quiz_input):
     routes = functions.get_routes(permutations, maap)
     logger.debug(f'{routes = }')
 
-    result = min(routes.values())
+    result = max(routes.values())
     print(result)
     return result
 
