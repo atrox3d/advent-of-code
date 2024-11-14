@@ -51,17 +51,17 @@ def solution(input_path):
     print(f'end solution')
 
 
-if __name__ == '__main__':
-    LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
-    handlers = [
-        logging.FileHandler(LOGFILE, mode='w'),
-        logging.StreamHandler()
-    ]
-    main.main(
-                solution, 
-                input_param=None,
-                test_input=None,
-                test_expected=None, 
-                level='DEBUG', 
-                handlers=handlers
-            )
+# if __name__ == '__main__':
+#     LOGFILE = str(Path(sys.argv[0]).parent / Path(__file__).stem) + '.log'
+#     handlers = [
+#         logging.FileHandler(LOGFILE, mode='w'),
+#         logging.StreamHandler()
+#     ]
+#     main.main(
+#                 solution, 
+#                 input_param=None,
+#                 test_input=None,
+#                 test_expected=None, 
+#                 level='DEBUG', 
+#                 handlers=handlers
+#             )
