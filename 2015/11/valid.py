@@ -2,8 +2,12 @@ import logging
 from string import ascii_lowercase
 
 
-from straight import has_straight
-from doubles import has_doubles
+try:
+    from straight import has_straight
+    from doubles import has_doubles
+except:
+    from .straight import has_straight
+    from .doubles import has_doubles
 
 logger = logging.getLogger(__name__)
 

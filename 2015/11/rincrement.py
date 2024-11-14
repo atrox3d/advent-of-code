@@ -1,6 +1,10 @@
 import logging
-from valid import valid_chars
 from string import ascii_lowercase
+
+try:
+    from valid import valid_chars
+except:
+    from .valid import valid_chars
 
 logger = logging.getLogger(__name__)
 

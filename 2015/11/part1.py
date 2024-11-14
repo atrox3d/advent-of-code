@@ -7,6 +7,15 @@ import sys, os
 import re, json
 from pathlib import Path
 
+try:
+    from increment import increment
+    from rincrement import rincrement
+    from valid import is_valid
+except:
+    from .increment import increment
+    from .rincrement import rincrement
+    from .valid import is_valid
+
 # def update_syspath():
 #     cwd = Path.cwd()
 #     while cwd.name != 'aoc':
@@ -75,10 +84,6 @@ def solve(quiz_input):
 
     Your puzzle input is cqjxjnds. cqjxkkaa   
     '''
-    from increment import increment
-    from rincrement import rincrement
-    from valid import is_valid
-
     result = quiz_input
     logger.info(f'{result = }')
     result = increment(result)
