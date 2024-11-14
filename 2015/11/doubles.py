@@ -10,17 +10,15 @@ def has_doubles(string:str) -> bool:
     redoubles = re.compile(r'([a-z])\1.*([a-z])\2')
     doubles = redoubles.search(string)
     logger.debug(f'{doubles = }')
-
+    
     if doubles is not None:
         logger.debug(f'{doubles.groups() = }')
         for char in doubles.groups():
-
             if string.count(char*2) != 1:
                 return False
             
             if string.count(char*3) != 0:
                 return False 
-       
         return True
     return False
 
