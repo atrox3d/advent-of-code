@@ -3,6 +3,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 def has_doubles(string:str) -> bool:
+    '''
+    Passwords must contain at least two different, 
+    non-overlapping pairs of letters, like aa, bb, or zz
+    '''
     import re
 
     logger.debug(f'{string = }')
@@ -16,9 +20,6 @@ def has_doubles(string:str) -> bool:
         for char in doubles.groups():
             if string.count(char*2) != 1:
                 return False
-            
-            if string.count(char*3) != 0:
-                return False 
         return True
     return False
 

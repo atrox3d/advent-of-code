@@ -23,3 +23,10 @@ def test_has_straight():
     assert has_straight('abcaaa')
     assert has_straight('aaaaabcaaaaa')
     assert has_straight('xyz123')
+
+def test_doubles():
+    assert has_doubles('aa12345bb')
+    assert has_doubles('aabb')
+    assert not has_doubles('aabbaa')
+    assert has_doubles('aabbccc')
+    assert not has_doubles('aabbcccc')
