@@ -1,4 +1,5 @@
 from doctest import debug
+from pathlib import Path
 import pytest
 
 from aoclib import modules
@@ -29,7 +30,9 @@ def main():
 
         solution_path = data.get_solutionpath(args.year, args.day)
         solution_file = data.get_solutionfile(args.year, args.day, part)
-        input_file = data.get_inputfile(args.year, args.day, part)
+        input_file = data.get_inputfile(args.year, args.day, part, suffix='txt')
+        if not Path(input_file).exists():
+            input_file = data.get_inputfile(args.year, args.day, part, suffix='json')
 
         if args.command == 'setup':
             commands.setup(
