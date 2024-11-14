@@ -6,6 +6,14 @@ logger = logging.getLogger(__name__)
 forbidden = 'iol'
 valid = ''.join(char for char in ascii_lowercase if char not in forbidden)
 
+def get_straights(length:int):
+    for pos, start in enumerate(ascii_lowercase):
+        straight = ascii_lowercase[pos:pos+length]
+        if len(straight) < length:
+            break
+        yield straight
+
+
 def has_straight(
             string: str, 
             # valid: str, 
@@ -17,13 +25,12 @@ def has_straight(
     They cannot skip letters; abd doesn't count.
     '''
     logger.debug(f'{string = }')
+    straights = list(get_straights(length))
     for pos, _ in enumerate(string):
         pattern = string[pos:pos+length]
         if len(pattern) == length: 
             logger.debug(f'{pattern = }')
-            index = ascii_lowercase.index(_)
-            target = ascii_lowercase[index:index+length]
-            if  target == pattern:
+            if  pattern in straights:
                 return True
     return False
 
