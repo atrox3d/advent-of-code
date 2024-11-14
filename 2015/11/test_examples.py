@@ -16,7 +16,7 @@ def test_example1():
     hijklmmn meets the first requirement (because it contains the straight hij) 
     but fails the second requirement requirement (because it contains i and l).
     '''
-    assert has_straight('hijklmmn', valid_chars) is False
+    assert has_straight('hijklmmn') is True
 
 def test_example2():
     '''
@@ -49,4 +49,4 @@ def test_example5():
     result = increment('ghijklmn')
     while not is_valid(result):
         result = increment(result)
-    assert result == 'ghjaabba'
+    assert result == 'ghjaabcc'
