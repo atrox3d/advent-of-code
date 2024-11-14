@@ -1,3 +1,5 @@
+
+
 def get_happiness(quiz_input: list[str]) -> dict[dict]:
     happiness = {}
     for line in quiz_input:
