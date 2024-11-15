@@ -36,11 +36,13 @@ def test_happiness(happiness):
 
 def test_rpermute(happiness):
     names = [name for name in happiness]
-    rpermutations = rpermute(names)
+    rpermutations = rpermute(names, as_list=True, use_recursive=True)
     permutations = [list(combo) for combo in itertools.permutations(names)]
     assert len(permutations) == len(rpermutations)
     assert rpermutations == permutations
 
-
-
-
+def test_totals(happiness):
+    names = [name for name in happiness]
+    combos = rpermute(names)
+    tot = totals(happiness, combos)
+    assert max(tot) == 330
