@@ -27,22 +27,6 @@ def solve(quiz_input):
     print(best)
     return best
 
-    me = {}
-    for name in happiness:
-        me.update({name:0})
-    happiness['me'] = me
-    for name in happiness:
-        happiness[name].update({'me':0})
-    print('happiness=', json.dumps(happiness, indent=2))
-
-    names = [name for name in happiness]
-    permutations = rpermute(names)
-    combos = [item for item in permutations if item[0]==names[0]]
-
-    bestme = (max(totals(happiness, combos)))
-    print(bestme)
-
-    return best, bestme
 
 def solution(input_path):
     '''called from aoc/main.py'''

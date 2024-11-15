@@ -1,4 +1,11 @@
 
+def get_combo_value(happiness:dict, name1:str, name2:str) -> dict:
+    combo = {}
+    combo[name1] = happiness[name1][name2]
+    combo[name2] = happiness[name2][name1]
+    combo['total'] = combo[name1] + combo[name2]
+    return combo
+
 
 def get_happiness(quiz_input: list[str]) -> dict[dict]:
     happiness = {}
