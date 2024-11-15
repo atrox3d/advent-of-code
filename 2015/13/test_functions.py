@@ -1,6 +1,7 @@
 from pathlib import Path
 import pytest
 import json
+import itertools
 
 try:
     from happiness import get_happiness, totals, rpermute, get_combo_value
@@ -13,9 +14,13 @@ def quiz_input():
     with open(test_path, 'r') as fp:
         return [line.rstrip() for line in  fp.readlines()]
 
-def test_happiness(quiz_input):
-    happiness = get_happiness(quiz_input)
-    print(json.dumps(happiness, indent=2))
+@pytest.fixture
+def happiness(quiz_input) -> dict[str:dict[str:int]]:
+    return get_happiness(quiz_input)
+
+def test_happiness(happiness):
+    # happiness = get_happiness(quiz_input)
+    # print(json.dumps(happiness, indent=2))
 
     combo = get_combo_value(happiness, 'Alice', 'David')
     assert combo['total'] == 44
@@ -28,5 +33,14 @@ def test_happiness(quiz_input):
 
     combo = get_combo_value(happiness, 'Carol', 'David')
     assert combo['total'] == 96
+
+def test_rpermute(happiness):
+    names = [name for name in happiness]
+    rpermutations = rpermute(names)
+    permutations = [list(combo) for combo in itertools.permutations(names)]
+    assert len(permutations) == len(rpermutations)
+    assert rpermutations == permutations
+
+
 
 

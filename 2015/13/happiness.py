@@ -1,3 +1,4 @@
+import itertools
 
 def get_combo_value(happiness:dict, name1:str, name2:str) -> dict:
     combo = {}
@@ -32,16 +33,26 @@ def totals(table, combos):
         totals.append(total)
     return totals
 
-def rpermute(items):
-    if len(items) == 1:
-        return [items]
-    
-    out = []
-    for item in items:
-        for res in rpermute([c for c in items if c!=item]):
-            ret = [item,  *res]
-            out.append(ret)
-    return out
+def rpermute(items, as_list=False, use_recursive=False):
+    if not use_recursive:
+        if as_list:
+            return [list(combo) for combo in itertools.permutations(items)]
+        else:
+            return itertools.permutations(items)
+    else:
+        if len(items) == 1:
+            return [items]
+        
+        out = []
+        for item in items:
+            for res in rpermute(
+                    [c for c in items if c!=item],
+                    as_list,
+                    use_recursive
+                ):
+                ret = [item,  *res]
+                out.append(ret)
+        return out
 
 if __name__ == '__main__':
     import json
