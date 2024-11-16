@@ -50,53 +50,7 @@ def solution(input_path):
     print(f'{result = }')
     print(f'end solution')
 
-def solution2(quiz_input, test=False):
-    '''
-    --- Part Two ---
-    Your cookie recipe becomes wildly popular! Someone asks if you can make another recipe that 
-    has exactly 500 calories per cookie (so they can use it as a meal replacement). 
-    
-    Keep the rest of your award-winning process the same 
-            (100 teaspoons, same ingredients, same scoring system).
 
-    For example, given the ingredients above, if you had instead selected 
-            40 teaspoons of butterscotch and 60 teaspoons of cinnamon (which still adds to 100), 
-    the total calorie count would be 
-            40*8 + 60*3 = 500. The total score would go down, though: only 57600000, 
-    the best you can do in such trying circumstances.
-
-    Given the ingredients in your kitchen and their properties, 
-    what is the total score of the highest-scoring cookie you can make with a calorie total of 500?    
-    '''
-    logger.info(f'{quiz_input = !r}')
-
-    ingredients_properties = ing.parse_ingredients(quiz_input)
-    for line in json.dumps(ingredients_properties, indent=2).splitlines():
-        logger.info(line)
-    
-    spoons = 100
-    ingredients = 4
-    if test:
-        # values of the aoc example test
-        # testmix = lambda x, y:[(44, 56)]                      
-        
-        # simulate preceding and subsequent values
-        testmix = lambda x, y:[(45, 55), (44, 56), (46, 54)]    
-        testmix = lambda x, y:[(39, 61), (40, 60), (41, 59)]    
-        
-        mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients, func=testmix)
-    else:
-        mixes = ing.get_mixes(spoons=spoons, ingredients=ingredients)
-    # return ing.get_max_score(mixes, ingredients_properties)
-    best_diet_cookies = []
-    for total, calories in ing.find_calories(mixes, ingredients_properties, 500):
-        print(f'{total=}, {calories=}')
-        best_diet_cookies.append({total:calories})
-        print(best_diet_cookies)
-    print(best_diet_cookies)
-
-    best = max(total for result in best_diet_cookies for total in result)
-    print(f'{best=}')
 
 
 
