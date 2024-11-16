@@ -11,7 +11,7 @@ except:
 
 logger = logging.getLogger(__name__)
 
-def solution1(quiz_input):
+def solve(quiz_input):
     aunts = functions.parse_aunts(quiz_input, AuntSue)
     tape = functions.get_tape()
 
@@ -23,19 +23,6 @@ def solution1(quiz_input):
             return aunt.id
     
 
-def solution2(quiz_input):
-    # return None
-    aunts = functions.parse_aunts(quiz_input, AuntSue2)
-    tape = functions.get_tape()
-
-    for auntid, aunt in aunts.items():
-        # if auntid > 250:
-            # break
-        # print(auntid, aunt)
-        if aunt==tape:
-            print(auntid, aunt == tape, '<---------- AUNT SUE!!!!')
-            return aunt.id
-
 def solution(input_path):
     '''called from aoc/main.py'''
 
@@ -44,7 +31,7 @@ def solution(input_path):
         input_text = fp.read()
     
     print(f'call solve <input_text>')
-    result = solution1(input_text)
+    result = solve(input_text)
     print(f'{result = }')
     print(f'end solution')
 
