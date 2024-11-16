@@ -86,7 +86,7 @@ def get_scores(mixes:list, ingredients:dict, *exclude):
             property_score = get_property_score(property_name, mix, ingredients)
             property_score = 0 if property_score < 0 else property_score
             total *= property_score
-            print(f'{exclude=}, {mix=}, {property_score=}, {total=}, {max=}\n')
+            print(f'{exclude=}, {mix=}, {property_name=}, {property_score=}, {total=}\n')
         # /for property_name in ing.get_property_names(ingredients, 'calories'):
         yield total
     # /for mix in mixes
