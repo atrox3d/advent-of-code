@@ -52,6 +52,16 @@ def test_race1(reindeers):
     second1000 = functions.race1(1000, reindeers)
     assert [('Comet', 1120)] == second1000
 
+def test_race2(reindeers):
+    second01 = functions.race2(1, reindeers)
+    assert ('Dancer', 1) == second01
+
+    second140 = functions.race2(140, reindeers)
+    assert ('Dancer', 139) == second140
+
+    second1000 = functions.race2(1000, reindeers)
+    assert ('Dancer', 689) == second1000
+
 
 
 
