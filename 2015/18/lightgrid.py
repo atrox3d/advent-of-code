@@ -1,10 +1,17 @@
 import logging
 
-from gridoop import (
-        Grid, 
-        GridStrategy, LineStrategy, CellStrategy, 
-        GridValueError, GridCoordError,
-    )
+try:
+    from gridoop import (
+            Grid, 
+            GridStrategy, LineStrategy, CellStrategy, 
+            GridValueError, GridCoordError,
+        )
+except:
+    from .gridoop import (
+            Grid, 
+            GridStrategy, LineStrategy, CellStrategy, 
+            GridValueError, GridCoordError,
+        )
 
 logger = logging.getLogger(__name__)
 

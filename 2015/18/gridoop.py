@@ -7,12 +7,21 @@ class GridStrategy(ABC):
     def parse_grid(self, grid_data:str) -> list:
         pass
 
+    @abstractmethod
+    def set(self, grid, y, x, value):
+        pass
+
 class LineStrategy(GridStrategy):
     def parse_grid(self, grid_data: str) -> list[str]:
         grid = []
         for line in grid_data.splitlines():
             grid.append(line)
         return grid
+
+    def set(self, grid, y, x, value):
+        row = grid[y][:x] + value + grid[y][x:]
+        grid[y] = row
+
 
 class CellStrategy(GridStrategy):
     def parse_grid(self, grid_data: str) -> list[str]:
@@ -23,6 +32,9 @@ class CellStrategy(GridStrategy):
                 row.append(ch)
             grid.append(row)
         return grid
+    
+    def set(self, grid, y, x, value):
+        grid[y][x] = value
 
 class GridCoordError(IndexError): pass
 class GridValueError(ValueError): pass
@@ -72,7 +84,8 @@ class Grid:
         self.check(row=r, col=c)
         if value not in (self.ON, self.OFF):
             raise GridValueError(f'invalid value {value}, must be one of {self.ON, self.OFF}')
-        self.grid[r][c] = value
+        # self.grid[r][c] = value
+        self.strategy.set(self.grid, r, c, value)
     
     def print(self, state=False, end='') -> None:
         for row in range(self.heigth()):
@@ -106,7 +119,7 @@ class Grid:
         values = self.neighbors(r, c)
         return sum(1 if value==self.ON else 0 for value in values)
     
-    def grid(self, copy=False) -> list:
+    def get_grid(self, copy=False) -> list:
         if copy:
             return deepcopy(self.grid)
         else:
