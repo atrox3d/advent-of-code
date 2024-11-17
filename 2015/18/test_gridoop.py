@@ -1,5 +1,4 @@
 from pathlib import Path
-from tabnanny import check
 import pytest 
 
 try:
