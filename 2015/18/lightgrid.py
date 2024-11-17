@@ -59,6 +59,44 @@ class LightGrid(Grid):
         # if self.is_fixed(row, col):
 
 
+def step(grid:LightGrid,  printgrid=False, end='') -> 'LightGrid':
+    '''
+The state a light should have next is based on its current state (on or off) plus 
+the number of neighbors that are on:
+
+    - A light which is on stays on when 2 or 3 neighbors are on, 
+        and turns off otherwise.
+
+    - A light which is off turns on if exactly 3 neighbors are on, 
+        and stays off otherwise.
+
+    - All of the lights update simultaneously; 
+        they all consider the same current state before moving to the next.
+
+    '''
+    # if printgrid:
+        # grid.print(state=True, end=end)
+
+    logger.info('copying grid')
+    copy: LightGrid = grid.copy()
+
+    logger.info('updating copy')
+    for row, col, value in grid.foreach():
+        state = grid.state(row, col)
+
+        if value == LightGrid.ON:
+            if not 2 <= state <= 3:
+                copy.toggle(row, col)
+
+        if value == LightGrid.OFF:
+            if state == 3:
+                copy.toggle(row, col)
+    if printgrid:
+        print()
+        copy.print(state=True, end=end)
+    
+    logger.info('returning copy')
+    return copy
 
 # if __name__ == '__main__':
 #     from pathlib import Path
