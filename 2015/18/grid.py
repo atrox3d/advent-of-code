@@ -21,7 +21,7 @@ def get_value(grid:list[str], r:int, c:int) -> str:
 
 
 def get_width(grid:list[str]) -> int:
-    return len(grid[0])
+    return len(grid)
 
 def get_heigth(grid:list[str]) -> int:
     return len(grid)
