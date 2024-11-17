@@ -60,12 +60,12 @@ class LightGrid(Grid):
 
 
 
-if __name__ == '__main__':
-    from pathlib import Path
+# if __name__ == '__main__':
+#     from pathlib import Path
 
-    path = Path(__file__).parent / 'test2.txt'
-    lg = LightGrid.from_file(path, CellStrategy())
-    lg.fix(0, 0, LightGrid.ON)
-    print(lg.is_fixed(0, 0))
-    lg.toggle(0, 0)
+#     path = Path(__file__).parent / 'test2.txt'
+#     lg = LightGrid.from_file(path, CellStrategy())
+#     lg.fix(0, 0, LightGrid.ON)
+#     print(lg.is_fixed(0, 0))
+#     lg.toggle(0, 0)
 

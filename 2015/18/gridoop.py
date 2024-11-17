@@ -132,19 +132,19 @@ class Grid:
                 yield row, col, self.get(row, col)
 
 
-if __name__ == '__main__':
-    from pathlib import Path
+# if __name__ == '__main__':
+#     from pathlib import Path
 
-    path = Path(__file__).parent / 'test.txt'
-    grid = Grid.from_file(path, LineStrategy())
+#     path = Path(__file__).parent / 'test.txt'
+#     grid = Grid.from_file(path, LineStrategy())
 
-    grid.print()
-    print(grid.neighbors(5, 2))
-    print(grid.state(5, 2))
+#     grid.print()
+#     print(grid.neighbors(5, 2))
+#     print(grid.state(5, 2))
 
-    with open(path) as fp:
-        grid = Grid(fp.read(), LineStrategy())
+#     with open(path) as fp:
+#         grid = Grid(fp.read(), LineStrategy())
 
-    grid.print(state=True, end=' ')
-    print(grid.neighbors(5, 2))
-    print(grid.state(5, 2))
+#     grid.print(state=True, end=' ')
+#     print(grid.neighbors(5, 2))
+#     print(grid.state(5, 2))

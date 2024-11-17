@@ -40,11 +40,11 @@ def get_col(grid_row:str, c) -> str:
         grid_width = len(grid_row)
         raise GridColException(f'col {c} not valid for grid width {grid_width}')
 
-if __name__ == '__main__':
-    from pathlib import Path
+# if __name__ == '__main__':
+#     from pathlib import Path
 
-    grid = load_from_file(Path(__file__).parent / 'test.txt')
-    for r in range(get_heigth(grid)):
-        for c in range(get_width(grid)):
-            print(get_value(grid, r, c))
+#     grid = load_from_file(Path(__file__).parent / 'test.txt')
+#     for r in range(get_heigth(grid)):
+#         for c in range(get_width(grid)):
+#             print(get_value(grid, r, c))
 
