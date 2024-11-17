@@ -8,13 +8,23 @@ except:
     from . import gridoop as goop
 
 @pytest.fixture
-def test_file():
+def test_file1():
     test_file = Path(__file__).parent / 'test1.txt'
     return test_file
 
 @pytest.fixture
-def quiz_input1(test_file) -> str:
-    with open(test_file, 'r') as fp:
+def quiz_input1(test_file1) -> str:
+    with open(test_file1, 'r') as fp:
+        return fp.read()
+
+@pytest.fixture
+def test_file2():
+    test_file = Path(__file__).parent / 'test2.txt'
+    return test_file
+
+@pytest.fixture
+def quiz_input2(test_file2) -> str:
+    with open(test_file2, 'r') as fp:
         return fp.read()
 
 @pytest.fixture
@@ -29,6 +39,17 @@ def grid_line1():
     ]
 
 @pytest.fixture
+def grid_line2():
+    return [
+        '##.#.#', 
+        '...##.', 
+        '#....#', 
+        '..#...', 
+        '#.#..#', 
+        '####.#'
+    ]
+
+@pytest.fixture
 def grid_cell1():
     return [
         ['.', '#', '.', '#', '.', '#'], 
@@ -39,12 +60,23 @@ def grid_cell1():
         ['#', '#', '#', '#', '.', '.']
         ]
 
-def test_grid_from_file_line_strategy(test_file, grid_line1):
-    grid = goop.Grid.from_file(test_file, goop.LineStrategy())
+@pytest.fixture
+def grid_cell2():
+    return [
+        ['#', '#', '.', '#', '.', '#'], 
+        ['.', '.', '.', '#', '#', '.'], 
+        ['#', '.', '.', '.', '.', '#'], 
+        ['.', '.', '#', '.', '.', '.'], 
+        ['#', '.', '#', '.', '.', '#'], 
+        ['#', '#', '#', '#', '.', '#']
+        ]
+
+def test_grid_from_file_line_strategy(test_file1, grid_line1):
+    grid = goop.Grid.from_file(test_file1, goop.LineStrategy())
     assert grid_line1 == grid.get_grid()
 
-def test_grid_from_file_cell_strategy(test_file, grid_cell1):
-    grid = goop.Grid.from_file(test_file, goop.CellStrategy())
+def test_grid_from_file_cell_strategy(test_file1, grid_cell1):
+    grid = goop.Grid.from_file(test_file1, goop.CellStrategy())
     assert grid_cell1 == grid.get_grid()
 
 def test_grid_line_strategy(quiz_input1, grid_line1):
@@ -142,4 +174,43 @@ def test_set(quiz_input1, grid_line1, grid_cell1):
 
     with pytest.raises(goop.GridValueError):
         grid.set(0, 0, 'A')
+
+def test_neighbors(quiz_input1, grid_cell1, grid_line1):
+    grid = goop.Grid(quiz_input1, goop.LineStrategy())
+    assert grid.neighbors(0, 0) == ['#', '.', '.']
+
+    grid = goop.Grid(quiz_input1, goop.CellStrategy())
+    assert grid.neighbors(0, 0) == ['#', '.', '.']
+
+def test_state(quiz_input1):
+    grid = goop.Grid(quiz_input1, goop.LineStrategy())
+    assert grid.state(0, 0) == 1
+    assert grid.state(0, 1) == 0
+
+    grid = goop.Grid(quiz_input1, goop.CellStrategy())
+    assert grid.state(0, 0) == 1
+    assert grid.state(0, 1) == 0
+
+def test_update(quiz_input1, quiz_input2):
+    grid1 = goop.Grid(quiz_input1, goop.LineStrategy())
+    grid2 = goop.Grid(quiz_input2, goop.LineStrategy())
+    grid1.update(grid2)
+    assert grid1.get_grid() == grid2.get_grid()
+
+    grid1 = goop.Grid(quiz_input1, goop.CellStrategy())
+    grid2 = goop.Grid(quiz_input2, goop.CellStrategy())
+    grid1.update(grid2)
+    assert grid1.get_grid() == grid2.get_grid()
+
+def test_foreach(quiz_input1, grid_line1, grid_cell1):
+    grid1 = goop.Grid(quiz_input1, goop.LineStrategy())
+    grid2 = goop.Grid(quiz_input1, goop.CellStrategy())
+    
+    for (ya, yb, a), (yb, xb, b), c, d in zip(
+            grid1.foreach(), 
+            grid2.foreach(),
+            (c for row in grid_line1 for c in row),
+            (c for row in grid_cell1 for c in row)
+        ):
+        assert a == b == c == d
 
