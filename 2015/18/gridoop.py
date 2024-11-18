@@ -145,6 +145,9 @@ class Grid:
         for row in range(self.heigth()):
             for col in range(self.width()):
                 yield row, col, self.get(row, col)
+    
+    def __eq__(self, other: 'Grid') -> bool:
+        return self.grid == other.grid
 
 
 # if __name__ == '__main__':
