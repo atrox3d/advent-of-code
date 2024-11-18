@@ -19,7 +19,8 @@ class LineStrategy(GridStrategy):
         return grid
 
     def set(self, grid, y, x, value):
-        row = grid[y][:x] + value + grid[y][x:]
+        row = grid[y][:x] + value + grid[y][x+1:]
+        assert len(row) == len(grid)
         grid[y] = row
 
 
@@ -107,6 +108,7 @@ class Grid:
         for offset in offsets:
             try:
                 coords = tuple(map(sum, zip((r,c), offset)))
+                # print(f'{coords = }')
                 value = self.get(*coords)
                 values.append(value)
             except GridCoordError:
