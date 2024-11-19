@@ -105,6 +105,18 @@ the number of neighbors that are on:
     logger.info('returning copy')
     return copy
 
+def fix_corners(grid:LightGrid) -> 'LightGrid':
+    top_left = 0, 0
+    top_right = 0, grid.width() -1
+    bottom_left = grid.heigth() -1, 0
+    bottom_right = grid.heigth() -1, grid.width() -1
+
+    grid.fix(*top_left, LightGrid.ON)
+    grid.fix(*top_right, LightGrid.ON)
+    grid.fix(*bottom_left, LightGrid.ON)
+    grid.fix(*bottom_right, LightGrid.ON)
+
+    return grid
 # if __name__ == '__main__':
 #     from pathlib import Path
 

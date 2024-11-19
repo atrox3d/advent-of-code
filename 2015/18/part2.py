@@ -4,9 +4,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from lightgrid import LightGrid, LineStrategy, CellStrategy, step
+    from lightgrid import (
+        LightGrid, 
+        LineStrategy, 
+        CellStrategy, 
+        step,
+        fix_corners
+    )
 except:
-    from .lightgrid import LightGrid, LineStrategy, CellStrategy, step
+    from .lightgrid import (
+        LightGrid, 
+        LineStrategy, 
+        CellStrategy, 
+        step,
+        fix_corners
+    )
 
 
 
@@ -14,31 +26,17 @@ STEPS = 100
 
 def solve(quiz_input, test=False):
     grid = LightGrid(quiz_input, CellStrategy())
-    top_left = 0, 0
-    top_right = 0, grid.width() -1
-    bottom_left = grid.heigth() -1, 0
-    bottom_right = grid.heigth() -1, grid.width() -1
-
-    grid.fix(*top_left, LightGrid.ON)
-    grid.fix(*top_right, LightGrid.ON)
-    grid.fix(*bottom_left, LightGrid.ON)
-    grid.fix(*bottom_right, LightGrid.ON)
-
-    assert grid.is_fixed(*top_left), f'{top_left} is not fixed'
-    assert grid.is_fixed(*top_right), f'{top_right} is not fixed'
-    assert grid.is_fixed(*bottom_left), f'{bottom_left} is not fixed'
-    assert grid.is_fixed(*bottom_right), f'{bottom_right} is not fixed'
-
+    grid = fix_corners(grid)
     # grid.print(state=True, end='')
     for stepno in range(STEPS):
         logger.info(f'--- STEP {stepno+1} ---')
         grid = step(grid, printgrid=False, end='')
 
 
-    assert grid.is_fixed(*top_left), f'{top_left} is not fixed'
-    assert grid.is_fixed(*top_right), f'{top_right} is not fixed'
-    assert grid.is_fixed(*bottom_left), f'{bottom_left} is not fixed'
-    assert grid.is_fixed(*bottom_right), f'{bottom_right} is not fixed'
+    # assert grid.is_fixed(*top_left), f'{top_left} is not fixed'
+    # assert grid.is_fixed(*top_right), f'{top_right} is not fixed'
+    # assert grid.is_fixed(*bottom_left), f'{bottom_left} is not fixed'
+    # assert grid.is_fixed(*bottom_right), f'{bottom_right} is not fixed'
 
     # grid.print(state=True, end='')
     result = sum(1 for row, col, light in grid.foreach() if light == LightGrid.ON )
