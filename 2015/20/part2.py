@@ -52,7 +52,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-import gifts
+try:
+    import gifts
+except:
+    from . import gifts
 
 
 # def load_input(filename):

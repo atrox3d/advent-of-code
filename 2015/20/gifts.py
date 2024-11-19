@@ -23,7 +23,14 @@ def get_house(
 def get_presents_per_house(house:int) -> int:
     ''' return total presents for this house '''
 
-    return sum(filter(lambda elf: house%elf==0, range(1, house+1))) * 10
+    return sum(
+            filter(
+                lambda elf: house%elf==0, 
+                range(1, house+1)
+            )
+        ) * 10
+
+
 
 if __name__ == '__main__':
     max_houses = 1_000_000

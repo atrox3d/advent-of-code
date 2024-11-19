@@ -3,7 +3,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-import gifts
+try:
+    import gifts
+except:
+    from . import gifts
 
 def solve(quiz_input):
     print(f'{quiz_input = !r}')
