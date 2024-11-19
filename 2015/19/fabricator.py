@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     santa = 'HOHOHO'
     target = 'HOH'
-    start = 'e'
+    # start = 'e'
     # e => O to get O
     # O => HH to get HH
     # H => OH (on the second H) to get HOH
