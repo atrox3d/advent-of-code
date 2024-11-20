@@ -13,6 +13,6 @@ class Weapon(ShopItem): pass
 class Armor(ShopItem): pass
 class Ring(ShopItem): pass
 
-no_weapon =Weapon('Weapons', 'NoWeapon', 0, 0, 0)
+no_weapon = Weapon('Weapons', 'NoWeapon', 0, 0, 0)
 no_armor = Armor('Armors', 'NoArmor', 0, 0, 0)
 no_ring = Ring('Rings', 'NoRing', 0, 0, 0)
