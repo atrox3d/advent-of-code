@@ -20,6 +20,27 @@ def get_house(
         if presents[house] >= target:
             return house, presents[house]
 
+
+def infinite_numbers():
+    number = 1
+    while True:
+        yield number
+        number += 1
+
+def get_house_dict(target:int, gifts=10):
+    elf = 1
+    house = 1
+    houses = {}
+    for house in infinite_numbers():
+        presents = 0
+        if house > target:
+            break
+        for elf in range(1, house+1):
+            if house%elf == 0:
+                presents += (elf*gifts)
+                yield house, elf, presents
+        yield ' ', ' ', ' '
+
 def get_presents_per_house(house:int) -> int:
     ''' return total presents for this house '''
 

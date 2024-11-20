@@ -45,4 +45,21 @@ def test_values(test_text:str):
 def test_get_house(house, presents):
     assert presents == gifts.get_presents_per_house(house)
 
-
+# @pytest.mark.parametrize(
+#     'house, presents', [
+#             (1, 10), 
+#             (2, 30), 
+#             (3, 40), 
+#             (4, 70), 
+#             (5, 60), 
+#             (6, 120), 
+#             (7, 80), 
+#             (8, 150), 
+#             (9, 130)
+#         ]
+# )
+def test_get_house_dict():
+    for house, elf, presents in gifts.get_house_dict(9):
+        # print(f'{house = }, {elf = }, {visited = }')
+        print(house, elf, presents)
+    # assert _house == house

@@ -14,7 +14,8 @@ def solve(quiz_input):
     target = int(quiz_input)
     house, presents = gifts.get_house(target, max_houses)
     print(house, presents)
-    return house
+    house, total, houses = gifts.get_house_dict(target)
+    return house, total
 
 def solution(input_path):
     '''called from aoc/main.py'''
