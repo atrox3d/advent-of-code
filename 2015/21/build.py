@@ -1,5 +1,9 @@
 from dataclasses import dataclass
-from shop import Shop, ShopItem, Weapon, Armor, Ring
+
+try:
+    from shop import Shop, ShopItem, Weapon, Armor, Ring
+except:
+    from .shop import Shop, ShopItem, Weapon, Armor, Ring
 
 @dataclass
 class Build:

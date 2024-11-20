@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from build import Build
+try:
+    from build import Build
+except:
+    from .build import Build
 
 @dataclass
 class Character:

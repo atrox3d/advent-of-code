@@ -1,12 +1,20 @@
 from pathlib import Path
-
-from shop_item import (
-    ShopItem,
-    Weapon,
-    Ring,
-    Armor,
-    no_weapon, no_armor, no_ring
-)
+try:
+    from shop_item import (
+        ShopItem,
+        Weapon,
+        Ring,
+        Armor,
+        no_weapon, no_armor, no_ring
+    )
+except:
+    from .shop_item import (
+        ShopItem,
+        Weapon,
+        Ring,
+        Armor,
+        no_weapon, no_armor, no_ring
+    )
 
 class Shop:
 

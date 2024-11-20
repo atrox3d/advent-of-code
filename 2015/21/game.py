@@ -4,9 +4,14 @@ import string
 from typing import Generator
 from dataclasses import dataclass, field
 
-from shop import Shop
-from character import Character
-from build import Build
+try:
+    from shop import Shop
+    from character import Character
+    from build import Build
+except:
+    from .shop import Shop
+    from .character import Character
+    from .build import Build
 
 def get_builds(shop:Shop) -> Generator[Build, None, None]:
     weapons = shop.weapons()
