@@ -83,9 +83,7 @@ class Shop:
             )
 
     def categories(self) -> list[str]:
-        return sorted(list(
-            {item.category for item in self.items()}
-        ))
+        return sorted(self._items)
 
     @staticmethod
     def _sortby(data:list[ShopItem], fields:str=None, reverse=False
@@ -96,7 +94,11 @@ class Shop:
             return data
         keys = fields.split()
         # print(f'{keys=}', end='\n\n')
-        return sorted(data[:], key=lambda x:[getattr(x, k) for k in keys], reverse=reverse)
+        return sorted(
+                data[:], 
+                key=lambda x:[getattr(x, k) for k in keys], 
+                reverse=reverse
+            )
     
     def _get_category(self, klass) -> list[ShopItem]:
         ''' returns list of items filtered by type '''
