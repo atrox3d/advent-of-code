@@ -70,12 +70,17 @@ class Shop:
 
         data = self._load(self.filename, self.path)
         items_dict = self._parse(data)
-        self._items = [item for category, items in items_dict.items() for item in items]
+        # self._items = [item for category, items in items_dict.items() for item in items]
+        self._items = items_dict
 
     def items(self, sortby:str=None, reverse=False):
         ''' returns a sorted list of all items'''
-
-        return self._sortby([item for item in self._items + [no_armor, no_ring]], sortby, reverse)
+        items = [item for category, items in self._items.items() for item in items]
+        return self._sortby(
+                [item for item in items + [no_armor, no_ring]], 
+                sortby, 
+                reverse
+            )
 
     def categories(self) -> list[str]:
         return sorted(list(
