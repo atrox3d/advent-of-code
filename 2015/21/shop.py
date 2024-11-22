@@ -77,6 +77,11 @@ class Shop:
 
         return self._sortby([item for item in self._items + [no_armor, no_ring]], sortby, reverse)
 
+    def categories(self) -> list[str]:
+        return sorted(list(
+            {item.category for item in self.items()}
+        ))
+
     @staticmethod
     def _sortby(data:list[ShopItem], fields:str=None, reverse=False
         ) -> list[ShopItem]:
