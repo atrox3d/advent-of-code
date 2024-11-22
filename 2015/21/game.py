@@ -25,6 +25,7 @@ def get_builds(shop:Shop) -> Generator[Build, None, None]:
         if lring is not rring:
             build = Build(weapon, armor, lring, rring)
             yield build
+
 def fight(player:Character, boss:Character) -> Character:
     turn = 0
     while player.hitpoints > 0 and boss.hitpoints > 0:
