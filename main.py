@@ -32,7 +32,7 @@ def main():
         solution_file = data.get_solutionfile(args.year, args.day, part)
         input_file = data.get_inputfile(args.year, args.day, part, suffix='txt')
         if not Path(input_file).exists():
-            input_file = data.get_inputfile(args.year, args.day, part, suffix='json')
+            input_file = data.get_inputfile(args.year, args.day, part, suffix='txt')
 
         if args.command == 'setup':
             commands.setup(
